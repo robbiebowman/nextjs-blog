@@ -3,6 +3,6 @@ module.exports = {
     // Remove the workaround the issue is fixed
     images: {
         loader: "imgix",
-        path: "/",
+        path: "https://agreeable-bay-09df86b0f.1.azurestaticapps.net/",
     },
 };
