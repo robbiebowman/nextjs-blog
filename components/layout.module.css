@@ -46,3 +46,7 @@
     flex-direction: column;
     align-items: center;
 }
+
+.emailBox {
+    width: 10rem;
+}

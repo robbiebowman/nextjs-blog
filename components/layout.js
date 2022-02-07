@@ -4,6 +4,7 @@ import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 import React, { useState } from 'react';
+import { CSSTransition, SwitchTransition } from 'react-transition-group'
 
 const name = 'Robbie Bowman'
 export const siteTitle = 'Robbie Bowman dot com'
@@ -11,6 +12,10 @@ export const siteTitle = 'Robbie Bowman dot com'
 const emailPortionA = 'robbiebo'
 const emailPortionB = 'wman'
 const emailPortionC = '@gmail.com'
+
+const mode = "in-out"
+const emailKey = "email"
+const emailButtonKey = "emailButton"
 
 export default function Layout({ children, home }) {
     const [showEmail, setShowEmail] = useState(false)
@@ -51,23 +56,30 @@ export default function Layout({ children, home }) {
                     <Link href="https://github.com/robbiebowman/">
                         <a><div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} /></div>Github</div></a>
                     </Link>
-                    {
-                        showEmail
-                            ? <div>
-                                <div className={styles.socialIcon}>
-                                    <Image src="/images/gmail.webp" height={14} width={14} />
-                                </div>
-                                {emailPortionA}{emailPortionB}{emailPortionC}
-                            </div>
-                            : <a onClick={() => setShowEmail(true)}>
-                                <div>
-                                    <div className={styles.socialIcon}>
-                                        <Image src="/images/gmail.webp" height={14} width={14} />
-                                    </div>
-                                    Email
-                                </div>
-                            </a>
-                    }
+
+                    <div>
+                        <div className={styles.socialIcon}>
+                            <Image src="/images/gmail.webp" height={14} width={14} />
+                        </div>
+                        <div className={styles.emailBox}>
+
+                            <SwitchTransition>
+                                <CSSTransition
+                                    key={showEmail}
+                                    addEndListener={(node, done) => {
+                                        node.addEventListener("transitionend", done, false);
+                                    }}
+                                    classNames="fade">
+                                    <span>
+                                        {showEmail
+                                            ? `${emailPortionA}${emailPortionB}${emailPortionC}`
+                                            : <a onClick={() => setShowEmail(true)}>Email</a>}
+
+                                    </span>
+                                </CSSTransition>
+                            </SwitchTransition>
+                        </div>
+                    </div>
                     <Link href="https://www.linkedin.com/in/robbie-bowman/">
                         <a><div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} /></div>LinkedIn</div></a>
                     </Link>
