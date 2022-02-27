@@ -1,0 +1,24 @@
+.gBox {
+    font-weight: bold;
+    font-size: 24px;
+    background-color: #66bb33;
+    color: #FFF;
+    padding: 2rem;
+    margin: 2rem;
+}
+.yBox {
+    font-weight: bold;
+    font-size: 24px;
+    background-color: #cb0;
+    color: #FFF;
+    padding: 2rem;
+    margin: 2rem;
+}
+.bBox {
+    font-weight: bold;
+    font-size: 24px;
+    background-color: #333;
+    color: #FFF;
+    padding: 2rem;
+    margin: 2rem;
+}
