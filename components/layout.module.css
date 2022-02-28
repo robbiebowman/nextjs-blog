@@ -1,7 +1,11 @@
 .container {
-    max-width: 36rem;
+    max-width: 45rem;
     padding: 0 1rem;
-    margin: 3rem auto 6rem;
+    margin: 1rem auto;
+    padding: 2rem 4rem;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 1px 2px 100px 1px #00000015;
+    border-radius: 10px;
 }
 
 .header {
@@ -10,10 +14,6 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-}
-
-.backToHome {
-    margin: 3rem 0 0;
 }
 
 .socialIcon {
@@ -36,7 +36,7 @@
     color: black
 }
 
-.headerLinks a:hover {
+.headerLinks a:hover, .headerLinks span:hover {
     color: lightslategrey;
     text-decoration: none;
 }
