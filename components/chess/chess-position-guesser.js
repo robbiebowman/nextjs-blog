@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { Chessboard } from "react-chessboard";
 import styles from './chess.module.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ChessPositionGuesser() {
 
@@ -10,6 +10,14 @@ export default function ChessPositionGuesser() {
     const fetcher = (...args) => fetch(...args).then(res => res.json())
 
     const { data, error } = useSWR("/api/chess-position", fetcher)
+    const [datas, setDatas] = useState('');
+
+    useEffect(() => {
+        (async function () {
+            const { text } = await (await fetch(`/api/ChessEvals`)).json();
+            setDatas(text);
+        })();
+    });
 
     if (error) return <div>Error</div>
     if (!data) return <div>loading...</div>
@@ -29,6 +37,7 @@ export default function ChessPositionGuesser() {
 
     return (
         <div className={styles.boardBox}>
+            <p>Hey look! {datas}. That's neat</p>
             <div>
                 <Chessboard arePiecesDraggable={false} position={fen} />
             </div>
