@@ -1,0 +1,13 @@
+.guessBox {
+    display: flex;
+    justify-content: space-around;
+}
+.guessBox button {
+    margin: 1rem 3rem;
+}
+.boardBox {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}

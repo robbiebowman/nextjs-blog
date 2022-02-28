@@ -1,0 +1,46 @@
+import useSWR from 'swr';
+import { Chessboard } from "react-chessboard";
+import styles from './chess.module.css'
+import { useState } from 'react';
+
+export default function ChessPositionGuesser() {
+
+    const [resultMsg, setResultMsg] = useState("Who has the better position?")
+
+    const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+    const { data, error } = useSWR("/api/chess-position", fetcher)
+
+    if (error) return <div>Error</div>
+    if (!data) return <div>loading...</div>
+
+    const fen = data.fen
+    const stockfishEval = parseInt(data.evaluation)
+
+    const selectAnswer = (answer) => {
+        const result = stockfishEval > 0 ? "White is winning" : stockfishEval < 0 ? "Black is winning" : "The position is even"
+
+        const wasCorrect = (answer == "+" && stockfishEval > 0) || (answer == "-" && stockfishEval < 0) || (answer == "=" && stockfishEval == 0)
+
+        const resultMessage = (wasCorrect ? "Correct!" : "According to Stockfish:") + " " + result
+
+        setResultMsg(resultMessage)
+    }
+
+    return (
+        <div className={styles.boardBox}>
+            <div>
+                <Chessboard arePiecesDraggable={false} position={fen} />
+            </div>
+            <div className={styles.guessBox}>
+                <button type="button" className="btn btn-light" onClick={() => selectAnswer("+")}>White</button>
+                <button type="button" className="btn btn-secondary" onClick={() => selectAnswer("=")}>Even</button>
+                <button type="button" className="btn btn-dark" onClick={() => selectAnswer("-")}>Black</button>
+            </div>
+            <div>
+                <p>{resultMsg}</p>
+            </div>
+        </div>
+    )
+
+}
