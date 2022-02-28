@@ -10,25 +10,23 @@ export default function ChessPositionGuesser() {
     const fetcher = (...args) => fetch(...args).then(res => res.json())
 
     const { data, error } = useSWR("/api/chess-position", fetcher)
-    const [datas, setDatas] = useState('');
+    const [evalNum, setEvalNum] = useState(null)
+    const [fen, setFen] = useState(null)
 
     useEffect(() => {
         (async function () {
-            const { text } = await (await fetch(`/api/ChessEvals`)).json();
-            setDatas(text);
-        })();
-    });
+            const { evaluation, fen } = await (await fetch(`/api/chess-position`)).json()
+            setEvalNum(parseInt(evaluation))
+            setFen(fen)
+        })()
+    })
 
-    if (error) return <div>Error</div>
-    if (!data) return <div>loading...</div>
-
-    const fen = data.fen
-    const stockfishEval = parseInt(data.evaluation)
+    if (!evalNum) return <div>loading...</div>
 
     const selectAnswer = (answer) => {
-        const result = stockfishEval > 0 ? "White is winning" : stockfishEval < 0 ? "Black is winning" : "The position is even"
+        const result = evalNum > 0 ? "White is winning" : evalNum < 0 ? "Black is winning" : "The position is even"
 
-        const wasCorrect = (answer == "+" && stockfishEval > 0) || (answer == "-" && stockfishEval < 0) || (answer == "=" && stockfishEval == 0)
+        const wasCorrect = (answer == "+" && evalNum > 0) || (answer == "-" && evalNum < 0) || (answer == "=" && evalNum == 0)
 
         const resultMessage = (wasCorrect ? "Correct!" : "According to Stockfish:") + " " + result
 
@@ -37,7 +35,6 @@ export default function ChessPositionGuesser() {
 
     return (
         <div className={styles.boardBox}>
-            <p>Hey look! {datas}. That's neat</p>
             <div>
                 <Chessboard arePiecesDraggable={false} position={fen} />
             </div>
