@@ -4,29 +4,20 @@ import styles from './chess.module.css'
 import { useState, useEffect } from 'react';
 
 export default function ChessPositionGuesser() {
-
     const [resultMsg, setResultMsg] = useState("Who has the better position?")
 
     const fetcher = (...args) => fetch(...args).then(res => res.json())
 
     const { data, error } = useSWR("/api/chess-position", fetcher)
-    const [evalNum, setEvalNum] = useState(null)
-    const [fen, setFen] = useState(null)
 
-    useEffect(() => {
-        (async function () {
-            const { evaluation, fen } = await (await fetch(`/api/chess-position`)).json()
-            setEvalNum(parseInt(evaluation))
-            setFen(fen)
-        })()
-    })
+    if (!data) return <div>Loading...</div>
+    if (error) return <div>Error</div>
 
-    if (!evalNum) return <div>loading...</div>
 
     const selectAnswer = (answer) => {
-        const result = evalNum > 0 ? "White is winning" : evalNum < 0 ? "Black is winning" : "The position is even"
+        const result = data.evaluation > 0 ? "White is winning" : data.evaluation < 0 ? "Black is winning" : "The position is even"
 
-        const wasCorrect = (answer == "+" && evalNum > 0) || (answer == "-" && evalNum < 0) || (answer == "=" && evalNum == 0)
+        const wasCorrect = (answer == "+" && data.evaluation > 0) || (answer == "-" && data.evaluation < 0) || (answer == "=" && data.evaluation == 0)
 
         const resultMessage = (wasCorrect ? "Correct!" : "According to Stockfish:") + " " + result
 
@@ -36,7 +27,7 @@ export default function ChessPositionGuesser() {
     return (
         <div className={styles.boardBox}>
             <div>
-                <Chessboard arePiecesDraggable={false} position={fen} />
+                <Chessboard arePiecesDraggable={false} position={data.fen} />
             </div>
             <div className={styles.guessBox}>
                 <button type="button" className="btn btn-light" onClick={() => selectAnswer("+")}>White</button>
