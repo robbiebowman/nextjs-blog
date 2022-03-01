@@ -5,14 +5,20 @@ import { useState, useEffect } from 'react';
 
 export default function ChessPositionGuesser() {
     const [resultMsg, setResultMsg] = useState("Who has the better position?")
+    const [data, setData] = useState({ fen: "", evaluation: 0 })
+    const [isLoading, setLoading] = useState(false)
+    const [newPuzzleRequested, setNewPuzzleRequested] = useState(true)
 
-    const fetcher = (...args) => fetch(...args).then(res => res.json())
-
-    const { data, error } = useSWR("/api/chess-position", fetcher)
-
-    if (!data) return <div>Loading...</div>
-    if (error) return <div>Error</div>
-
+    useEffect(() => {
+        if (newPuzzleRequested && !isLoading) {
+            setLoading(true)
+            fetch("api/chess-position").then(res => res.json()).then((data) => {
+                setData(data)
+                setLoading(false)
+                setNewPuzzleRequested(false)
+            })
+        }
+    }, [newPuzzleRequested])
 
     const selectAnswer = (answer) => {
         const result = data.evaluation > 0 ? "White is winning" : data.evaluation < 0 ? "Black is winning" : "The position is even"
@@ -26,6 +32,7 @@ export default function ChessPositionGuesser() {
 
     return (
         <div className={styles.boardBox}>
+            <button type="button" disabled={isLoading} onClick={() => { setNewPuzzleRequested(true) }}>Load new puzzle</button>
             <div>
                 <Chessboard arePiecesDraggable={false} position={data.fen} />
             </div>
@@ -39,5 +46,4 @@ export default function ChessPositionGuesser() {
             </div>
         </div>
     )
-
 }
