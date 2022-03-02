@@ -1,9 +1,10 @@
 import { useCookies } from "react-cookie"
+import styles from "./score.module.css"
 
 export default function Score({ answer, evaluation, fen, nextClicked }) {
 
     // result { correct: boolean, guess: char (=,-,+), fen: string, nextClicked: func }
-    console.log(`The eval is: "${evaluation}"`)
+    if (!evaluation) return (<div>Loading...</div>)
     var result
     var wasCorrect
     const wasMate = evaluation[0] == '#'
@@ -17,7 +18,7 @@ export default function Score({ answer, evaluation, fen, nextClicked }) {
     const resultMessage = `${wasCorrect ? "Correct!" : "According to Stockfish:"} ${result}`
 
     return (
-        <div>
+        <div className={styles.resultBox}>
             <p>{resultMessage}</p>
             <button className="btn" onClick={nextClicked}>Next</button>
         </div>

@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 import Score from './score/score';
 
 export default function ChessPositionGuesser() {
-    const [resultMsg, setResultMsg] = useState("Who has the better position?")
     const [data, setData] = useState({ fen: "", evaluation: 0 })
     const [isLoading, setLoading] = useState(false)
     const [difficulty, setDifficulty] = useState("Medium")
@@ -18,7 +17,6 @@ export default function ChessPositionGuesser() {
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
             setLoading(true)
-            setResultMsg("Who has the better position?")
             fetch("api/chess-position?difficulty=" + difficulty).then(res => res.json()).then((data) => {
                 setGuessed(false)
                 setData(data)

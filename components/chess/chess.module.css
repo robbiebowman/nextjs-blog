@@ -26,7 +26,7 @@
     transition: all 300ms ease-in;
 }
 
-.hiddenButton {
+.hiddenButton, .hiddenButton:disabled {
     opacity: 0;
     transition: all 300ms ease-in;
 }
