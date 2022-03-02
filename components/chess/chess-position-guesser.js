@@ -11,12 +11,14 @@ export default function ChessPositionGuesser() {
     const [isLoading, setLoading] = useState(false)
     const [difficulty, setDifficulty] = useState("Medium")
     const [newPuzzleRequested, setNewPuzzleRequested] = useState(true)
+    const [guessed, setGuessed] = useState(false)
 
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
             setLoading(true)
             setResultMsg("Who has the better position?")
             fetch("api/chess-position?difficulty=" + difficulty).then(res => res.json()).then((data) => {
+                setGuessed(false)
                 setData(data)
                 setLoading(false)
                 setNewPuzzleRequested(false)
@@ -25,6 +27,7 @@ export default function ChessPositionGuesser() {
     }, [newPuzzleRequested])
 
     const selectAnswer = (answer) => {
+        setGuessed(true)
         const result = data.evaluation > 0 ? "White is winning" : data.evaluation < 0 ? "Black is winning" : "The position is even"
 
         const wasCorrect = (answer == "+" && data.evaluation > 0) || (answer == "-" && data.evaluation < 0) || (answer == "=" && data.evaluation == 0)
@@ -36,10 +39,10 @@ export default function ChessPositionGuesser() {
 
     return (
         <div className={styles.boardBox}>
-            <DifficultySelector setDifficulty={(level) => {setDifficulty(level)}} />
+            <DifficultySelector setDifficulty={(level) => {setDifficulty(level)}}/>
             <button type="button" disabled={isLoading} onClick={() => { setNewPuzzleRequested(true) }}>Load new puzzle</button>
             <div className={styles.boardAndEval}>
-                <div className={styles.eval}><EvalBar evaluation={data.evaluation} /></div>
+                <div className={guessed ? styles.visibleEval : styles.invisibleEval}><EvalBar evaluation={data.evaluation} /></div>
                 <Chessboard arePiecesDraggable={false} position={data.fen} />
             </div>
             <div className={styles.guessBox}>

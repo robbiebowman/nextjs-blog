@@ -16,3 +16,12 @@
     display: flex;
     flex-direction: row;
 }
+
+.invisibleEval {
+    opacity: 0;
+}
+
+.visibleEval {
+    opacity: 1;
+    transition: all 300ms ease-in;
+}
