@@ -1,11 +1,12 @@
 
 .selectorBox {
     display: flex;
+    margin: 0.5rem;
     align-items: center;
     justify-content: space-around;
     width: 13rem;
 	cursor: pointer;
-	background: #e6e6e6;
+	background: #f3f3f3;
 	padding: 0.2rem;
 	border-radius: 0.5rem;
 }
@@ -18,10 +19,9 @@
 }
 
 .unselected {
-	color: #5a5a5a;
+	color: #9c9c9c;
 }
 
 .selected {
-    font-weight: bold;
-	color: rgb(92, 92, 92);
+	color: rgb(44, 44, 44);
 }
