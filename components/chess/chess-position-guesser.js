@@ -42,7 +42,7 @@ export default function ChessPositionGuesser() {
             </div>
             <div className={styles.guessBox}>
                 <button type="button" className="btn btn-light" disabled={guessed} onClick={() => selectAnswer("+")}>White</button>
-                <button type="button" className="btn btn-secondary" disabled={guessed} onClick={() => selectAnswer("=")}>Even</button>
+                <button type="button" className={"btn btn-secondary " + (difficulty == 'Hard' ? styles.visibleButton : styles.hiddenButton)} disabled={guessed} onClick={() => selectAnswer("=")}>Even</button>
                 <button type="button" className="btn btn-dark" disabled={guessed} onClick={() => selectAnswer("-")}>Black</button>
             </div>
             <div className={guessed ? styles.visibleEval : styles.invisibleEval}>

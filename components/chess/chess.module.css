@@ -25,3 +25,13 @@
     opacity: 1;
     transition: all 300ms ease-in;
 }
+
+.hiddenButton {
+    opacity: 0;
+    transition: all 300ms ease-in;
+}
+
+.visibleButton {
+    opacity: 1;
+    transition: all 300ms ease-in;
+}
