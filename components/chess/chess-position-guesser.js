@@ -13,6 +13,7 @@ export default function ChessPositionGuesser() {
     const [newPuzzleRequested, setNewPuzzleRequested] = useState(true)
     const [guessed, setGuessed] = useState(false)
     const [answer, setAnswer] = useState(null)
+    const [boardWidth, setBoardWidth] = useState(400)
 
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
@@ -31,12 +32,18 @@ export default function ChessPositionGuesser() {
         setAnswer(answer)
     }
 
+    useEffect(() => {
+        // rem converter needed for Chessboard width (only accepts pixel values)
+        const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        setBoardWidth(31 * rem)
+      }, []);
+
     return (
         <div className={styles.boardBox}>
             <DifficultySelector setDifficulty={(level) => { setDifficulty(level) }} />
             <div className={styles.boardAndEval}>
                 <div className={guessed ? styles.visibleEval : styles.invisibleEval}><EvalBar evaluation={data.evaluation} /></div>
-                <Chessboard arePiecesDraggable={false} position={data.fen} />
+                <Chessboard boardWidth={boardWidth} arePiecesDraggable={false} position={data.fen} />
             </div>
             <div className={styles.guessBox}>
                 <button type="button" className="btn btn-light" disabled={guessed} onClick={() => selectAnswer("+")}>White</button>
