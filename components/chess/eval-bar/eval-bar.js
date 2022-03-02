@@ -59,7 +59,7 @@ export default function EvalBar({ evaluation }) {
                     {wHeight < 50 ? sfEval : ""}
                 </span>
             </div>
-            <div style={{ height: `${wHeight}%`, backgroundColor: "#FAFAFA", display: "flex", alignContent: "stretch", alignItems: "start"  }}>
+            <div style={{ height: `${wHeight}%`, backgroundColor: "#EEE", display: "flex", alignContent: "stretch", alignItems: "start"  }}>
                 <span style={{ color: "#000", textAlign: "center", width: "100%"  }} >
                     {wHeight >= 50 ? sfEval : ""}
                 </span>

@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { Chessboard } from "react-chessboard";
 import EvalBar from "./eval-bar/eval-bar";
+import DifficultySelector from "./difficulty-selector/difficulty-selector"
 import styles from './chess.module.css'
 import { useState, useEffect } from 'react';
 
@@ -8,13 +9,14 @@ export default function ChessPositionGuesser() {
     const [resultMsg, setResultMsg] = useState("Who has the better position?")
     const [data, setData] = useState({ fen: "", evaluation: 0 })
     const [isLoading, setLoading] = useState(false)
+    const [difficulty, setDifficulty] = useState("Medium")
     const [newPuzzleRequested, setNewPuzzleRequested] = useState(true)
 
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
             setLoading(true)
             setResultMsg("Who has the better position?")
-            fetch("api/chess-position").then(res => res.json()).then((data) => {
+            fetch("api/chess-position?difficulty=" + difficulty).then(res => res.json()).then((data) => {
                 setData(data)
                 setLoading(false)
                 setNewPuzzleRequested(false)
@@ -34,6 +36,7 @@ export default function ChessPositionGuesser() {
 
     return (
         <div className={styles.boardBox}>
+            <DifficultySelector setDifficulty={(level) => {setDifficulty(level)}} />
             <button type="button" disabled={isLoading} onClick={() => { setNewPuzzleRequested(true) }}>Load new puzzle</button>
             <div className={styles.boardAndEval}>
                 <div className={styles.eval}><EvalBar evaluation={data.evaluation} /></div>

@@ -1,0 +1,31 @@
+
+.selectorBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 13rem;
+	cursor: pointer;
+	background: #e6e6e6;
+	padding: 0.2rem;
+	border-radius: 0.5rem;
+}
+
+.selectorBox span {
+    font-size: 0.75rem;
+	width: 100%;
+    text-align: center;
+	height: 100%;
+	appearance: none;
+	outline: none;
+	border-radius: 5px;
+	padding: 4px 8px;
+}
+
+.unselected {
+	color: #5a5a5a;
+}
+
+.selected {
+    font-weight: bold;
+	color: rgb(92, 92, 92);
+}
