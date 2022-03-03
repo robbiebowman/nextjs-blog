@@ -1,6 +1,28 @@
-.resultBox {
+.feedbackBox {
     border-radius: 1rem;
     padding: 1rem 2rem;
     background-color: rgb(243, 243, 243);
     transition: all 300ms ease-in;
+}
+
+.resultsBox {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.copyFenBox {
+    padding: 1rem;
+}
+
+.resultsBox * {
+    margin: 0 0.5rem;
+}
+
+.fenBox {
+    font-size: x-small;
+}
+
+.copyFen {
+    font-size: xx-small;
 }

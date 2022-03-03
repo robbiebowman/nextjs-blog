@@ -14,16 +14,19 @@ export default function ChessPositionGuesser() {
     const [newPuzzleRequested, setNewPuzzleRequested] = useState(true)
     const [guessed, setGuessed] = useState(false)
     const [answer, setAnswer] = useState(null)
+    const [whomToMove, setWhomToMove] = useState("...")
     const [boardWidth, setBoardWidth] = useState(400)
 
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
             setLoading(true)
             fetch("api/chess-position?difficulty=" + difficulty).then(res => res.json()).then((data) => {
+                const move = data.fen.split(' ')[1] == 'w' ? "⬜ White" : "⬛ Black"
                 setGuessed(false)
                 setData(data)
                 setLoading(false)
                 setNewPuzzleRequested(false)
+                setWhomToMove(move)
             })
         }
     }, [newPuzzleRequested])
@@ -40,11 +43,14 @@ export default function ChessPositionGuesser() {
 
     return (
         <div className={styles.boardBox} ref={usedForGettingRemSize}>
-            <DifficultySelector setDifficulty={(level) => { setDifficulty(level) }} />
+            <div className={styles.difficultyAndWhomToMove}>
+                <div className={styles.whomToMove}><span>{`${whomToMove} to move`}</span></div>
+                <DifficultySelector setDifficulty={(level) => { setDifficulty(level) }} />
+            </div>
             <div className={styles.boardAndEval}>
                 <div className={guessed ? styles.visibleEval : styles.invisibleEval}><EvalBar evaluation={data.evaluation} /></div>
-                    <Chessboard boardWidth={boardWidth} arePiecesDraggable={false} position={data.fen} />
-            <div className={styles.thingToMakeBoardSymmetrical}/>
+                <Chessboard boardWidth={boardWidth} arePiecesDraggable={false} position={data.fen} />
+                <div className={styles.thingToMakeBoardSymmetrical} />
             </div>
             <div className={styles.guessBox}>
                 <button type="button" className="btn btn-light" disabled={guessed} onClick={() => selectAnswer("+")}>White</button>
@@ -54,7 +60,6 @@ export default function ChessPositionGuesser() {
             <div className={guessed ? styles.visibleEval : styles.invisibleEval}>
                 <Score answer={answer} fen={data.fen} evaluation={data.evaluation} nextClicked={() => { setNewPuzzleRequested(true) }} />
             </div>
-            <p ref={usedForGettingRemSize}></p>
         </div>
     )
 }

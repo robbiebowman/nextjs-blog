@@ -84,7 +84,7 @@ export default function Layout({ children, home }) {
                     </Link>
                 </div>
             </header>
-            <main>{children}</main>
+            <main className={styles.mainContent}>{children}</main>
         </div>
     )
 }

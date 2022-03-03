@@ -16,6 +16,17 @@
     align-items: center;
 }
 
+.difficultyAndWhomToMove {
+    width: 100%;
+    justify-content: space-around;
+    display:flex;
+    flex-wrap: wrap-reverse;
+}
+
+.whomToMove {
+    padding: 0.5rem;
+}
+
 .boardAndEval {
     display: flex;
     flex-direction: row;
