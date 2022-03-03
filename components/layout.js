@@ -71,7 +71,6 @@ export default function Layout({ children, home }) {
                                         {showEmail
                                             ? `${emailPortionA}${emailPortionB}${emailPortionC}`
                                             : <a onClick={() => setShowEmail(true)}>Email</a>}
-
                                     </span>
                                 </CSSTransition>
                             </SwitchTransition>
