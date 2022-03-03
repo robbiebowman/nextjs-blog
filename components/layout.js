@@ -13,10 +13,6 @@ const emailPortionA = 'robbiebo'
 const emailPortionB = 'wman'
 const emailPortionC = '@gmail.com'
 
-const mode = "in-out"
-const emailKey = "email"
-const emailButtonKey = "emailButton"
-
 export default function Layout({ children, home }) {
     const [showEmail, setShowEmail] = useState(false)
     return (

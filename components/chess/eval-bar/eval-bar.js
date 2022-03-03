@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from './eval-bar.module.css';
 
 // Adapted from Trevor O'Farrell's wonderful Stockfish integrated evalbar:
 // https://github.com/trevor-ofarrell/chess-evaluation-bar/blob/main/src/lib/components/EvalBar.js
@@ -53,14 +54,14 @@ export default function EvalBar({ evaluation }) {
     console.log("Rendering..." + wHeight)
 
     return (
-        <div style={{ height: "100%", width: "2rem" }}>
-            <div style={{ height: `${100 - wHeight}%`, backgroundColor: "#555", width: "100%", display: "flex", alignContent: "stretch", alignItems: "end" }}>
-                <span style={{ color: "#FFF", textAlign: "center", width: "100%" }}>
+        <div className={styles.bar}>
+            <div style={{ height: `${100 - wHeight}%`}} className={styles.blackEvalBar}>
+                <span className={styles.blackEvalBarText}>
                     {wHeight < 50 ? sfEval : ""}
                 </span>
             </div>
-            <div style={{ height: `${wHeight}%`, backgroundColor: "#EEE", display: "flex", alignContent: "stretch", alignItems: "start"  }}>
-                <span style={{ color: "#000", textAlign: "center", width: "100%"  }} >
+            <div style={{ height: `${wHeight}%`}} className={styles.whiteEvalBar}>
+                <span className={styles.whiteEvalBarText} >
                     {wHeight >= 50 ? sfEval : ""}
                 </span>
             </div>

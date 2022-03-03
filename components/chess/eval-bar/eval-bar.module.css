@@ -1,0 +1,31 @@
+.bar {
+    width: 1.75rem;
+    height: 100%;
+}
+
+.blackEvalBarText {
+    color: #FFF;
+    text-align: center;
+    width: 100%;
+}
+
+.whiteEvalBarText {
+    color: #000;
+    text-align: center;
+    width: 100%;
+}
+
+.whiteEvalBar {
+    background-color: #EEE;
+    display: flex;
+    align-content: stretch;
+    align-items: start;
+}
+
+.blackEvalBar {
+    background-color: #555;
+    width: 100%;
+    display: flex;
+    align-content: stretch;
+    align-items: end;
+}

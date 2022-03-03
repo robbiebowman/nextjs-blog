@@ -1,8 +1,7 @@
 .container {
     max-width: 45rem;
-    padding: 0 1rem;
     margin: 1rem auto;
-    padding: 2rem 4rem;
+    padding: 2rem 3rem;
     background-color: rgb(255, 255, 255);
     box-shadow: 1px 2px 100px 1px #00000015;
     border-radius: 10px;
