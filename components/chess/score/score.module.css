@@ -26,3 +26,45 @@
 .copyFen {
     font-size: xx-small;
 }
+
+.correctAnswer {
+    font-weight: bold;
+    color: rgb(13, 179, 35)
+}
+
+.incorrectAnswer {
+    color: rgb(224, 17, 17)
+}
+
+.chessDotComLink {
+    font-size: small;
+    text-decoration: underline;
+    margin: 0 1rem 0 0;
+}
+
+.streakBox {
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imageAndStreakText {
+    font-size: medium;
+}
+
+.streakText {
+    margin: 0 0.5rem;
+}
+
+.streakOne {
+    color:rgb(55, 187, 29)
+}
+
+.streakTwo {
+    color:rgb(243, 159, 2)}
+
+.streakThree {
+    font-weight: bold;
+    color:rgb(247, 92, 3)
+}

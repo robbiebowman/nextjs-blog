@@ -1,34 +1,92 @@
 import { useCookies } from "react-cookie"
-import { createRef } from 'react'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFire, faFireFlameCurved } from '@fortawesome/free-solid-svg-icons'
 import styles from "./score.module.css"
 
-export default function Score({ answer, evaluation, fen, nextClicked }) {
-
-    const fenBox = createRef()
+export default function Score({ answer, evaluation, fen, nextClicked, evaluator, currentStreak }) {
 
     // result { correct: boolean, guess: char (=,-,+), fen: string, nextClicked: func }
     if (!evaluation) return (<div>Loading...</div>)
-    var result
-    var wasCorrect
-    const wasMate = evaluation[0] == '#'
-    if (wasMate) {
-        wasCorrect = answer == evaluation[1]
-        result = `${evaluation[1] == '+' ? "White" : "Black"} has mate in ${evaluation.substring(2)}!`
-    } else {
-        wasCorrect = (answer == "+" && evaluation > 0) || (answer == "-" && evaluation < 0) || (answer == "=" && evaluation == 0)
-        result = evaluation > 0 ? "White is winning" : evaluation < 0 ? "Black is winning" : "The position is even"
+
+    const wasCorrect = evaluator(evaluation, answer)
+
+    const getReact = (streak) => {
+        if (streak == 2) {
+            return (
+                <p className={styles.streakOne}>
+                    <FontAwesomeIcon icon={faFireFlameCurved} size="xl" />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak == 3) {
+            return (
+                <p className={styles.streakTwo}>
+                    <FontAwesomeIcon icon={faFireFlameCurved} size="xl" />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak == 4) {
+            return (
+                <p className={styles.streakThree}>
+                    <FontAwesomeIcon icon={faFireFlameCurved} size="xl" />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak == 5 || streak == 6) {
+            return (
+                <p className={styles.streakThree}>
+                    <Image src="/images/chess-reacts/doge.png" height={40} width={40} />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak < 10) {
+            return (
+                <p className={styles.streakThree}>
+                    <Image src="/images/chess-reacts/cool-doge.gif" height={40} width={40} />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak < 12) {
+            return (
+                <p className={styles.streakThree}>
+                    <Image src="/images/chess-reacts/cat.png" height={40} width={40} />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak < 15) {
+            return (
+                <p className={styles.streakThree}>
+                    <Image src="/images/chess-reacts/catjam.gif" height={40} width={40} />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
+        if (streak >= 15) {
+            return (
+                <p className={styles.streakThree}>
+                    <Image src="/images/chess-reacts/amaze.gif" height={40} width={40} />
+                    <span className={styles.streakText}>{currentStreak} in a row!</span>
+                </p>)
+        }
     }
-    const resultMessage = `${wasCorrect ? "Correct!" : "According to Stockfish:"} ${result}`
 
     return (
         <div className={styles.feedbackBox}>
             <div className={styles.resultsBox}>
-                <p>{resultMessage}</p>
+                {wasCorrect ? <span styles={{ display: (wasCorrect ? "block" : "none") }} className={styles.correctAnswer}>Correct!</span>
+                    : <span styles={{ display: (wasCorrect ? "none" : "block") }} className={styles.incorrectAnswer}>Stockfish disagrees 🤖</span>}
                 <button className="btn btn-success" onClick={nextClicked}>Next</button>
             </div>
+            {currentStreak > 1 ?
+                <div className={styles.streakBox}>
+                    {getReact(currentStreak)}
+                </div>
+                : <div />}
             <div className={styles.copyFenBox}>
+                <a className={styles.chessDotComLink} target="_blank" rel="noopener noreferrer" href={`https://www.chess.com/play/computer?fen=${fen}`}>Open in Chess.com</a>
                 <input type="text" id="fen" name="fen" value={fen} className={styles.fenBox} />
-                <button className={`btn btn-info btn-sm ${styles.copyFen}`} onClick={() => {navigator.clipboard.writeText(fen)}}>Copy FEN</button>
+                <button className={`btn btn-info btn-sm ${styles.copyFen}`} onClick={() => { navigator.clipboard.writeText(fen) }}>Copy FEN</button>
             </div>
         </div>
     )

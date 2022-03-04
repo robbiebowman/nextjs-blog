@@ -38,7 +38,7 @@
 }
 
 .invisibleEval {
-    opacity: 0;
+    visibility: hidden;
 }
 
 .visibleEval {

@@ -16,6 +16,18 @@ export default function ChessPositionGuesser() {
     const [answer, setAnswer] = useState(null)
     const [whomToMove, setWhomToMove] = useState("...")
     const [boardWidth, setBoardWidth] = useState(400)
+    const [streak, setStreak] = useState(0)
+
+    const isCorrect = (evaluation, answer) => {
+        const wasMate = evaluation[0] == '#'
+        var wasCorrect
+        if (wasMate) {
+            wasCorrect = answer == evaluation[1]
+        } else {
+            wasCorrect = (answer == "+" && evaluation > 0) || (answer == "-" && evaluation < 0) || (answer == "=" && evaluation == 0)
+        }
+        return wasCorrect
+    }
 
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
@@ -34,6 +46,11 @@ export default function ChessPositionGuesser() {
     const selectAnswer = (answer) => {
         setGuessed(true)
         setAnswer(answer)
+        if (isCorrect(data.evaluation, answer)) {
+            setStreak(streak + 1)
+        } else {
+            setStreak(0)
+        }
     }
 
     useEffect(() => {
@@ -58,7 +75,13 @@ export default function ChessPositionGuesser() {
                 <button type="button" className="btn btn-dark" disabled={guessed} onClick={() => selectAnswer("-")}>Black</button>
             </div>
             <div className={guessed ? styles.visibleEval : styles.invisibleEval}>
-                <Score answer={answer} fen={data.fen} evaluation={data.evaluation} nextClicked={() => { setNewPuzzleRequested(true) }} />
+                <Score answer={answer}
+                    fen={data.fen}
+                    evaluation={data.evaluation}
+                    nextClicked={() => { setNewPuzzleRequested(true) }}
+                    evaluator={isCorrect}
+                    currentStreak={streak}
+                />
             </div>
         </div>
     )
