@@ -35,7 +35,7 @@ export default function Home({ allPostsData }) {
             </li>
         </ul>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         { allPostsData.length > 0 ? <h2 className={utilStyles.headingLg}>Posts</h2> : "" }
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
@@ -50,7 +50,7 @@ export default function Home({ allPostsData }) {
             </li>
           ))}
         </ul>
-      </section>
+      </section> */}
     </Layout>
   )
 }
