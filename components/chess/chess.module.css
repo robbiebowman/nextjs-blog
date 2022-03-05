@@ -55,3 +55,22 @@
     opacity: 1;
     transition: all 300ms ease-in;
 }
+
+.blurred {
+    -webkit-filter: blur(1.5rem);
+    -moz-filter: blur(1.5rem);
+    -o-filter: blur(1.5rem);
+    -ms-filter: blur(1.5rem);
+    filter: blur(1.5rem);
+}
+
+.unblurred {
+    transition: all 100ms linear;
+}
+
+.boardAndTimer {
+    min-height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

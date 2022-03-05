@@ -6,8 +6,7 @@ import { loadNewRandomPuzzle, isCorrect } from '/lib/chess'
 import Score from './score/score'
 import Board from './board'
 
-export default function ChessPositionGuesser({ mode }) {
-    // mode: ["Practice", "Daily", "Storm"]
+export default function ChessPractice() {
 
     const [data, setData] = useState({ fen: "", evaluation: 0 })
     const [isLoading, setLoading] = useState(false)
@@ -15,19 +14,16 @@ export default function ChessPositionGuesser({ mode }) {
     const [newPuzzleRequested, setNewPuzzleRequested] = useState(true)
     const [showResults, setShowResults] = useState(false)
     const [answer, setAnswer] = useState(null)
-    const [whomToMove, setWhomToMove] = useState("...")
     const [streak, setStreak] = useState(0)
 
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
             setLoading(true)
             loadNewRandomPuzzle(difficulty).then((data) => {
-                const move = data.fen.split(' ')[1] == 'w' ? "⬜ White" : "⬛ Black"
                 setShowResults(false)
                 setData(data)
                 setLoading(false)
                 setNewPuzzleRequested(false)
-                setWhomToMove(move)
             })
         }
     }, [newPuzzleRequested])
@@ -42,18 +38,17 @@ export default function ChessPositionGuesser({ mode }) {
         }
     }
 
+    const difficultySelector = <DifficultySelector setDifficulty={(level) => { setDifficulty(level) }} />
+
     return (
         <div className={styles.boardBox}>
-            <div className={styles.difficultyAndWhomToMove}>
-                <div className={styles.whomToMove}><span>{`${whomToMove} to move`}</span></div>
-                <DifficultySelector setDifficulty={(level) => { setDifficulty(level) }} />
-            </div>
             <Board
                 data={data}
                 difficulty={difficulty}
                 showResults={showResults}
                 onCorrect={(answer) => { selectAnswer(answer, true) }}
                 onWrong={(answer) => { selectAnswer(answer, false) }}
+                whomToMoveSibling={difficultySelector}
             />
             <div className={showResults ? styles.visibleEval : styles.invisibleEval}>
                 <Score answer={answer}
