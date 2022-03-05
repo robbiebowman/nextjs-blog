@@ -6,7 +6,9 @@ import styles from './chess.module.css'
 import { useState, useEffect, createRef } from 'react';
 import Score from './score/score';
 
-export default function ChessPositionGuesser() {
+export default function ChessPositionGuesser({mode}) {
+    // mode: ["Practice", "Daily", "Storm"]
+
     const usedForGettingRemSize = createRef()
     const [data, setData] = useState({ fen: "", evaluation: 0 })
     const [isLoading, setLoading] = useState(false)
@@ -32,7 +34,7 @@ export default function ChessPositionGuesser() {
     useEffect(() => {
         if (newPuzzleRequested && !isLoading) {
             setLoading(true)
-            fetch("api/chess-position?difficulty=" + difficulty).then(res => res.json()).then((data) => {
+            fetch("/api/chess-position?difficulty=" + difficulty).then(res => res.json()).then((data) => {
                 const move = data.fen.split(' ')[1] == 'w' ? "⬜ White" : "⬛ Black"
                 setGuessed(false)
                 setData(data)
