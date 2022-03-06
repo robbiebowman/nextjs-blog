@@ -1,0 +1,33 @@
+.gametypeBox {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border: 0.1rem rgba(0, 0, 0, 0.25) solid;
+    border-width: 0 0 0.1rem 0;
+}
+
+
+.gametypeBox span a {
+    padding: 0.25rem 1.1rem;
+    margin: 0 1rem;
+}
+
+.gametypeBox span a:hover {
+    text-decoration: none;
+}
+
+.selectedTab a {
+    color: #000C;
+    background-color: #FFF;
+    border: 0.1rem rgba(0, 0, 0, 0.25) solid;
+    border-width: 0.1rem  0.1rem 0 0.1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.unselectedTab a {
+    color: #0004;
+    border: 0.1rem rgba(0, 0, 0, 0.075) solid;
+    border-width: 0.1rem  0.1rem 0 0.1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}

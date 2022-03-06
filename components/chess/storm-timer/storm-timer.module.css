@@ -1,0 +1,20 @@
+.timerBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.timerText {
+    font-size: xx-large;
+    width: 100%;
+    text-align: center;
+}
+
+.wrongGuessCounter {
+    margin: 1rem 0 0.5rem;
+}
+
+.wrongGuessCounter span {
+    padding: 0.5rem;
+}
