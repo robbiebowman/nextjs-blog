@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React, { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import { createGlobalStyle } from "styled-components";
+import { config, dom } from "@fortawesome/fontawesome-svg-core";
 
 config.autoAddCss = false;
 const GlobalStyles = createGlobalStyle`
