@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp, faFire, faFireFlameCurved, faArrowRightLong } from '@fortawesome/free-solid-svg-icons'
 import styles from "./score.module.css"
+import CopyFen from './copy-fen'
 
 export default function Score({ answer, evaluation, fen, nextClicked, evaluator, currentStreak }) {
 
@@ -75,22 +76,20 @@ export default function Score({ answer, evaluation, fen, nextClicked, evaluator,
     return (
         <div className={styles.feedbackBox}>
             <div className={styles.resultsBox}>
-                {wasCorrect ? <span styles={{ display: (wasCorrect ? "block" : "none") }} className={styles.correctAnswer}>Correct!</span>
-                    : <span styles={{ display: (wasCorrect ? "none" : "block") }} className={styles.incorrectAnswer}>Stockfish disagrees 🤖</span>}
-                <button className="btn btn-success" onClick={nextClicked}><FontAwesomeIcon icon={faArrowRightLong} size="s" /></button>
+                {wasCorrect ? <span className={styles.correctAnswer}>Correct!</span>
+                    : <span className={styles.incorrectAnswer}>Stockfish disagrees 🤖</span>}
+                <button className="btn btn-success" onClick={nextClicked}><FontAwesomeIcon icon={faArrowRightLong} size="sm" /></button>
             </div>
             {currentStreak > 1 ?
                 <div className={styles.streakBox}>
                     {getReact(currentStreak)}
                 </div>
                 : <div />}
-                <div className={styles.expandCopyFenBox} onClick={() => {setFenBoxOpen(!fenBoxOpen)}}>
-                    <span>{fenBoxOpen ? <FontAwesomeIcon icon={faAngleUp} size="s" /> : <FontAwesomeIcon icon={faAngleDown} size="s" />}</span>
-                </div>
+            <div className={styles.expandCopyFenBox} onClick={() => { setFenBoxOpen(!fenBoxOpen) }}>
+                <span>{fenBoxOpen ? <FontAwesomeIcon icon={faAngleUp} size="sm" /> : <FontAwesomeIcon icon={faAngleDown} size="sm" />}</span>
+            </div>
             <div className={fenBoxOpen ? styles.copyFenBox : styles.copyFenBoxClosed}>
-                <a className={styles.chessDotComLink} target="_blank" rel="noopener noreferrer" href={`https://www.chess.com/play/computer?fen=${fen}`}>Open in Chess.com</a>
-                <input type="text" id="fen" name="fen" value={fen} className={styles.fenBox} />
-                <button className={`btn btn-info btn-sm ${styles.copyFen}`} onClick={() => { navigator.clipboard.writeText(fen) }}>Copy FEN</button>
+                <CopyFen fen={fen} />
             </div>
         </div>
     )

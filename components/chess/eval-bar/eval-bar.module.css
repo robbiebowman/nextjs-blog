@@ -19,7 +19,7 @@
     background-color: #EEE;
     display: flex;
     align-content: stretch;
-    align-items: start;
+    align-items: flex-start;
 }
 
 .blackEvalBar {
@@ -27,5 +27,5 @@
     width: 100%;
     display: flex;
     align-content: stretch;
-    align-items: end;
+    align-items: flex-end;
 }
