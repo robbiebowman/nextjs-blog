@@ -7,7 +7,7 @@ import Score from './score/score'
 import Board from './board'
 import StormTimer from './storm-timer/storm-timer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleXmark, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons'
 import CopyFen from './score/copy-fen'
 
 export default function ChessStorm() {
@@ -21,7 +21,8 @@ export default function ChessStorm() {
     const [ready, setReady] = useState(false)
     const [difficulty, setDifficulty] = useState("Medium")
 
-    const resetGame = () => {
+    const resetGame = (difficulty) => {
+        console.log("Reseting with difficulty" + difficulty)
         setPositions([])
         setGameStage('Pregame')
         setAnswers([])
@@ -29,6 +30,7 @@ export default function ChessStorm() {
         setCorrectGuesses(0)
         setWrongGuesses(0)
         setReady(false)
+        setDifficulty(difficulty || "Medium")
     }
 
     useEffect(() => {
@@ -87,10 +89,38 @@ export default function ChessStorm() {
         }
     }
 
+    const shareClicked = () => {
+        // Robbie's Chess Z /\ /\
+        // y y y n y
+        // y n y n
+        const difficultyComponent = difficulty == 'Easy' ? "☀️" : difficulty == "Medium" ? "☁️☁️" : "⛈️⛈️⛈️"
+        const correctList = answers.map((a, i) => {
+            const correct = isCorrect(positions[i].evaluation, a)
+            let str
+            if (correct) {
+                str = "✅"
+            } else {
+                str = "❌"
+            }
+            if ((i + 1) % 5 == 0) {
+                str += "\n"
+            }
+            return str
+        }).join('')
+        if (correctList.split('').filter(c => c == "❌").length < 3) {
+            correctList += "⏱️"
+        }
+        const shareString = `${difficultyComponent} Robbie's ♟️ ⚡\n${correctList}`
+        navigator.clipboard.writeText(shareString)
+    }
+
     return (<div className={styles.stormBox}>
         <div className={`${styles.stormResultsBox}`} style={{ display: (gameStage == "Postgame" ? "block" : "none") }}>
             <span className={styles.closeResults} onClick={() => resetGame()}><FontAwesomeIcon icon={faXmark} /></span>
-            <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
+            <div className={styles.resultsHeaderBox}>
+                <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
+                <button onClick={shareClicked} className="btn btn-lg btn-primary"><FontAwesomeIcon icon={faCopy} /> Share</button>
+            </div>
             {answers.map((a, i) => {
                 const p = positions[i]
                 const correct = isCorrect(p.evaluation, a)
@@ -106,9 +136,10 @@ export default function ChessStorm() {
             })}
         </div>
         <div className={`${styles.difficultySelector} ${gameStage == "Postgame" ? styles.blurred : styles.unblurred}`}>
-            <DifficultySelector 
-            setDifficulty={(level) => { setDifficulty(level) }}
-            disabled={gameStage == 'Live'} />
+            <DifficultySelector
+                difficulty={difficulty}
+                onDifficultyChanged={(level) => { resetGame(level) }}
+                disabled={gameStage == 'Live'} />
         </div>
         <div className={styles.stormGameBox}>
             <div className={`${styles.boardAndTimer} ${gameStage == "Postgame" ? styles.blurred : styles.unblurred}`}>

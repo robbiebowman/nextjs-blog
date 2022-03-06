@@ -38,7 +38,7 @@ export default function ChessPractice() {
         }
     }
 
-    const difficultySelector = <DifficultySelector setDifficulty={(level) => { setDifficulty(level) }} />
+    const difficultySelector = <DifficultySelector difficulty={difficulty} onDifficultyChanged={(level) => { setDifficulty(level) }} />
 
     return (
         <div className={styles.boardBox}>
