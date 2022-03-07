@@ -4,6 +4,7 @@ import { isCorrect } from '/lib/chess'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons'
 import CopyFen from '../score/copy-fen'
+import ReactTooltip from 'react-tooltip'
 
 export default function StormResults({ positions, display, answers, onResultsClosed, difficulty }) {
 
@@ -62,7 +63,15 @@ export default function StormResults({ positions, display, answers, onResultsClo
             <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>
             <div className={styles.resultsHeaderBox}>
                 <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
-                <button onClick={shareClicked} className="btn btn-lg btn-primary"><FontAwesomeIcon icon={faCopy} /> Share</button>
+                <button 
+                onClick={shareClicked} 
+                className="btn btn-lg btn-primary" 
+                data-tip="Copied to clipboard!"
+                data-place="top"
+                data-effect="solid"
+                data-event="click"
+                data-event-off="hover"
+                ><FontAwesomeIcon icon={faCopy} /> Share</button>
             </div>
             {answers.map((a, i) => {
                 const p = positions[i]
@@ -79,5 +88,6 @@ export default function StormResults({ positions, display, answers, onResultsClo
                     <CopyFen className={styles.fenBox} fen={p.fen} />
                 </div>
             })}
+            <ReactTooltip />
         </div>)
 }
