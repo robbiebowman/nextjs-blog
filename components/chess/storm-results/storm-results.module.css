@@ -62,12 +62,6 @@
     opacity: 0.5;
 }
 
-.difficultySelector {
-    display: flex;
-    justify-content: center;
-    margin: 1rem;
-}
-
 .resultsHeaderBox {
     display: flex;
     justify-content: center;

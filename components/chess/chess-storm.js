@@ -69,58 +69,13 @@ export default function ChessStorm() {
         return <p>Loading...</p>
     }
 
-    const mapAnswerToName = (ans) => {
-        if (ans == '+') {
-            return "⬜ White"
-        } else if (ans == '-') {
-            return "⬛ Black"
-        } else {
-            return "🏁 Even"
-        }
-    }
-
-    const getStockfishEvalStyle = (evaluation) => {
-        const sign = evaluation[0] == '#' ? evaluation[1] : evaluation[0]
-        if (sign == '-') {
-            return styles.stockfishFavoursBlack
-        } else if (sign == '+') {
-            return styles.stockfishFavoursWhite
-        } else {
-            return styles.stockfishFavoursEven
-        }
-    }
-
-    const shareClicked = () => {
-        // Robbie's Chess Z /\ /\
-        // y y y n y
-        // y n y n
-        const difficultyComponent = difficulty == 'Easy' ? "☀️" : difficulty == "Medium" ? "☁️☁️" : "⛈️⛈️⛈️"
-        const correctList = answers.map((a, i) => {
-            const correct = isCorrect(positions[i].evaluation, a)
-            let str
-            if (correct) {
-                str = "✅"
-            } else {
-                str = "❌"
-            }
-            if ((i + 1) % 5 == 0) {
-                str += "\n"
-            }
-            return str
-        }).join('')
-        if (correctList.split('').filter(c => c == "❌").length < 3) {
-            correctList += "⏱️"
-        }
-        const shareString = `${difficultyComponent} Robbie's ♟️ ⚡\n${correctList}`
-        navigator.clipboard.writeText(shareString)
-    }
-
     return (<div className={styles.stormBox}>
         <StormResults
             answers={answers}
             display={gameStage == "Postgame"}
             positions={positions}
-            onResultsClosed={() => resetGame(difficulty)} />
+            onResultsClosed={() => resetGame(difficulty)}
+            difficulty={difficulty} />
         <div className={`${styles.difficultySelector} ${gameStage == "Postgame" ? styles.blurred : styles.unblurred}`}>
             <DifficultySelector
                 difficulty={difficulty}
@@ -143,6 +98,7 @@ export default function ChessStorm() {
                     showResults={false}
                     onCorrect={(answer) => { selectAnswer(answer, true) }}
                     onWrong={(answer) => { selectAnswer(answer, false) }}
+                    disableButtons={answers.length == positions.length || gameStage != 'Live'}
                 />
             </div>
         </div>

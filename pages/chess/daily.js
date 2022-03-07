@@ -11,7 +11,9 @@ export default function Daily() {
                 <title>Who has the better position?</title>
             </Head>
             <GameSelector selectedTab="Daily" />
-            <ChessPractice />
+            <div style={{ margin: "0 1rem" }}>
+                <ChessPractice />
+            </div>
         </Layout>
     )
 }

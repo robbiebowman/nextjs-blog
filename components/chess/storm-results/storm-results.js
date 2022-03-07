@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons'
 import CopyFen from '../score/copy-fen'
 
-export default function StormResults({ positions, display, answers, onResultsClosed }) {
+export default function StormResults({ positions, display, answers, onResultsClosed, difficulty }) {
 
     if (positions.length == 0) {
         return <p>Loading...</p>

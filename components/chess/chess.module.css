@@ -81,3 +81,9 @@
     height: 100%;
     position: relative;
 }
+
+.difficultySelector {
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+}

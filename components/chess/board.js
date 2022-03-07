@@ -4,8 +4,11 @@ import { Chessboard } from "react-chessboard"
 import EvalBar from "./eval-bar/eval-bar"
 import { useState, useEffect, createRef } from 'react'
 
-export default function Board({ data, difficulty, onCorrect, onWrong, showResults, whomToMoveSibling }) {
-    const whomToMove = data.fen.split(' ')[1] == 'w' ? "⬜ White" : "⬛ Black"
+export default function Board({ data, difficulty, onCorrect, onWrong, showResults, whomToMoveSibling, disableButtons }) {
+    if (data === undefined) {
+        data = {fen: "", evaluation: ""}
+    }
+    const whomToMove = data.fen.split(' ')[1] == 'w' ? "⬜ White" : "⬛ Black" || "⬜ Loading..."
 
     const usedForGettingRemSize = createRef()
     const [boardWidth, setBoardWidth] = useState(400)
@@ -23,6 +26,8 @@ export default function Board({ data, difficulty, onCorrect, onWrong, showResult
         setBoardWidth(Math.min(width, 500))
     }, []);
 
+    console.log("Disabled buttons?" + disableButtons + "    " + Math.random())
+
     return (<>
         <div className={styles.difficultyAndWhomToMove}>
             <div className={styles.whomToMove}><span>{`${whomToMove} to move`}</span></div>
@@ -36,15 +41,15 @@ export default function Board({ data, difficulty, onCorrect, onWrong, showResult
         <div className={styles.guessBox}  ref={usedForGettingRemSize}>
             <button type="button"
                 className="btn btn-light"
-                disabled={showResults}
+                disabled={showResults || disableButtons}
                 onClick={() => selectAnswer("+")}>White</button>
             <button type="button"
                 className={"btn btn-secondary " + (difficulty == 'Hard' ? styles.visibleButton : styles.hiddenButton)}
-                disabled={showResults || difficulty != 'Hard'}
+                disabled={showResults || difficulty != 'Hard' || disableButtons}
                 onClick={() => selectAnswer("=")}>Even</button>
             <button type="button"
                 className="btn btn-dark"
-                disabled={showResults}
+                disabled={showResults || disableButtons}
                 onClick={() => selectAnswer("-")}>Black</button>
         </div>
     </>)

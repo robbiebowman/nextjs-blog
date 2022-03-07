@@ -14,7 +14,9 @@ export default function Storm() {
                 <title>Who has the better position?</title>
             </Head>
             <GameSelector selectedTab="Storm" />
-            <ChessStorm />
+            <div style={{ margin: "0 1rem" }}>
+                <ChessStorm />
+            </div>
         </Layout>
     )
 }

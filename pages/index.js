@@ -18,6 +18,7 @@ export default function Home({ allPostsData }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
+      <div className={utilStyles.mainPageContent}>
       <section className={utilStyles.headingMd}>
         <p>I write code for fun. It's also my job.</p>
       </section>
@@ -51,6 +52,7 @@ export default function Home({ allPostsData }) {
           ))}
         </ul>
       </section> */}
+      </div>
     </Layout>
   )
 }
