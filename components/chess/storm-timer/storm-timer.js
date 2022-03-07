@@ -10,12 +10,27 @@ export default function StormTimer({ onTimerPressed, correctGuesses, wrongGuesse
     const [handledCorrectGuesses, setHandledCorrectGuesses] = useState(0)
     const [handledWrongGuesses, setHandledWrongGuesses] = useState(0)
 
+    const [pulseCorrectTime, setPulseCorrectTime] = useState(false)
+    const [pulseWrongTime, setPulseWrongTime] = useState(false)
+
     useEffect(() => {
-        if (correctGuesses != 0) setSeconds(sec => sec + 3)
+        if (correctGuesses != 0) {
+            setSeconds(sec => sec + 3)
+            setPulseCorrectTime(true)
+            setTimeout(() => {
+                setPulseCorrectTime(false)
+            }, 300)
+        }
     }, [handledCorrectGuesses])
 
     useEffect(() => {
-        if (wrongGuesses != 0) setSeconds(sec => sec - 10)
+        if (wrongGuesses != 0) {
+            setSeconds(sec => sec - 10)
+            setPulseWrongTime(true)
+            setTimeout(() => {
+                setPulseWrongTime(false)
+            }, 300)
+        }
     }, [handledWrongGuesses])
 
     if (handledCorrectGuesses != correctGuesses) {
@@ -55,7 +70,7 @@ export default function StormTimer({ onTimerPressed, correctGuesses, wrongGuesse
             {gameStage == "Pregame"
                 ? <button className="btn btn-primary" onClick={timerPressed}>Start!</button>
                 : gameStage == "Live"
-                    ? <span className={`${styles.timerText}`}>{seconds}</span>
+                    ? <span className={`${styles.timerText} ${pulseCorrectTime ? styles.correctTimerText : pulseWrongTime ? styles.wrongTimerText : styles.standardTimerText}`}>{seconds}</span>
                     : <></>
             }
             <div className={styles.wrongGuessCounter}>

@@ -18,3 +18,14 @@
 .wrongGuessCounter span {
     padding: 0.5rem;
 }
+
+.correctTimerText {
+    color: rgb(0, 190, 73);
+}
+.wrongTimerText {
+    color: rgb(250, 52, 52);
+}
+
+.standardTimerText {
+    transition: all 300ms ease-in;
+}
