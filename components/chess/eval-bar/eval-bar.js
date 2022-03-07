@@ -51,8 +51,6 @@ export default function EvalBar({ evaluation }) {
         reevaluate(evaluation)
     })
 
-    console.log("Rendering..." + wHeight)
-
     return (
         <div className={styles.bar}>
             <div style={{ height: `${100 - wHeight}%`}} className={styles.blackEvalBar}>

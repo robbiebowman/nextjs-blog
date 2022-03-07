@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons'
 import CopyFen from '../score/copy-fen'
 
-export default function StormResults({ positions, display, answers }) {
+export default function StormResults({ positions, display, answers, onResultsClosed }) {
 
     if (positions.length == 0) {
         return <p>Loading...</p>
@@ -59,7 +59,7 @@ export default function StormResults({ positions, display, answers }) {
 
     return (
         <div className={`${styles.stormResultsBox}`} style={{ display: (display ? "block" : "none") }}>
-            <span className={styles.closeResults} onClick={() => resetGame()}><FontAwesomeIcon icon={faXmark} /></span>
+            <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>
             <div className={styles.resultsHeaderBox}>
                 <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
                 <button onClick={shareClicked} className="btn btn-lg btn-primary"><FontAwesomeIcon icon={faCopy} /> Share</button>

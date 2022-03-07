@@ -116,7 +116,11 @@ export default function ChessStorm() {
     }
 
     return (<div className={styles.stormBox}>
-        <StormResults answers={answers} display={gameStage == "Postgame"} positions={positions} />
+        <StormResults
+            answers={answers}
+            display={gameStage == "Postgame"}
+            positions={positions}
+            onResultsClosed={() => resetGame(difficulty)} />
         <div className={`${styles.difficultySelector} ${gameStage == "Postgame" ? styles.blurred : styles.unblurred}`}>
             <DifficultySelector
                 difficulty={difficulty}

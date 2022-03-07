@@ -25,7 +25,7 @@ export default function Home({ allPostsData }) {
         <h1 className={utilStyles.headingLg}>Things I made</h1>
         <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
-              <Link href={`/chess-position-game`}>
+              <Link href={`/chess`}>
                 <a>♟️Chess position game♟️</a>
               </Link>
               <br />

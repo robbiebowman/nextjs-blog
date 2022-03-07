@@ -19,7 +19,7 @@
 .difficultyAndWhomToMove {
     width: 100%;
     justify-content: space-around;
-    display:flex;
+    display: flex;
     flex-wrap: wrap-reverse;
 }
 
@@ -54,8 +54,6 @@
 .visibleButton {
     opacity: 1;
     transition: all 300ms ease-in;
-<<<<<<< Updated upstream
-=======
 }
 
 .blurred {
@@ -82,11 +80,4 @@
     width: 100%;
     height: 100%;
     position: relative;
-}
-
-.difficultySelector {
-    display: flex;
-    justify-content: center;
-    margin: 1rem;
->>>>>>> Stashed changes
 }
