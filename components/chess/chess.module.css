@@ -54,4 +54,39 @@
 .visibleButton {
     opacity: 1;
     transition: all 300ms ease-in;
+<<<<<<< Updated upstream
+=======
+}
+
+.blurred {
+    -webkit-filter: blur(1rem);
+    -moz-filter: blur(1rem);
+    -o-filter: blur(1rem);
+    -ms-filter: blur(1rem);
+    filter: blur(1rem);
+    transition: all 100ms linear;
+}
+
+.unblurred {
+    transition: all 100ms linear;
+}
+
+.boardAndTimer {
+    min-height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stormBox {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.difficultySelector {
+    display: flex;
+    justify-content: center;
+    margin: 1rem;
+>>>>>>> Stashed changes
 }
