@@ -1,0 +1,78 @@
+import useSWR from 'swr'
+import DifficultySelector from "./difficulty-selector/difficulty-selector"
+import styles from './chess.module.css'
+import { useState, useEffect, createRef } from 'react'
+import { loadDailyPuzzle, isCorrect } from '/lib/chess'
+import Score from './score/score'
+import Board from './board'
+import DailyStage from './daily-stage'
+
+export default function ChessDaily() {
+
+    const stages = ["Easy", "Medium", "Hard"]
+
+    const [loaded, setLoaded] = useState([])
+    const [stage, setStage] = useState(0)
+    const [dailyFinished, setDailyFinished] = useState(false)
+    const [showResults, setShowResults] = useState(false)
+    const [answers, setAnswers] = useState([])
+    const [positions, setPositions] = useState({ Easy: null, Medium: null, Hard: null })
+
+    useEffect(() => {
+        let today = new Date()
+        const day = today.getDate()
+        const month = today.getMonth() + 1
+        loadDailyPuzzle(day, month, "Easy").then((data) => {
+            setPositions(p => ({ ...p, Easy: data }))
+            setLoaded(l => [...l, "Easy"])
+        })
+        loadDailyPuzzle(day, month, "Medium").then((data) => {
+            setPositions(p => ({ ...p, Medium: data }))
+            setLoaded(l => [...l, "Medium"])
+        })
+        loadDailyPuzzle(day, month, "Hard").then((data) => {
+            setPositions(p => ({ ...p, Hard: data }))
+            setLoaded(l => [...l, "Hard"])
+        })
+    }, [])
+
+    if (loaded.length < 3) {
+        return <p>Loading your daily puzzles!</p>
+    }
+
+    const selectAnswer = (answer) => {
+        setShowResults(true)
+        setAnswers(a => [...a, answer])
+        setTimeout(() => {
+            if (stage != 2) {
+                setStage(s => s+1)
+                setShowResults(false)
+            } else {
+                setDailyFinished(true)
+            }
+        }, 3000)
+    }
+
+    const difficulty = stages[stage]
+
+    const dailyStage = <DailyStage stage={difficulty} />
+
+    console.log(`Difficulty is: ${difficulty}`)
+    console.log(`Position is: ${JSON.stringify(positions[difficulty])}`)
+
+    return (
+        <div className={styles.boardBox}>
+            <Board
+                data={positions[stages[stage]]}
+                difficulty={difficulty}
+                showResults={showResults}
+                onCorrect={(answer) => { selectAnswer(answer) }}
+                onWrong={(answer) => { selectAnswer(answer) }}
+                whomToMoveSibling={dailyStage}
+            />
+            <div className={styles.dailyResultsLoadingBarHolder}>
+                <div className={`${styles.dailyResultsLoadingBar} ${showResults ? styles.barFull : styles.barEmpty}`} />
+            </div>
+        </div>
+    )
+}

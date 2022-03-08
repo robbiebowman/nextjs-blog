@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
-import ChessPractice from "../../components/chess/chess-practice";
+import ChessDaily from "../../components/chess/chess-daily";
 import GameSelector from "../../components/chess/game-selector/game-selector";
 
 export default function Daily() {
@@ -12,7 +12,7 @@ export default function Daily() {
             </Head>
             <GameSelector selectedTab="Daily" />
             <div style={{ margin: "0 1rem" }}>
-                <ChessPractice />
+                <ChessDaily />
             </div>
         </Layout>
     )
