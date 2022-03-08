@@ -26,8 +26,6 @@ export default function Board({ data, difficulty, onCorrect, onWrong, showResult
         setBoardWidth(Math.min(width, 500))
     }, []);
 
-    console.log("Disabled buttons?" + disableButtons + "    " + Math.random())
-
     return (<>
         <div className={styles.difficultyAndWhomToMove}>
             <div className={styles.whomToMove}><span>{`${whomToMove} to move`}</span></div>

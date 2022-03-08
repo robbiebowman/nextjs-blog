@@ -50,7 +50,6 @@ export default function StormTimer({ onTimerPressed, correctGuesses, wrongGuesse
         if (seconds < 1) {
             clearTimeout(timer)
             if (gameStage == "Live") {
-                console.log("Timer ended!")
                 setGameStage("Postgame")
                 onGameEnded()
             }

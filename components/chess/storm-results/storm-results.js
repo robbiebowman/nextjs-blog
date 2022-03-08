@@ -37,6 +37,7 @@ export default function StormResults({ positions, display, answers, onResultsClo
         // Robbie's Chess Z /\ /\
         // y y y n y
         // y n y n
+        console.log("Share clicked")
         const difficultyComponent = difficulty == 'Easy' ? "☀️" : difficulty == "Medium" ? "☁️☁️" : "⛈️⛈️⛈️"
         const correctList = answers.map((a, i) => {
             const correct = isCorrect(positions[i].evaluation, a)
@@ -63,15 +64,15 @@ export default function StormResults({ positions, display, answers, onResultsClo
             <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>
             <div className={styles.resultsHeaderBox}>
                 <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
-                <button 
-                onClick={shareClicked} 
-                className="btn btn-lg btn-primary" 
-                data-tip="Copied to clipboard!"
-                data-place="top"
-                data-effect="solid"
-                data-event="click"
-                data-event-off="hover"
+                <div>
+                <button
+                    className="btn btn-lg btn-primary"
+                    data-tip="Copied to clipboard!"
+                    data-place="top"
+                    data-effect="solid"
+                    data-event="click"
                 ><FontAwesomeIcon icon={faCopy} /> Share</button>
+                </div>
             </div>
             {answers.map((a, i) => {
                 const p = positions[i]
@@ -83,11 +84,11 @@ export default function StormResults({ positions, display, answers, onResultsClo
                     <span className={styles.stockfishSays}>
                         Stockfish: <span className={getStockfishEvalStyle(p.evaluation)}>
                             {p.evaluation[0] == '#' ? p.evaluation : parseFloat(p.evaluation) / 100}
-                            </span>
+                        </span>
                     </span>
                     <CopyFen className={styles.fenBox} fen={p.fen} />
                 </div>
             })}
-            <ReactTooltip />
-        </div>)
+            <ReactTooltip afterShow={shareClicked} /> 
+        </div>) //Why the afterShow must be defined on the ReactTooltip, I do not know. https://github.com/wwayne/react-tooltip/issues/496
 }
