@@ -6,6 +6,7 @@ import { loadDailyPuzzle, isCorrect } from '/lib/chess'
 import Score from './score/score'
 import Board from './board'
 import DailyStage from './daily-stage'
+import GameResults from './game-results/game-results'
 
 export default function ChessDaily() {
 
@@ -45,23 +46,36 @@ export default function ChessDaily() {
         setAnswers(a => [...a, answer])
         setTimeout(() => {
             if (stage != 2) {
-                setStage(s => s+1)
+                setStage(s => s + 1)
                 setShowResults(false)
             } else {
                 setDailyFinished(true)
             }
-        }, 3000)
+        }, 500)
     }
 
     const difficulty = stages[stage]
 
     const dailyStage = <DailyStage stage={difficulty} />
 
-    console.log(`Difficulty is: ${difficulty}`)
+    console.log(`Daily finished is: ${dailyFinished}`)
     console.log(`Position is: ${JSON.stringify(positions[difficulty])}`)
 
-    return (
-        <div className={styles.boardBox}>
+    const getFinishedPositionsIterable = (positions) => {
+        if (positions.length < 3) {
+            return []
+        }
+        return [positions[stages[0]], positions[stages[1]], positions[stages[2]]]
+    }
+
+    return (<div className={styles.stormBox}>
+        <GameResults
+            mode="Daily"
+            answers={answers}
+            display={dailyFinished}
+            positions={getFinishedPositionsIterable(positions)}
+            difficulty={difficulty} />
+        <div className={`${styles.boardBox} ${dailyFinished ? styles.blurred : styles.unblurred}`}>
             <Board
                 data={positions[stages[stage]]}
                 difficulty={difficulty}
@@ -74,5 +88,5 @@ export default function ChessDaily() {
                 <div className={`${styles.dailyResultsLoadingBar} ${showResults ? styles.barFull : styles.barEmpty}`} />
             </div>
         </div>
-    )
+    </div>)
 }

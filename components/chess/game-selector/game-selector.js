@@ -9,7 +9,7 @@ export default function GameSelector({ selectedTab }) {
                 <Link href="/chess">Practice</Link>
             </span>
             <span className={selectedTab == "Daily" ? styles.selectedTab : styles.unselectedTab}>
-                <Link href="/chess/daily">Daily 🚧</Link>
+                <Link href="/chess/daily">Daily</Link>
             </span>
             <span className={selectedTab == "Storm" ? styles.selectedTab : styles.unselectedTab}>
                 <Link href="/chess/storm">Storm</Link>

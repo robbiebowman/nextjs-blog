@@ -47,9 +47,8 @@
 }
 
 .resultNumber {
-    font-size: 5rem;
+    font-size: 3rem;
     color:rgb(15, 211, 74);
-    text-shadow: 0 0 0.5rem rgb(93, 248, 127);
     display: block;
     width: 100%;
     text-align: center;

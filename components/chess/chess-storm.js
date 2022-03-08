@@ -9,7 +9,7 @@ import StormTimer from './storm-timer/storm-timer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons'
 import CopyFen from './score/copy-fen'
-import StormResults from './storm-results/storm-results'
+import GameResults from './game-results/game-results'
 
 export default function ChessStorm() {
 
@@ -70,7 +70,9 @@ export default function ChessStorm() {
     }
 
     return (<div className={styles.stormBox}>
-        <StormResults
+        <GameResults
+            mode="Storm"
+            showCloseButton={true}
             answers={answers}
             display={gameStage == "Postgame"}
             positions={positions}

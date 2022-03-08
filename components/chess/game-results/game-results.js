@@ -1,4 +1,4 @@
-import styles from './storm-results.module.css'
+import styles from './game-results.module.css'
 import { useState } from 'react'
 import { isCorrect } from '/lib/chess'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,7 +6,7 @@ import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free
 import CopyFen from '../score/copy-fen'
 import ReactTooltip from 'react-tooltip'
 
-export default function StormResults({ positions, display, answers, onResultsClosed, difficulty }) {
+export default function GameResults({ mode, positions, display, answers, onResultsClosed, difficulty, showCloseButton }) {
 
     if (positions.length == 0) {
         return <p>Loading...</p>
@@ -33,7 +33,7 @@ export default function StormResults({ positions, display, answers, onResultsClo
         }
     }
 
-    const shareClicked = () => {
+    const shareStormClicked = () => {
         // Robbie's Chess Z /\ /\
         // y y y n y
         // y n y n
@@ -59,25 +59,72 @@ export default function StormResults({ positions, display, answers, onResultsClo
         navigator.clipboard.writeText(shareString)
     }
 
+    const getDailySymbol = (i) => {
+        if (i == 0) {
+            return "☀️"
+        } else if (i == 1) {
+            return "☁️"
+        } else {
+            return "⛈️"
+        }
+    }
+
+    const getDailyNumber = () => {
+        const firstEverPuzzle = new Date(2022, 2, 7)
+        const today = new Date()
+        return Math.floor((today.getTime() - firstEverPuzzle.getTime()) / (1000 * 60 * 60 * 24)) + 1
+    }
+
+    const shareDailyClicked = () => {
+        // Robbie's Daily
+        // /\ [} #1
+        // ☀️ ☁️ ⛈️
+        // y n y
+        const dayDiff = getDailyNumber()
+        const correctList = answers.map((a, i) => {
+            const correct = isCorrect(positions[i].evaluation, a)
+            let str
+            if (correct) {
+                str = "✅"
+            } else {
+                str = "❌"
+            }
+            if ((i + 1) % 5 == 0) {
+                str += "\n"
+            }
+            return str
+        }).join('')
+        const shareString = `Robbie's Daily\n♟️🧩#${dayDiff}\n☀️☁️⛈️\n${correctList}`
+        navigator.clipboard.writeText(shareString)
+    }
+
     return (
         <div className={`${styles.stormResultsBox}`} style={{ display: (display ? "block" : "none") }}>
-            <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>
+            {mode == "Daily" ? "" : <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>}
             <div className={styles.resultsHeaderBox}>
-                <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
+                <span className={styles.resultNumber}>{
+                    mode == "Daily"
+                        ? "☀️☁️⛈️"
+                        : answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length
+                }</span>
                 <div>
-                <button
-                    className="btn btn-lg btn-primary"
-                    data-tip="Copied to clipboard!"
-                    data-place="top"
-                    data-effect="solid"
-                    data-event="click"
-                ><FontAwesomeIcon icon={faCopy} /> Share</button>
+                    <button
+                        className="btn btn-lg btn-primary"
+                        data-tip="Copied to clipboard!"
+                        data-place="top"
+                        data-effect="solid"
+                        data-event="click"
+                    ><FontAwesomeIcon icon={faCopy} /> Share</button>
                 </div>
             </div>
             {answers.map((a, i) => {
                 const p = positions[i]
                 const correct = isCorrect(p.evaluation, a)
-                return <div key={`answer${i}`} className={styles.resultRow} style={i == 0 ? { borderTop: "0rem #FFF solid" } : i == answers.length - 1 ? { borderBottom: "0rem #FFF solid" } : {}}>
+                return <div
+                    key={`answer${i}`}
+                    className={styles.resultRow}
+                    style={i == 0 ? { borderTop: "0rem #FFF solid" } : i == answers.length - 1 ? { borderBottom: "0rem #FFF solid" } : {}}>
+                    {mode == "Daily" ? getDailySymbol(i) : ""}
                     <span className={correct ? styles.correctGuess : styles.wrongGuess}>
                         <FontAwesomeIcon icon={correct ? faCircleCheck : faCircleXmark} /> {mapAnswerToName(a)}
                     </span>
@@ -89,6 +136,6 @@ export default function StormResults({ positions, display, answers, onResultsClo
                     <CopyFen className={styles.fenBox} fen={p.fen} />
                 </div>
             })}
-            <ReactTooltip afterShow={shareClicked} /> 
+            <ReactTooltip afterShow={mode == "Daily" ? shareDailyClicked : shareStormClicked} />
         </div>) //Why the afterShow must be defined on the ReactTooltip, I do not know. https://github.com/wwayne/react-tooltip/issues/496
 }
