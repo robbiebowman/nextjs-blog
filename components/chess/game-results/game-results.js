@@ -103,7 +103,6 @@ export default function GameResults({ mode, positions, display, answers, onResul
             return (Math.round((thisOne / max) * 10) / 10) * barHeightRems
         }
         const maxRecord = Math.max(records.Easy, records.Medium, records.Hard)
-
         const heights = [getHeight(maxRecord, records.Easy), getHeight(maxRecord, records.Medium), getHeight(maxRecord, records.Hard)]
 
         dailyResultsHeader = <div className={styles.dailyResultsHeader}>

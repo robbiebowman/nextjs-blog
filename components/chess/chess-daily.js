@@ -3,8 +3,9 @@ import { useState, useEffect, createRef } from 'react'
 import Board from './board'
 import DailyStage from './daily-stage'
 import GameResults from './game-results/game-results'
-import { loadDailyPuzzle, getDailyCookieKey, getDailyCookieValue } from '/lib/chess'
-import { getTodaysDailyAnswers, saveTodaysDailyAnswers, getAllDailyAnswers, hasCompletedToday } from '/lib/cookies'
+import { loadDailyPuzzle } from '/lib/chess'
+import { getLastDailyAnswers, saveTodaysDailyAnswers, getAllDailyAnswers, hasCompletedToday } from '/lib/cookies'
+import { isCorrect } from '../../lib/chess'
 
 export default function ChessDaily() {
 
@@ -37,11 +38,20 @@ export default function ChessDaily() {
 
     useEffect(() => {
         if (hasCompletedToday()) {
-            const results = getTodaysDailyAnswers().answers
+            const results = getLastDailyAnswers()
             setAnswers(results)
             setDailyFinished(true)
         }
     }, [])
+
+    useEffect(() => {
+        if (loaded.length == 3 && answers.length == 3) {
+            const easyCorrect = isCorrect(positions.Easy.evaluation, answers[0])
+            const medCorrect = isCorrect(positions.Medium.evaluation, answers[1])
+            const hardCorrect = isCorrect(positions.Hard.evaluation, answers[2])
+            saveTodaysDailyAnswers(answers, [easyCorrect, medCorrect, hardCorrect])
+        }
+    }, [answers, loaded])
 
     if (loaded.length < 3) {
         return <p>Loading your daily puzzles!</p>
@@ -49,11 +59,7 @@ export default function ChessDaily() {
 
     const selectAnswer = (answer) => {
         setShowResults(true)
-        setAnswers(a => {
-            let ans = [...a, answer]
-            saveTodaysDailyAnswers(ans)
-            return ans
-        })
+        setAnswers(a => [...a, answer])
         setTimeout(() => {
             if (stage != 2) {
                 setStage(s => s + 1)

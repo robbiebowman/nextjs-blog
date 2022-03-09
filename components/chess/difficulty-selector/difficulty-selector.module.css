@@ -18,7 +18,7 @@
 }
 
 .unselected {
-	color: #9c9c9c;
+    opacity: 0.3;
 }
 
 .selected {
