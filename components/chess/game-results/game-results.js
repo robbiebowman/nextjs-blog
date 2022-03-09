@@ -1,12 +1,12 @@
 import styles from './game-results.module.css'
 import { useState } from 'react'
-import { isCorrect } from '/lib/chess'
+import { isCorrect, getDailyNumber } from '/lib/chess'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleXmark, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons'
 import CopyFen from '../score/copy-fen'
 import ReactTooltip from 'react-tooltip'
 
-export default function GameResults({ mode, positions, display, answers, onResultsClosed, difficulty, showCloseButton }) {
+export default function GameResults({ mode, positions, display, answers, onResultsClosed, difficulty, records, streak }) {
 
     if (positions.length == 0) {
         return <p>Loading...</p>
@@ -69,12 +69,6 @@ export default function GameResults({ mode, positions, display, answers, onResul
         }
     }
 
-    const getDailyNumber = () => {
-        const firstEverPuzzle = new Date(2022, 2, 7)
-        const today = new Date()
-        return Math.floor((today.getTime() - firstEverPuzzle.getTime()) / (1000 * 60 * 60 * 24)) + 1
-    }
-
     const shareDailyClicked = () => {
         // Robbie's Daily
         // /\ [} #1
@@ -98,15 +92,48 @@ export default function GameResults({ mode, positions, display, answers, onResul
         navigator.clipboard.writeText(shareString)
     }
 
+    const stormResultsHeader = <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
+
+
+    let dailyResultsHeader = ""
+
+    if (mode == "Daily") {
+        const barHeightRems = 5
+        const getHeight = (max, thisOne) => {
+            return (Math.round((thisOne / max) * 10) / 10) * barHeightRems
+        }
+        const maxRecord = Math.max(records.Easy, records.Medium, records.Hard)
+
+        const heights = [getHeight(maxRecord, records.Easy), getHeight(maxRecord, records.Medium), getHeight(maxRecord, records.Hard)]
+
+        dailyResultsHeader = <div className={styles.dailyResultsHeader}>
+            <div className={styles.recordsAndDifficultyBox}>
+                <span className={styles.recordsCount}>{records.Easy}</span>
+                <div className={styles.recordsBar} style={{ height: `${heights[0]}rem` }} />
+                <span className={styles.recordBarDifficulty}>☀️</span>
+            </div>
+            <div className={styles.recordsAndDifficultyBox}>
+                <span className={styles.recordsCount}>{records.Medium}</span>
+                <div className={styles.recordsBar} style={{ height: `${heights[1]}rem` }} />
+                <span className={styles.recordBarDifficulty}>☁️</span>
+            </div>
+            <div className={styles.recordsAndDifficultyBox}>
+                <span className={styles.recordsCount}>{records.Hard}</span>
+                <div className={styles.recordsBar} style={{ height: `${heights[2]}rem` }} />
+                <span className={styles.recordBarDifficulty}>⛈️</span>
+            </div>
+        </div>
+    }
+
     return (
         <div className={`${styles.stormResultsBox}`} style={{ display: (display ? "block" : "none") }}>
             {mode == "Daily" ? "" : <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>}
             <div className={styles.resultsHeaderBox}>
-                <span className={styles.resultNumber}>{
+                {
                     mode == "Daily"
-                        ? "☀️☁️⛈️"
-                        : answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length
-                }</span>
+                        ? dailyResultsHeader
+                        : stormResultsHeader
+                }
                 <div>
                     <button
                         className="btn btn-lg btn-primary"

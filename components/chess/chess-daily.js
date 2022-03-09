@@ -1,12 +1,10 @@
-import useSWR from 'swr'
-import DifficultySelector from "./difficulty-selector/difficulty-selector"
 import styles from './chess.module.css'
 import { useState, useEffect, createRef } from 'react'
-import { loadDailyPuzzle, isCorrect } from '/lib/chess'
-import Score from './score/score'
 import Board from './board'
 import DailyStage from './daily-stage'
 import GameResults from './game-results/game-results'
+import { loadDailyPuzzle, getDailyCookieKey, getDailyCookieValue } from '/lib/chess'
+import { getTodaysDailyAnswers, saveTodaysDailyAnswers, getAllDailyAnswers, hasCompletedToday } from '/lib/cookies'
 
 export default function ChessDaily() {
 
@@ -37,13 +35,25 @@ export default function ChessDaily() {
         })
     }, [])
 
+    useEffect(() => {
+        if (hasCompletedToday()) {
+            const results = getTodaysDailyAnswers().answers
+            setAnswers(results)
+            setDailyFinished(true)
+        }
+    }, [])
+
     if (loaded.length < 3) {
         return <p>Loading your daily puzzles!</p>
     }
 
     const selectAnswer = (answer) => {
         setShowResults(true)
-        setAnswers(a => [...a, answer])
+        setAnswers(a => {
+            let ans = [...a, answer]
+            saveTodaysDailyAnswers(ans)
+            return ans
+        })
         setTimeout(() => {
             if (stage != 2) {
                 setStage(s => s + 1)
@@ -51,15 +61,12 @@ export default function ChessDaily() {
             } else {
                 setDailyFinished(true)
             }
-        }, 500)
+        }, 300)
     }
 
     const difficulty = stages[stage]
 
     const dailyStage = <DailyStage stage={difficulty} />
-
-    console.log(`Daily finished is: ${dailyFinished}`)
-    console.log(`Position is: ${JSON.stringify(positions[difficulty])}`)
 
     const getFinishedPositionsIterable = (positions) => {
         if (positions.length < 3) {
@@ -74,7 +81,9 @@ export default function ChessDaily() {
             answers={answers}
             display={dailyFinished}
             positions={getFinishedPositionsIterable(positions)}
-            difficulty={difficulty} />
+            difficulty={difficulty}
+            records={getAllDailyAnswers()}
+            streak={getAllDailyAnswers().streak} />
         <div className={`${styles.boardBox} ${dailyFinished ? styles.blurred : styles.unblurred}`}>
             <Board
                 data={positions[stages[stage]]}
