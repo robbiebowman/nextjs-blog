@@ -65,10 +65,6 @@ export default function ChessStorm() {
         }
     }
 
-    if (positions.length == 0) {
-        return <p>Loading...</p>
-    }
-
     return (<div className={styles.stormBox}>
         <GameResults
             mode="Storm"
@@ -87,6 +83,7 @@ export default function ChessStorm() {
         <div className={styles.stormGameBox}>
             <div className={`${styles.boardAndTimer} ${gameStage == "Postgame" ? styles.blurred : styles.unblurred}`}>
                 <StormTimer
+                    gameStage={gameStage}
                     onTimerPressed={() => { setGameStage("Live") }}
                     correctGuesses={correctGuesses}
                     wrongGuesses={wrongGuesses}

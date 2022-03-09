@@ -2,10 +2,10 @@ import { useState, useEffect } from "react"
 import styles from './storm-timer.module.css'
 
 
-export default function StormTimer({ onTimerPressed, correctGuesses, wrongGuesses, onGameEnded }) {
+export default function StormTimer({ gameStage, onTimerPressed, correctGuesses, wrongGuesses, onGameEnded }) {
 
     const [seconds, setSeconds] = useState(60)
-    const [gameStage, setGameStage] = useState('Pregame') // Pregame, Live, Postgame
+    // gameStage = Pregame, Live, Postgame
 
     const [handledCorrectGuesses, setHandledCorrectGuesses] = useState(0)
     const [handledWrongGuesses, setHandledWrongGuesses] = useState(0)
@@ -50,7 +50,6 @@ export default function StormTimer({ onTimerPressed, correctGuesses, wrongGuesse
         if (seconds < 1) {
             clearTimeout(timer)
             if (gameStage == "Live") {
-                setGameStage("Postgame")
                 onGameEnded()
             }
         }
@@ -60,8 +59,8 @@ export default function StormTimer({ onTimerPressed, correctGuesses, wrongGuesse
     }, [seconds, gameStage]);
 
     const timerPressed = () => {
+        setSeconds(60)
         onTimerPressed()
-        setGameStage("Live")
     }
 
     return (

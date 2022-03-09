@@ -53,10 +53,6 @@ export default function ChessDaily() {
         }
     }, [answers, loaded])
 
-    if (loaded.length < 3) {
-        return <p>Loading your daily puzzles!</p>
-    }
-
     const selectAnswer = (answer) => {
         setShowResults(true)
         setAnswers(a => [...a, answer])

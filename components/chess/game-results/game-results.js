@@ -8,9 +8,6 @@ import ReactTooltip from 'react-tooltip'
 
 export default function GameResults({ mode, positions, display, answers, onResultsClosed, difficulty, records, streak }) {
 
-    if (positions.length == 0) {
-        return <p>Loading...</p>
-    }
 
     const mapAnswerToName = (ans) => {
         if (ans == '+') {
@@ -92,10 +89,7 @@ export default function GameResults({ mode, positions, display, answers, onResul
         navigator.clipboard.writeText(shareString)
     }
 
-    const stormResultsHeader = <span className={styles.resultNumber}>{answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}</span>
-
-
-    let dailyResultsHeader = ""
+    let resultsHeader
 
     if (mode == "Daily") {
         const barHeightRems = 5
@@ -105,7 +99,7 @@ export default function GameResults({ mode, positions, display, answers, onResul
         const maxRecord = Math.max(records.Easy, records.Medium, records.Hard)
         const heights = [getHeight(maxRecord, records.Easy), getHeight(maxRecord, records.Medium), getHeight(maxRecord, records.Hard)]
 
-        dailyResultsHeader = <div className={styles.dailyResultsHeader}>
+        resultsHeader = <div className={styles.dailyResultsHeader}>
             <div className={styles.recordsAndDifficultyBox}>
                 <span className={styles.recordsCount}>{records.Easy}</span>
                 <div className={styles.recordsBar} style={{ height: `${heights[0]}rem` }} />
@@ -122,17 +116,18 @@ export default function GameResults({ mode, positions, display, answers, onResul
                 <span className={styles.recordBarDifficulty}>⛈️</span>
             </div>
         </div>
+        console.log(`Computed heights: ${heights}`)
+    } else {
+        resultsHeader = <span className={styles.resultNumber}>
+            {answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}
+        </span>
     }
 
     return (
         <div className={`${styles.stormResultsBox}`} style={{ display: (display ? "block" : "none") }}>
             {mode == "Daily" ? "" : <span className={styles.closeResults} onClick={onResultsClosed}><FontAwesomeIcon icon={faXmark} /></span>}
             <div className={styles.resultsHeaderBox}>
-                {
-                    mode == "Daily"
-                        ? dailyResultsHeader
-                        : stormResultsHeader
-                }
+                {resultsHeader}
                 <div>
                     <button
                         className="btn btn-lg btn-primary"
@@ -144,7 +139,7 @@ export default function GameResults({ mode, positions, display, answers, onResul
                 </div>
             </div>
             {answers.map((a, i) => {
-                const p = positions[i]
+                const p = positions[i] || {evaluation: "", fen: ""}
                 const correct = isCorrect(p.evaluation, a)
                 return <div
                     key={`answer${i}`}
@@ -156,7 +151,7 @@ export default function GameResults({ mode, positions, display, answers, onResul
                     </span>
                     <span className={styles.stockfishSays}>
                         Stockfish: <span className={getStockfishEvalStyle(p.evaluation)}>
-                            {p.evaluation[0] == '#' ? p.evaluation : parseFloat(p.evaluation) / 100}
+                            {p.evaluation ? p.evaluation[0] == '#' ? p.evaluation : parseFloat(p.evaluation) / 100 : ""}
                         </span>
                     </span>
                     <CopyFen className={styles.fenBox} fen={p.fen} />

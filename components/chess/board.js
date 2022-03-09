@@ -5,7 +5,7 @@ import EvalBar from "./eval-bar/eval-bar"
 import { useState, useEffect, createRef } from 'react'
 
 export default function Board({ data, difficulty, onCorrect, onWrong, showResults, whomToMoveSibling, disableButtons }) {
-    if (data === undefined) {
+    if (data === undefined || data == null) {
         data = {fen: "", evaluation: ""}
     }
     const whomToMove = data.fen.split(' ')[1] == 'w' ? "⬜ White" : "⬛ Black" || "⬜ Loading..."

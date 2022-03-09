@@ -10,8 +10,6 @@ export default function Score({ answer, evaluation, fen, nextClicked, evaluator,
 
     const [fenBoxOpen, setFenBoxOpen] = useState(false)
 
-    if (!evaluation) return (<div>Loading...</div>)
-
     const wasCorrect = evaluator(evaluation, answer)
 
     const getReact = (streak) => {
