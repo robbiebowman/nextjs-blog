@@ -116,7 +116,6 @@ export default function GameResults({ mode, positions, display, answers, onResul
                 <span className={styles.recordBarDifficulty}>⛈️</span>
             </div>
         </div>
-        console.log(`Computed heights: ${heights}`)
     } else {
         resultsHeader = <span className={styles.resultNumber}>
             {answers.filter((a, i) => isCorrect(positions[i].evaluation, a)).length}
@@ -135,7 +134,7 @@ export default function GameResults({ mode, positions, display, answers, onResul
                         data-place="top"
                         data-effect="solid"
                         data-event="click"
-                    ><FontAwesomeIcon icon={faCopy} /> Share</button>
+                    ><FontAwesomeIcon icon={faCopy} /> Share!</button>
                 </div>
             </div>
             {answers.map((a, i) => {

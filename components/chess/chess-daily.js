@@ -63,7 +63,7 @@ export default function ChessDaily() {
             } else {
                 setDailyFinished(true)
             }
-        }, 300)
+        }, 3000)
     }
 
     const difficulty = stages[stage]
