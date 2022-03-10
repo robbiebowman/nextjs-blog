@@ -10,9 +10,16 @@ export default function Storm() {
 
     return (
         <Layout>
-            <Head>
-                <title>Who has the better position?</title>
-            </Head>
+        <Head>
+            <title>Who has the better position?</title>
+            <meta
+                property="og:image"
+                content={"https://www.robbiebowman.com/images/social-preview.png"}
+            />
+            <meta name="og:title" content="A timed chess game by Robbie" />
+            <meta name="twitter:card"
+                content={"https://www.robbiebowman.com/images/social-preview.png"} />
+        </Head>
             <GameSelector selectedTab="Storm" />
             <div style={{ margin: "0 1rem" }}>
                 <ChessStorm />

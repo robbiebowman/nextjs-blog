@@ -12,13 +12,14 @@ export default function Chess() {
                 <title>Who has the better position?</title>
                 <meta
                     property="og:image"
-                    content={"/public/images/social-preview.png"}
+                    content={"https://www.robbiebowman.com/images/social-preview.png"}
                 />
                 <meta name="og:title" content="A chess game by Robbie" />
-                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:card"
+                    content={"https://www.robbiebowman.com/images/social-preview.png"} />
             </Head>
             <GameSelector selectedTab="Practice" />
-            <div style={{margin: "0 1rem"}}>
+            <div style={{ margin: "0 1rem" }}>
                 <ChessPractice />
             </div>
         </Layout>
