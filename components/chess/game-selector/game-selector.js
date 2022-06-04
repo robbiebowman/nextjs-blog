@@ -4,8 +4,8 @@ import styles from './game-selector.module.css'
 function GameSelector({ tabs, selectedTitle }) {
 
     return (<div className={styles.gametypeBox}>
-        {tabs.map(t => {
-            return <span className={selectedTitle == t.title ? styles.selectedTab : styles.unselectedTab}>
+        {tabs.map((t, i) => {
+            return <span key={i} className={selectedTitle == t.title ? styles.selectedTab : styles.unselectedTab}>
                 <Link href={t.link}>{t.title}</Link>
             </span>
         })}</div>)
@@ -37,7 +37,7 @@ export function WordleGameSelector({
     selectedTitle
 }) {
     return GameSelector({
-        tabs: [{ title: "Solver", link: "/wordle" }, { title: "Daily", link: "/chess/daily" }],
+        tabs: [{ title: "Solver", link: "/wordle" }],
         selectedTitle
     })
 }
