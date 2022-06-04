@@ -6,7 +6,7 @@ export default function RemainingAnswers({ wordList, count }) {
 
   return (
     <div>
-      <p>Remaining possibilities: {count}</p>
+      <p className={styles.title}>Remaining possibilities: <span className={styles.count}>{count}</span></p>
       <ul className={styles.answerList}>
         {
           wordList.map((w, i) => {
