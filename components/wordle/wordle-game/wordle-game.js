@@ -86,7 +86,7 @@ export default function WordleGame() {
         {complete || errors
           ? <></>
           : <div className={styles.letterBox}>
-            {result.map((r, i) => <Letter letter={(bestGuess)[i]} onClick={() => toggleLetter(i)} result={r} />)}
+            {result.map((r, i) => <Letter key={i} letter={(bestGuess)[i]} onClick={() => toggleLetter(i)} result={r} />)}
           </div>}
         <div className={styles.buttonBox}>
           {errors
