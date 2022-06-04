@@ -8,7 +8,6 @@ import ReactTooltip from 'react-tooltip'
 
 export default function GameResults({ mode, positions, display, answers, onResultsClosed, difficulty, records, streak }) {
 
-
     const mapAnswerToName = (ans) => {
         if (ans == '+') {
             return "⬜ White"

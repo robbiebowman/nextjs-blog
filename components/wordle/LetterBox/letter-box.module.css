@@ -1,0 +1,12 @@
+.letterBox{
+    display:flex;
+}
+.doublePanel{
+    display: flex;
+    justify-content: space-around;
+}
+.buttonBox{
+    margin: 1rem;
+    display: flex;
+    justify-content: space-around;
+}
