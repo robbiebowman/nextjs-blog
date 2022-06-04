@@ -1,0 +1,21 @@
+.letterBox{
+    display:flex;
+}
+.doublePanel{
+    display: flex;
+    justify-content: space-around;
+}
+.buttonBox{
+    margin: 1rem;
+    display: flex;
+    justify-content: space-around;
+}
+.errorBox {
+    max-width: 15rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #A95777;
+    padding: 1rem;
+    color: white;
+}

@@ -34,6 +34,15 @@ export default function Home({ allPostsData }) {
                 Can you tell which side Stockfish favours?
               </small>
             </li>
+            <li className={utilStyles.listItem}>
+              <Link href={`/wordle`}>
+                <a>Wordle solver ⬜🟨🟩</a>
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                Suggests words based on how many remaining possibilities they'll exclude.
+              </small>
+            </li>
         </ul>
       </section>
       {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>

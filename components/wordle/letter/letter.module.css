@@ -1,0 +1,35 @@
+.box{
+    height: 4rem;
+    width: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #0006;
+    margin: 0.2rem;
+}
+.gBox {
+    background-color: #66bb33;
+    transition: all 300ms ease-in;
+}
+.yBox {
+    background-color: #cb0;
+    transition: all 300ms ease-in;
+}
+.bBox {
+    background-color: #333;
+    transition: all 300ms ease-in;
+}
+.innerLetter {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: #FFF;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}

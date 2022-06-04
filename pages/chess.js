@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Layout from "../components/layout";
 import ChessPractice from "../components/chess/chess-practice";
-import GameSelector from "../components/chess/game-selector/game-selector";
+import { ChessGameSelector } from "../components/chess/game-selector/game-selector";
 
 
 export default function Chess() {
@@ -18,7 +18,7 @@ export default function Chess() {
                 <meta name="twitter:card"
                     content={"https://www.robbiebowman.com/images/social-preview.png"} />
             </Head>
-            <GameSelector selectedTab="Practice" />
+            <ChessGameSelector selectedTitle="Practice" />
             <div style={{ margin: "0 1rem" }}>
                 <ChessPractice />
             </div>

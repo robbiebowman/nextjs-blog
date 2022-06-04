@@ -1,0 +1,13 @@
+.answerList {
+    list-style-type: none;
+    position: relative;
+    min-height: 35rem;
+    width: 15rem;
+}
+.title{
+    font-weight: 200;
+}
+.count{
+    font-weight: 400;
+    font-size: larger;
+}

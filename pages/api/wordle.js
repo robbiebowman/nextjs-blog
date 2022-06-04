@@ -1,12 +1,15 @@
 import useSWR from 'swr';
 
-
 export default async function handler(req, res) {
+  const { hardMode, guesses, results } = req.query
 
-  const response = await fetch("http://localhost:8080/wordle?guesses=&results=&hardMode=false").then(res => res.json())
+  const response = await fetch(`${process.env.PERSONAL_API_URL}/wordle?guesses=${guesses}&results=${results}&hardMode=${hardMode}`)
+    .then(r => { if (r.status >= 400) { 
+      throw "Couldn't find a valid answer"
+    } else { 
+      return r.json() 
+    } })
+    .catch(error => res.status(400).json({ error }))
 
-  
-  // req = HTTP incoming message, res = HTTP server response
   res.status(200).json(response)
-
 }
