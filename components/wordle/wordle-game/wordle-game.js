@@ -23,6 +23,9 @@ export default function WordleGame() {
     onSuccess: (data, key, config) => {
       if (data.error) {
         setErrors(true)
+        setRemainingAnswerCount(0)
+        setSomeRemainingAnswers([])
+        setBestGuess("")
       } else {
         setErrors(false)
         setRemainingAnswerCount(data.remainingAnswerCount)
