@@ -1,5 +1,6 @@
 .letterBox{
     display:flex;
+    align-items: center;
 }
 .doublePanel{
     display: flex;
