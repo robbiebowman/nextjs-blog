@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
-import { ChessGameSelector } from "../../components/chess/game-selector/game-selector";
+import { ChessGameSelector } from "../../components/game-selector/game-selector";
 import StormTimer from "../../components/chess/storm-timer/storm-timer";
 import { useState } from "react";
 import styles from './chess-games.module.css'

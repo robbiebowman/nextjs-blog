@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import React, { useState } from 'react';
 import Layout from "../components/layout";
 import WordleGame from "../components/wordle/wordle-game/wordle-game";
-import { WordleGameSelector } from "../components/chess/game-selector/game-selector";
+import { WordleGameSelector } from "../components/game-selector/game-selector";
 
 export default function Wordle() {
 

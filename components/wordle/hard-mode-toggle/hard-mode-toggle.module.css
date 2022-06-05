@@ -1,0 +1,26 @@
+
+.selectorBox {
+    display: flex;
+    margin: 0.5rem;
+    align-items: center;
+    justify-content: space-around;
+    width: 13rem;
+	background: #f3f3f3;
+	padding: 0.2rem;
+	border-radius: 0.5rem;
+}
+
+.selectorBox span {
+    font-size: 0.75rem;
+	width: 100%;
+    text-align: center;
+    transition: all 200ms linear;
+}
+
+.unselected {
+    opacity: 0.3;
+}
+
+.selected {
+	color: rgb(44, 44, 44);
+}

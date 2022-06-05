@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
 import ChessDaily from "../../components/chess/chess-daily";
-import { ChessGameSelector } from "../../components/chess/game-selector/game-selector";
+import { ChessGameSelector } from "../../components/game-selector/game-selector";
 
 export default function Daily() {
 

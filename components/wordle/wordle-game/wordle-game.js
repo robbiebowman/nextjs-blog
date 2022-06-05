@@ -1,9 +1,9 @@
-import styles from './wordle-game.module.css'
-import Head from "next/head";
+import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import React, { useState, useEffect } from 'react';
-import Letter from "../letter/letter"
+import HardModeToggle from '../hard-mode-toggle/hard-mode-toggle';
+import Letter from "../letter/letter";
 import RemainingAnswers from '../remaining-answers/remaining-answers';
+import styles from './wordle-game.module.css';
 
 export default function WordleGame() {
 
@@ -19,22 +19,22 @@ export default function WordleGame() {
 
   const fetcher = (...args) => fetch(...args).then(res => res.json());
 
-  const { data, mutate } = useSWR(() => `/api/wordle?guesses=${oldAnswers}&results=${oldResults}&hardMode=${hardMode}`, fetcher, {
+  const { data, mutate } = useSWR(() => errors ? null : `/api/wordle?guesses=${oldAnswers}&results=${oldResults}&hardMode=${hardMode}`, fetcher, {
     onSuccess: (data, key, config) => {
-      if (data.error) {
-        setErrors(true)
-        setRemainingAnswerCount(0)
-        setSomeRemainingAnswers([])
-        setBestGuess("")
-      } else {
-        setErrors(false)
-        setRemainingAnswerCount(data.remainingAnswerCount)
-        setSomeRemainingAnswers(data.someRemainingAnswers)
-        setBestGuess(data.bestGuess)
-        if (data.remainingAnswerCount == 1) {
-          setComplete(true)
-        }
+      setErrors(false)
+      setRemainingAnswerCount(data.remainingAnswerCount)
+      setSomeRemainingAnswers(data.someRemainingAnswers)
+      console.log("Made request")
+      setBestGuess(data.bestGuess)
+      if (data.remainingAnswerCount == 1) {
+        setComplete(true)
       }
+    },
+    onError: (err, key, config) => {
+      setErrors(true)
+      setRemainingAnswerCount(0)
+      setSomeRemainingAnswers([])
+      setBestGuess("")
     }
   })
 
@@ -48,7 +48,6 @@ export default function WordleGame() {
     const existingAnswer = result[index]
     const newResult = [...result]
     newResult[index] = existingAnswer == 'b' ? 'y' : existingAnswer == 'y' ? 'g' : 'b'
-    console.log(`newResult: ${newResult}`)
     setResult(newResult)
   }
 
@@ -73,7 +72,9 @@ export default function WordleGame() {
   return (<div>
     <div className={styles.doublePanel}>
       <div>
-        <p style={{ opacity: complete ? 0 : 1, transition: 'all 500ms linear' }}>Try: {bestGuess}</p>
+        <div>
+          <HardModeToggle disabled={oldAnswers.length != 0} hardModeOn={hardMode} onToggled={() => setHardMode((h) => !h)}/>
+        </div>
         {
           oldAnswers.map((a, i) => {
             return (
@@ -83,8 +84,8 @@ export default function WordleGame() {
             )
           })
         }
-        {complete ? (<div className={styles.letterBox}>
-                {[...bestGuess].map((l, i) => <Letter key={i + l} letter={l} result='g' />)}
+        {complete && bestGuess !== oldAnswers[oldAnswers.length] ? (<div className={styles.letterBox}>
+          {[...bestGuess].map((l, i) => <Letter key={i + l} letter={l} result='g' />)}
         </div>) : <></>}
         {complete || errors
           ? <></>
@@ -110,6 +111,7 @@ export default function WordleGame() {
         </div>
       </div>
       <div>
+        <p style={{ opacity: complete ? 0 : 1, transition: 'all 500ms linear' }}>Try: {bestGuess}</p>
         <RemainingAnswers count={remainingAnswerCount} wordList={someRemainingAnswers} />
       </div>
     </div>
