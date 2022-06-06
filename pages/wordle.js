@@ -12,8 +12,10 @@ export default function Wordle() {
             <Head>
                 <title>Wordle Solver</title>
             </Head>
-            <WordleGameSelector selectedTitle="Solver"/>
-            <WordleGame />
+            <WordleGameSelector selectedTitle="Solver" />
+            <div style={{ margin: "0 1rem" }}>
+                <WordleGame />
+            </div>
         </Layout>
     )
 

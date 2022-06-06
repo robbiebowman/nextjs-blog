@@ -1,35 +1,40 @@
-.box{
-    height: 4rem;
-    width: 4rem;
+.box {
     display: flex;
+    max-width: 4rem;
     align-items: center;
     justify-content: center;
     border: 1px solid #0006;
     margin: 0.2rem;
+    flex: 1;
+    aspect-ratio: 1;
 }
+
 .gBox {
     background-color: #66bb33;
     transition: all 300ms ease-in;
 }
+
 .yBox {
     background-color: #cb0;
     transition: all 300ms ease-in;
 }
+
 .bBox {
     background-color: #333;
     transition: all 300ms ease-in;
 }
+
 .innerLetter {
     text-align: center;
-    font-weight: bold;
-    font-size: 24px;
+    font-weight: 500;
+    font-size:  calc(0.5rem + 2vmin);
     color: #FFF;
 
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
 }

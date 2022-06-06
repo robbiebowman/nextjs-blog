@@ -1,8 +1,10 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState, useRef } from 'react';
 import useSWR from 'swr';
 import HardModeToggle from '../hard-mode-toggle/hard-mode-toggle';
 import Letter from "../letter/letter";
 import RemainingAnswers from '../remaining-answers/remaining-answers';
+import { faClose } from '@fortawesome/free-solid-svg-icons'
 import styles from './wordle-game.module.css';
 
 export default function WordleGame() {
@@ -116,7 +118,7 @@ export default function WordleGame() {
 
   return (<div>
     <div className={styles.doublePanel}>
-      <div>
+      <div className={styles.leftColumn}>
         <div>
           <HardModeToggle disabled={oldAnswers.length != 0} hardModeOn={hardMode} onToggled={() => setHardMode((h) => !h)} />
         </div>
@@ -125,6 +127,7 @@ export default function WordleGame() {
             return (
               <div key={i} className={styles.letterBox}>
                 {[...a].map((ans, j) => <Letter key={j} letter={ans} result={oldResults[i][j]} />)}
+                <div className={styles.xButtonBox} />
               </div>
             )
           })
@@ -137,9 +140,9 @@ export default function WordleGame() {
           ? <></>
           : <div className={styles.letterBox}>
             {result.map((r, i) => <Letter key={i} letter={(currentGuess)[i]} onClick={() => toggleLetter(i)} result={r} />)}
-            <div><button
-              className="btn btn-secondary btn-sm"
-              onClick={() => eraseGuess()}>X</button></div>
+            <div className={styles.xButtonBox}>
+              <span onClick={() => eraseGuess()}><FontAwesomeIcon icon={faClose} /> </span>
+            </div>
           </div>}
 
         <div className={styles.buttonBox}>
@@ -159,8 +162,9 @@ export default function WordleGame() {
                 onClick={() => reset()}>Reset</button></>
           }
         </div>
+        <div className={styles.xButtonBox} />
       </div>
-      <div>
+      <div className={styles.rightColumn}>
         <p style={{ opacity: complete ? 0 : 1, transition: 'all 500ms linear' }}>Try: {bestGuess}</p>
         <RemainingAnswers count={remainingAnswerCount} wordList={someRemainingAnswers} />
       </div>
