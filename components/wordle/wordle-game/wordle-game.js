@@ -6,6 +6,9 @@ import Letter from "../letter/letter";
 import RemainingAnswers from '../remaining-answers/remaining-answers';
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import styles from './wordle-game.module.css';
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
+import { isMobile } from 'react-device-detect';
 
 export default function WordleGame() {
 
@@ -95,20 +98,36 @@ export default function WordleGame() {
 
   useEffect(() => {
     document.addEventListener('keydown', (e) => {
-      if (isAlphabetic(e.key)) {
-        inputGuessChar(e.key)
-      }
-      if (e.key == "Enter") {
+      if (key == "Enter") {
         // Enter submits the form, triggering the Reset button
         e.preventDefault();
       }
-      if (e.key == "Backspace") {
-        if (currentGuessRef.current.length > 0) {
-          setCurrentGuess(currentGuessRef.current.slice(0, -1))
-        }
-      }
+      handleInput(e.key)
     })
   }, [])
+
+  const onScreenKeyPress = (key) => {
+    var mappedKey = key
+    if (key == "<<") {
+      mappedKey = "Backspace"
+    } else if (key == "{enter}") {
+      mappedKey = "Enter"
+    } else {
+      mappedKey = key
+    }
+    handleInput(mappedKey)
+  }
+
+  const handleInput = (key) => {
+    if (isAlphabetic(key)) {
+      inputGuessChar(key)
+    }
+    if (key == "Backspace") {
+      if (currentGuessRef.current.length > 0) {
+        setCurrentGuess(currentGuessRef.current.slice(0, -1))
+      }
+    }
+  }
 
   const inputGuessChar = (c) => {
     if (currentGuessRef.current.length < 5) {
@@ -178,6 +197,21 @@ export default function WordleGame() {
               </>
           }
         </div>
+        <div className={styles.onScreenKeyboard}
+          style={isMobile ? null :  {display: "none"} }>
+          <Keyboard
+            onChange={() => { console.log("Keyboard changed") }}
+            onKeyPress={(a) => onScreenKeyPress(a)}
+            layout={{
+              'default': [
+                'q w e r t y u i o p',
+                'a s d f g h j k l',
+                'z x c v b n m <<'
+              ]
+            }}
+          />
+        </div>
+
       </div>
       <div className={styles.rightColumn}>
         <p style={{ opacity: complete ? 0 : 1, transition: 'all 500ms linear' }}>Try: {bestGuess}</p>
