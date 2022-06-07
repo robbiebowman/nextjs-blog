@@ -79,7 +79,8 @@ export default function WordleGame() {
     const res = [...oldResults, submittedResult]
     setOldAnswers(answers)
     setOldResults(res)
-    setResult(['b', 'b', 'b', 'b', 'b'])
+    // If it's hard mode, only reset yellow guesses
+    setResult((r) => hardMode ? r.map((c) => c == 'y' ? 'b' : c) : ['b', 'b', 'b', 'b', 'b'])
     setShouldFetch(true)
   }
 
@@ -205,21 +206,21 @@ export default function WordleGame() {
           }
         </div>
         {isMobileDevice
-        ? 
-        <div className={styles.onScreenKeyboard}>
-          <Keyboard
-            onChange={() => { console.log("Keyboard changed") }}
-            onKeyPress={(a) => onScreenKeyPress(a)}
-            layout={{
-              'default': [
-                'q w e r t y u i o p',
-                'a s d f g h j k l',
-                'z x c v b n m <<'
-              ]
-            }}
-          />
-        </div>
-        : <></>
+          ?
+          <div className={styles.onScreenKeyboard}>
+            <Keyboard
+              onChange={() => { console.log("Keyboard changed") }}
+              onKeyPress={(a) => onScreenKeyPress(a)}
+              layout={{
+                'default': [
+                  'q w e r t y u i o p',
+                  'a s d f g h j k l',
+                  'z x c v b n m <<'
+                ]
+              }}
+            />
+          </div>
+          : <></>
         }
 
       </div>
