@@ -26,21 +26,21 @@ export default function Home({ allPostsData }) {
         <h1 className={utilStyles.headingLg}>Things I made</h1>
         <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
-              <Link href={`/chess`}>
-                <a>♟️Chess position game♟️</a>
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                Can you tell which side Stockfish favours?
-              </small>
-            </li>
-            <li className={utilStyles.listItem}>
               <Link href={`/wordle`}>
                 <a>Wordle solver ⬜🟨🟩</a>
               </Link>
               <br />
               <small className={utilStyles.lightText}>
                 Suggests words based on how many remaining possibilities they'll exclude.
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
+              <Link href={`/chess`}>
+                <a>♟️Chess position game♟️</a>
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                Can you tell which side Stockfish favours?
               </small>
             </li>
         </ul>
