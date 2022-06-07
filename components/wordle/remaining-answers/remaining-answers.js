@@ -11,7 +11,7 @@ export default function RemainingAnswers({ wordList, count }) {
       <ul className={styles.answerList}>
         {
           wordList.map((w, i) => {
-            return (<li key={i} style={{opacity: (allShowing ? (listSize - i) / 20 : 1)}}>{w}</li>)
+            return (<li key={i} style={{opacity: (allShowing ? 1 : (listSize - i) / 20)}}>{w}</li>)
           })
         }
       </ul>

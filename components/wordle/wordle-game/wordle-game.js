@@ -12,6 +12,7 @@ import { isMobile } from 'react-device-detect';
 
 export default function WordleGame() {
 
+  const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [hardMode, setHardMode] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(true)
   const [complete, setComplete] = useState(false)
@@ -51,6 +52,10 @@ export default function WordleGame() {
       setBestGuess("")
     }
   })
+
+  useEffect(() => {
+    setIsMobileDevice(isMobile)
+  }, [])
 
   useEffect(() => {
     if (oldAnswers && !complete) {
@@ -135,6 +140,8 @@ export default function WordleGame() {
     }
   }
 
+  console.log(`Is it mobile? ${isMobile}`)
+
   return (<div>
     <div className={styles.doublePanel}>
       <div className={styles.leftColumn}>
@@ -197,8 +204,9 @@ export default function WordleGame() {
               </>
           }
         </div>
-        <div className={styles.onScreenKeyboard}
-          style={isMobile ? null :  {display: "none"} }>
+        {isMobileDevice
+        ? 
+        <div className={styles.onScreenKeyboard}>
           <Keyboard
             onChange={() => { console.log("Keyboard changed") }}
             onKeyPress={(a) => onScreenKeyPress(a)}
@@ -211,6 +219,8 @@ export default function WordleGame() {
             }}
           />
         </div>
+        : <></>
+        }
 
       </div>
       <div className={styles.rightColumn}>
