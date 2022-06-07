@@ -126,19 +126,26 @@ export default function WordleGame() {
           oldAnswers.map((a, i) => {
             return (
               <div key={i} className={styles.letterBox}>
+                <div className={styles.xButtonBox} />
                 {[...a].map((ans, j) => <Letter key={j} letter={ans} result={oldResults[i][j]} />)}
                 <div className={styles.xButtonBox} />
               </div>
             )
           })
         }
-        {complete && bestGuess !== oldAnswers[oldAnswers.length] ? (<div className={styles.letterBox}>
-          {[...bestGuess].map((l, i) => <Letter key={i + l} letter={l} result='g' />)}
-        </div>) : <></>}
+        {complete && bestGuess != oldAnswers[oldAnswers.length - 1]
+          ? (<>
+            <div className={styles.letterBox}>
+              <div className={styles.xButtonBox} />
+              {[...bestGuess].map((l, i) => <Letter key={i + l} letter={l} result='g' />)}
+              <div className={styles.xButtonBox} />
+            </div></>)
+          : <></>}
         {/* Input/current guess */}
         {complete || errors
           ? <></>
           : <div className={styles.letterBox}>
+            <div className={styles.xButtonBox} />
             {result.map((r, i) => <Letter key={i} letter={(currentGuess)[i]} onClick={() => toggleLetter(i)} result={r} />)}
             <div className={styles.xButtonBox}>
               <span onClick={() => eraseGuess()}><FontAwesomeIcon icon={faClose} /> </span>
@@ -147,22 +154,30 @@ export default function WordleGame() {
 
         <div className={styles.buttonBox}>
           {errors
-            ? <div className={styles.errorBox}>
+            ? <div className={`${styles.resultBox} ${styles.errorBox}`}>
               <p>I can't find a word in my vocabulary to fit what you've input. Want to try again?</p>
               <button type="button"
                 className="btn btn-secondary"
                 onClick={() => reset()}>Reset</button>
             </div>
-            : <><button type="button"
-              className="btn btn-success"
-              disabled={complete || errors}
-              onClick={() => submit()}>Next</button>
-              <button type="button"
-                className="btn btn-secondary"
-                onClick={() => reset()}>Reset</button></>
+            : complete
+              ? <div className={`${styles.resultBox} ${styles.successBox}`}>
+                <p className={styles.successText}>The answer is <span>{bestGuess.toUpperCase()}!</span></p>
+                <button type="button"
+                  className="btn btn-success"
+                  onClick={() => reset()}>Reset</button>
+              </div>
+              : <>
+                <button type="button"
+                  className="btn btn-secondary"
+                  onClick={() => reset()}>Reset</button>
+                <button type="button"
+                  className="btn btn-success"
+                  disabled={complete || errors}
+                  onClick={() => submit()}>Next</button>
+              </>
           }
         </div>
-        <div className={styles.xButtonBox} />
       </div>
       <div className={styles.rightColumn}>
         <p style={{ opacity: complete ? 0 : 1, transition: 'all 500ms linear' }}>Try: {bestGuess}</p>

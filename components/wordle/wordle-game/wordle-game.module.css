@@ -1,43 +1,62 @@
-.letterBox{
-    display:flex;
+.letterBox {
+    width: 100%;
+    display: flex;
     align-items: center;
     justify-content: safe center;
 }
-.doublePanel{
-    width: 100%;
+
+.doublePanel {
     display: flex;
     justify-content: space-around;
 }
-.leftColumn{
+
+.leftColumn {
     width: 100%;
     flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.rightColumn{
+
+.rightColumn {
     flex-grow: 1;
 }
-.buttonBox{
+
+.buttonBox {
+    width: 100%;
     margin: 1rem;
     display: flex;
     justify-content: space-around;
 }
 
-.errorBox {
+.resultBox {
     max-width: 15rem;
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: #A95777;
     padding: 1rem;
     color: white;
 }
-.xButtonBox{
-    width: 2rem;
-    display: flex;
-    align-items: center;
+
+.errorBox {
+    background-color: #A95777;
 }
+
+.successBox {
+    background-color: #377a30;
+}
+
+.successText span {
+    font-weight: 600;
+}
+
+.xButtonBox {
+    width: 1rem;
+    display: flex;
+    align-items: flex-start;
+}
+
 .xButtonBox span {
-    padding: 0.5rem;
-    text-align: center;
     font-size: 1rem;
     color: #880000;
 }
