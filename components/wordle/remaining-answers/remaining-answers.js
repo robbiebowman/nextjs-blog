@@ -7,7 +7,7 @@ export default function RemainingAnswers({ wordList, count }) {
 
   return (
     <div className={styles.container} style={allShowing ? null : { borderBottom: "0"}}>
-      <p className={styles.title}>Remaining possibilities: <span className={styles.count}>{count}</span></p>
+      <p className={styles.title}><span className={styles.count}>{count} remaining</span></p>
       <ul className={styles.answerList}>
         {
           wordList.map((w, i) => {

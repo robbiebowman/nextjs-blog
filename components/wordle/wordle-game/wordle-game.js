@@ -98,7 +98,7 @@ export default function WordleGame() {
 
   useEffect(() => {
     document.addEventListener('keydown', (e) => {
-      if (key == "Enter") {
+      if (e.key == "Enter") {
         // Enter submits the form, triggering the Reset button
         e.preventDefault();
       }
