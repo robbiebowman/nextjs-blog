@@ -29,6 +29,10 @@
     justify-content: space-around;
 }
 
+.buttonBox button {
+    max-height: 2.5rem;
+}
+
 .resultBox {
     max-width: 15rem;
     display: flex;

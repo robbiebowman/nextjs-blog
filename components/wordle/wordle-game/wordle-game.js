@@ -93,6 +93,19 @@ export default function WordleGame() {
     setResult(['b', 'b', 'b', 'b', 'b'])
   }
 
+  const back = () => {
+    const answers = oldAnswers
+    setCurrentGuess(answers[answers.length - 1])
+    const newResult = oldResults[oldResults.length - 1];
+    console.log(`New result is ${newResult}. oldResults: ${JSON.stringify(oldResults)}`)
+    setResult([...newResult])
+    setOldAnswers(as => as.slice(0, as.length - 1))
+    setOldResults(rs => rs.slice(0, rs.length - 1))
+    setComplete(false)
+    setErrors(false)
+    setShouldFetch(true)
+  }
+
   const eraseGuess = () => {
     console.log(`erasing guess`)
     setCurrentGuess("")
@@ -141,8 +154,6 @@ export default function WordleGame() {
     }
   }
 
-  console.log(`Is it mobile? ${isMobile}`)
-
   return (<div>
     <div className={styles.doublePanel}>
       <div className={styles.leftColumn}>
@@ -180,11 +191,14 @@ export default function WordleGame() {
           </div>}
 
         <div className={styles.buttonBox}>
+          <button type="button"
+            className="btn btn-light"
+            onClick={back}>Back</button>
           {errors
             ? <div className={`${styles.resultBox} ${styles.errorBox}`}>
               <p>I can't find a word in my vocabulary to fit what you've input. Want to try again?</p>
               <button type="button"
-                className="btn btn-secondary"
+                className="btn btn-light"
                 onClick={() => reset()}>Reset</button>
             </div>
             : complete
@@ -196,7 +210,7 @@ export default function WordleGame() {
               </div>
               : <>
                 <button type="button"
-                  className="btn btn-secondary"
+                  className="btn btn-light"
                   onClick={() => reset()}>Reset</button>
                 <button type="button"
                   className="btn btn-success"
