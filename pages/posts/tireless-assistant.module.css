@@ -1,0 +1,43 @@
+.slackBotBox {
+    display: flex;
+    background-color: rgb(255, 254, 241);
+    padding: 1rem 0;
+    border-radius: 1rem;
+    margin: 1rem 0;
+    box-shadow: 1px 2px 1.5rem 1px #00000015;
+}
+.slackBotBox div {
+    margin: 0 1rem;
+}
+.slackAvatar {
+    flex-shrink: 0;
+    border-radius: 1rem;
+    height: min-content;
+    background-color: #1040c5;
+    overflow: hidden;
+    display: flex;
+    margin: 0rem;
+}
+.slackBotBox h1 {
+    font-size: 1.5rem;
+}
+.mainBox h2 {
+    font-size: 1.5rem;
+}
+.slackBotBox p {
+    color: #535353;
+}
+.slackBotBox a {
+    color: #1040c5;
+}
+.mainBox {
+    padding: 0 2rem;
+}
+
+.codeSpan {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+    background-color: #4e4e4e;
+    color: rgb(255, 172, 77);
+    padding: 0.2rem 0.4rem;
+}

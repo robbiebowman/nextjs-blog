@@ -26,6 +26,15 @@ export default function Home({ allPostsData }) {
         <h1 className={utilStyles.headingLg}>Things I made</h1>
         <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
+              <Link href={`/posts/tireless-assistant`}>
+                <a>🤖 A Slack bot that summarises recent messages</a>
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                Uses GPT to summarise all the messages you've missed in a Slack channel.
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
               <Link href={`/wordle`}>
                 <a>Wordle solver ⬜🟨🟩</a>
               </Link>
@@ -45,7 +54,8 @@ export default function Home({ allPostsData }) {
             </li>
         </ul>
       </section>
-      {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      
+        {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         { allPostsData.length > 0 ? <h2 className={utilStyles.headingLg}>Posts</h2> : "" }
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
@@ -61,6 +71,7 @@ export default function Home({ allPostsData }) {
           ))}
         </ul>
       </section> */}
+      
       </div>
     </Layout>
   )
