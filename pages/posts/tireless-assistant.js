@@ -15,7 +15,7 @@ export default function TirelessAssistant() {
                 <div className={styles.slackBotBox}>
                     <div className={styles.slackAvatar}>
                         <Image
-                            src="/images/tireless-assistant.png "
+                            src="/images/tireless-assistant.png"
                             height={144}
                             width={144}
                             alt="A robotic typewriter cartoon"
