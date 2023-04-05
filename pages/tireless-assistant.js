@@ -24,7 +24,7 @@ export default function TirelessAssistant() {
                     <div className={styles.slackBotDescBox}>
                         <h1><Link href="https://work-distractions.slack.com/apps/APQNFGHEC-tireless-assistant?tab=more_info">Tireless Assistant</Link></h1>
                         <p>Invite Tireless Assistant into a channel and ask it to summarize all the previous messages you've missed via its slash command.</p>
-                        <a className={styles.slackButtonLink} href="https://slack.com/oauth/v2/authorize?client_id=370994026455.806763561488&scope=channels:history,channels:read,chat:write,commands,users:read&user_scope=channels:history,channels:read,users:read">
+                        <a className={styles.slackButtonLink} href="https://slack.com/oauth/v2/authorize?client_id=370994026455.806763561488&scope=channels:history,channels:join,channels:read,chat:write,commands,users:read&user_scope=channels:history,channels:read,users:read">
                             <div className={styles.slackButton}>
                                 <Image
                                     className={styles.slackButtonIcon}
