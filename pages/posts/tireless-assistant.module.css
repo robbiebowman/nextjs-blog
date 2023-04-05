@@ -1,3 +1,7 @@
+.faqHeading {
+    font-size: larger;
+    font-weight: 600;
+}
 .slackBotBox {
     display: flex;
     background-color: rgb(255, 254, 241);
@@ -5,6 +9,14 @@
     border-radius: 1rem;
     margin: 1rem 0;
     box-shadow: 1px 2px 1.5rem 1px #00000015;
+    flex-wrap: ;
+    width: fit-content;
+}
+.slackBotDescBox {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
+    min-width: 6rem;
 }
 .slackBotBox div {
     margin: 0 1rem;
@@ -27,17 +39,44 @@
 .slackBotBox p {
     color: #535353;
 }
-.slackBotBox a {
-    color: #1040c5;
+.slackButtonLink:hover{
+    text-decoration: none;
+}
+.slackButtonLink{
+    display: block;
+    width: fit-content;
+}
+.slackButton {
+    width: 10rem;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 1px 2px 1rem 1px #00000019;
+    padding: 0.5rem 1rem;
+    border-radius: 0.9rem;
+    border: 1px solid #3334;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.slackButton {
+    font-weight: 600;
+    color: #2b2b2b;
+    text-decoration: none;
+}
+.slackButton:hover {
+    color: #2b2b2b;
+    text-decoration: none;
+}
+.slackButtonIcon {
 }
 .mainBox {
     padding: 0 2rem;
 }
 
 .codeSpan {
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 600;
-    background-color: #4e4e4e;
-    color: rgb(255, 172, 77);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    background-color: #ebebeb;
+    color: rgb(34, 80, 4);
     padding: 0.2rem 0.4rem;
 }
