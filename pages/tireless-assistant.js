@@ -60,7 +60,7 @@ export default function TirelessAssistant() {
                 <p>
                     <span className={styles.codeSpan}>/sum 45 min publicly</span> will summarise the past <strong>45 minutes</strong> of messages and post that summary in the channel.
                 </p>
-            
+
                 <h2>FAQ</h2>
                 <h3 className={styles.faqHeading}>How does it work?</h3>
                 <p>
@@ -90,6 +90,11 @@ export default function TirelessAssistant() {
                 <p>Probably. However GPT is not a free service. If the bot becomes very popular and the OpenAI API bills get unmanageable, I may seek to monetise it for enterprise orgs.</p>
                 <h2 className={styles.faqHeading}>Privacy Policy</h2>
                 <p>You can read the full privacy policy <Link href="/tireless-assistant/privacy-policy">here</Link></p>
+                <div>
+                    <Image
+                        src="/images/typewriter-footer.png"
+                        width="100%" height="40rem" layout="responsive" objectFit="contain" />
+                </div>
             </div>
         </Layout>
     )
