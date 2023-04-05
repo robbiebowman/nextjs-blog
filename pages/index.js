@@ -26,7 +26,7 @@ export default function Home({ allPostsData }) {
         <h1 className={utilStyles.headingLg}>Things I made</h1>
         <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
-              <Link href={`/posts/tireless-assistant`}>
+              <Link href={`/tireless-assistant`}>
                 <a>🤖 A Slack bot that summarises recent messages</a>
               </Link>
               <br />

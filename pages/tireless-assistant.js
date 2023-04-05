@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
 import styles from './tireless-assistant.module.css'
-import Layout from "../../components/layout";
+import Layout from "../components/layout";
 
 export default function TirelessAssistant() {
     return (
@@ -88,6 +88,8 @@ export default function TirelessAssistant() {
                     Will Tireless Assistant always be free?
                 </h3>
                 <p>Probably. However GPT is not a free service. If the bot becomes very popular and the OpenAI API bills get unmanageable, I may seek to monetise it for enterprise orgs.</p>
+                <h2 className={styles.faqHeading}>Privacy Policy</h2>
+                <p>You can read the full privacy policy <Link href="/tireless-assistant/privacy-policy">here</Link></p>
             </div>
         </Layout>
     )

@@ -9,7 +9,6 @@
     border-radius: 1rem;
     margin: 1rem 0;
     box-shadow: 1px 2px 1.5rem 1px #00000015;
-    flex-wrap: ;
     width: fit-content;
 }
 .slackBotDescBox {
@@ -66,8 +65,6 @@
 .slackButton:hover {
     color: #2b2b2b;
     text-decoration: none;
-}
-.slackButtonIcon {
 }
 .mainBox {
     padding: 0 2rem;
