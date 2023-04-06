@@ -1,15 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import Head from "next/head";
 import styles from './tireless-assistant.module.css'
 import Layout from "../components/layout";
 
 export default function TirelessAssistant() {
+    const router = useRouter()
+    const justInstalled = router.query.hasOwnProperty("install") && router.query["install"] == "true"
+    const [showSuccessfulInstall, setShowSuccessfulInstall] = useState(true)
+    const onClickSuccess = () => {router.push({ href: '/', query: {} }); setShowSuccessfulInstall(false)}
     return (
         <Layout>
             <Head>
                 <title>A Slack bot powered by GPT</title>
             </Head>
+            <div className={showSuccessfulInstall && justInstalled ? styles.installedToast : styles.installedToastDismissed} onClick={onClickSuccess}>Successfully installed!</div>
             <div className={styles.mainBox}>
                 <h1>A Slack bot powered by GPT</h1>
                 <div className={styles.slackBotBox}>
@@ -65,14 +72,14 @@ export default function TirelessAssistant() {
                 <h3 className={styles.faqHeading}>How does it work?</h3>
                 <p>
                     The mechanism is pretty simple:
-                    <ol>
-                        <li>Parse the incoming slash command for a timespan <em>(e.g. "2 days", "3h 30 min")</em></li>
-                        <li>Fetch all the messages between now and that amount of time in the past</li>
-                        <li>Format it in a way that can be easily interpreted</li>
-                        <li>Send it to <Link href="https://platform.openai.com/docs/guides/chat">GPT</Link> and ask it to summarise it</li>
-                        <li>Privately post that summary to the requesting user</li>
-                    </ol>
                 </p>
+                <ol>
+                    <li>Parse the incoming slash command for a timespan <em>(e.g. "2 days", "3h 30 min")</em></li>
+                    <li>Fetch all the messages between now and that amount of time in the past</li>
+                    <li>Format it in a way that can be easily interpreted</li>
+                    <li>Send it to <Link href="https://platform.openai.com/docs/guides/chat">GPT</Link> and ask it to summarise it</li>
+                    <li>Privately post that summary to the requesting user</li>
+                </ol>
                 <h3 className={styles.faqHeading}>Can Tireless Assistant read my private channels or DM's?</h3>
                 <p>
                     No. Tireless Assistant can only read messages in channels or conversations it's been added to. If someone uses <span className={styles.codeSpan}>/sum</span> in a private conversation, it will do nothing as the bot cannot join a private channel or DM group by itself. If you or a member explicitly invites Tireless Assistant in, the bot will work as usual.
