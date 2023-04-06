@@ -14,6 +14,10 @@
     background-color: rgb(241, 248, 250);
     align-items: flex-start;
     border-radius: 1rem 1rem 0 0;
+    background-image: url('/images/sky-bg.png');
+    background-position: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .mainContent {
