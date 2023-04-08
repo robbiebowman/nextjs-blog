@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
+import utilStyles from '../../styles/utils.module.css'
 import ChessDaily from "../../components/chess/chess-daily";
 import { ChessGameSelector } from "../../components/game-selector/game-selector";
 
@@ -18,6 +19,9 @@ export default function Daily() {
                     content={"https://www.robbiebowman.com/images/social-preview.png"} />
             </Head>
             <ChessGameSelector selectedTitle="Daily" />
+            <div className={utilStyles.descriptionBox}>
+                <p>Which player does Stockfish favour in this position?</p>
+            </div>
             <div style={{ margin: "0 1rem" }}>
                 <ChessDaily />
             </div>

@@ -3,6 +3,7 @@ import DifficultySelector from "./difficulty-selector/difficulty-selector"
 import styles from './chess.module.css'
 import { useState, useEffect, createRef } from 'react'
 import { loadNewRandomPuzzle, isCorrect } from '/lib/chess'
+import utilStyles from '../../styles/utils.module.css'
 import Score from './score/score'
 import Board from './board'
 
@@ -42,6 +43,9 @@ export default function ChessPractice() {
 
     return (
         <div className={styles.boardBox}>
+        <div className={utilStyles.descriptionBox}>
+            <p>Which player does Stockfish favour in this position?</p>
+        </div>
             <Board
                 data={data}
                 difficulty={difficulty}

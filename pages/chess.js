@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Layout from "../components/layout";
+import utilStyles from '../styles/utils.module.css';
 import ChessPractice from "../components/chess/chess-practice";
 import { ChessGameSelector } from "../components/game-selector/game-selector";
 

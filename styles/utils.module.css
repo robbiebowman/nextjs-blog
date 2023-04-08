@@ -59,3 +59,11 @@
 .mainPageContent {
   margin: 0 3rem;
 }
+.descriptionBox {
+  display: flex;
+  justify-content: center;
+}
+.descriptionBox p {
+  color: #8f8f8f;
+  max-width: 30rem;
+}
