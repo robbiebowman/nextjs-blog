@@ -1,4 +1,25 @@
 .mainBox {
-    margin: 1rem;
-    display: flex;
+    display:flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 1rem;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.crossword {
+    width: 25rem;
+}
+
+.clues {
+    max-width: 20rem;
+}
+
+.title {
+    margin: 0 1rem;
+}
+.title h1 {
+    font-size: 1.75rem;
 }

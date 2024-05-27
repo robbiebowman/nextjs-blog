@@ -12,11 +12,13 @@ export default function MiniCrosswordGame() {
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [rawPuzzleData, setRawPuzzleData] = useState(null)
   const [puzzle, setPuzzle] = useState(null)
+  const [dateTitle, setDateTitle] = useState("")
   const [isCorrect, setCorrect] = useState(false)
   const crosswordComponent = useRef();
 
   useEffect(() => {
     if (rawPuzzleData == null) return;
+    setDateTitle(new Date().toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
     const clues = rawPuzzleData.clues.clues;
     const acrossWords = rawPuzzleData.puzzle.acrossWords;
     const downWords = rawPuzzleData.puzzle.downWords;
@@ -72,21 +74,20 @@ export default function MiniCrosswordGame() {
     }
   })
 
-  const onCellChanged = () => {
-    console.log(`Is complete called`)
-    const correct = crosswordComponent.current.isCrosswordCorrect()
-    console.log(`${Date.now()} Iscorrect: ${correct}`)
+  const onCrosswordCorrect = (correct) => {
     setCorrect(correct)
   }
 
-  return (<div className={styles.mainBox}>
-    {isCorrect ? "Done" : "Not Done"}
+  return (<div>
+    <div className={styles.title}>
+      <h1>Mini Crossword - {dateTitle}</h1>
+    </div>
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={() => onCellChanged()}>
-        <div>
-          <CrosswordGrid />
-          <DirectionClues direction="across" />
-          <DirectionClues direction="down" />
+      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCrosswordCorrect={(correct) => onCrosswordCorrect(correct)}>
+        <div className={styles.mainBox}>
+          <div className={styles.crossword}><CrosswordGrid /></div>
+          <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
+          <div className={styles.clues}><DirectionClues className={styles.clues} label="Down" direction="down" /></div>
         </div>
       </CrosswordProvider>
     ) : ""}

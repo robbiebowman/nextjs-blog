@@ -12,7 +12,7 @@ export default function MiniCrossword() {
             <Head>
                 <title>Daily Mini Crossword</title>
             </Head>
-            <div style={{ margin: "0 1rem" }}>
+            <div style={{ width: "100%" }}>
                 <MiniCrosswordGame />
             </div>
         </Layout>
