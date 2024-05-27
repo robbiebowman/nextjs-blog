@@ -20,9 +20,8 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-export default function MiniCrosswordGame() {
+export default function MiniCrosswordGame({date}) {
 
-  const date = useRef(new Date())
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [rawPuzzleData, setRawPuzzleData] = useState(null)
   const [puzzle, setPuzzle] = useState(null)
@@ -32,7 +31,10 @@ export default function MiniCrosswordGame() {
 
   useEffect(() => {
     if (rawPuzzleData == null) return;
-    setDateTitle(date.current.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
+    
+    crosswordComponent.current ? console.log("Storagekey: " + JSON.stringify(crosswordComponent)) : ""
+
+    setDateTitle(date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
     const clues = rawPuzzleData.clues.clues;
     const acrossWords = rawPuzzleData.puzzle.acrossWords;
     const downWords = rawPuzzleData.puzzle.downWords;
@@ -79,8 +81,7 @@ export default function MiniCrosswordGame() {
   );
   
   const fetcher = (...args) => fetch(...args).then(res => res.json());
-  console.log(`Date is: ${date.current.getFullYear()}-${date.current.getMonth()+1}-${date.current.getDate()+1}`)
-  useSWR(() => `/api/mini-crossword?date=${formatDate(date.current)}`, fetcher, {
+  useSWR(() => `/api/mini-crossword?date=${formatDate(date)}`, fetcher, {
     onSuccess: (data, key, config) => {
       setRawPuzzleData(data)
     },
@@ -98,7 +99,7 @@ export default function MiniCrosswordGame() {
       <h1>Mini Crossword - {dateTitle}</h1>
     </div>
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCrosswordCorrect={(correct) => onCrosswordCorrect(correct)}>
+      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCrosswordCorrect={(correct) => onCrosswordCorrect(correct)} storageKey={formatDate(date)} useStorage>
         <div className={styles.mainBox}>
           <div className={styles.crossword}><CrosswordGrid /></div>
           <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
