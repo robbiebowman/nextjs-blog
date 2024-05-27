@@ -41,26 +41,24 @@ export default function Layout({ children, home }) {
                 <GlobalStyles />
                 <div className={styles.avatarContainer}>
                     <Link href="/">
-                        <a>
-                            <Image
-                                priority
-                                src="/images/13639947.jpg"
-                                className={utilStyles.borderCircle}
-                                height={108}
-                                width={108}
-                                alt={name}
-                            />
-                        </a>
+                        <Image
+                            priority
+                            src="/images/13639947.jpg"
+                            className={utilStyles.borderCircle}
+                            height={108}
+                            width={108}
+                            alt={name}
+                        />
                     </Link>
                     <h2 className={utilStyles.headingLg}>
                         <Link href="/">
-                            <a className={utilStyles.colorInherit}>{name}</a>
+                            <span className={utilStyles.colorInherit}>{name}</span>
                         </Link>
                     </h2>
                 </div>
                 <div className={styles.headerLinks}>
                     <Link href="https://github.com/robbiebowman/">
-                        <a><div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} /></div>Github</div></a>
+                        <div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} /></div>Github</div>
                     </Link>
 
                     <div>
@@ -86,10 +84,10 @@ export default function Layout({ children, home }) {
                         </div>
                     </div>
                     <Link href="https://www.linkedin.com/in/robbie-bowman/">
-                        <a><div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} /></div>LinkedIn</div></a>
+                        <div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} /></div>LinkedIn</div>
                     </Link>
                     <Link href="https://www.instagram.com/robbiebowman/">
-                        <a><div><div className={styles.socialIcon}><Image src="/images/instagram.webp" height={14} width={14} /></div>Instagram</div></a>
+                        <div><div className={styles.socialIcon}><Image src="/images/instagram.webp" height={14} width={14} /></div>Instagram</div>
                     </Link>
                 </div>
             </header>
