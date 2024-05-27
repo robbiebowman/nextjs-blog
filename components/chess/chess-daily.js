@@ -4,7 +4,7 @@ import Board from './board'
 import DailyStage from './daily-stage'
 import GameResults from './game-results/game-results'
 import { loadDailyPuzzle } from '/lib/chess'
-import { getLastDailyAnswers, saveTodaysDailyAnswers, getAllDailyAnswers, hasCompletedToday } from '/lib/cookies'
+import { getLastDailyAnswers, saveTodaysDailyAnswers, getAllDailyAnswers, hasCompletedToday } from '/lib/chess-cookies'
 import { isCorrect } from '../../lib/chess'
 
 export default function ChessDaily() {

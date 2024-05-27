@@ -1,5 +1,4 @@
-import { useCookies } from "react-cookie"
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp, faFire, faFireFlameCurved, faArrowRightLong } from '@fortawesome/free-solid-svg-icons'
