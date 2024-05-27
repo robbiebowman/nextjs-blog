@@ -26,6 +26,15 @@ export default function Home({ allPostsData }) {
         <h1 className={utilStyles.headingLg}>Things I made</h1>
         <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
+              <Link href={`/mini-crossword`}>
+                <a>Daily Mini Crossword</a>
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                A daily mini crossword game with LLM generated clues.
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
               <Link href={`/tireless-assistant`}>
                 <a>🤖 A Slack bot that summarises recent messages</a>
               </Link>
