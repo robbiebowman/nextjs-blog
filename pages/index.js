@@ -19,15 +19,15 @@ export default function Home({ allPostsData }) {
         <title>{siteTitle}</title>
       </Head>
       <div className={utilStyles.mainPageContent}>
-      <section className={utilStyles.headingMd}>
-        <p>I write code for fun. It's also my job.</p>
-      </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h1 className={utilStyles.headingLg}>Things I made</h1>
-        <ul className={utilStyles.list}>
+        <section className={utilStyles.headingMd}>
+          <p>I write code for fun. It's also my job.</p>
+        </section>
+        <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+          <h1 className={utilStyles.headingLg}>Things I made</h1>
+          <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
               <Link href={`/mini-crossword`}>
-                <a>Daily Mini Crossword</a>
+                Daily Mini Crossword
               </Link>
               <br />
               <small className={utilStyles.lightText}>
@@ -36,7 +36,7 @@ export default function Home({ allPostsData }) {
             </li>
             <li className={utilStyles.listItem}>
               <Link href={`/tireless-assistant`}>
-                <a>🤖 A Slack bot that summarises recent messages</a>
+                🤖 A Slack bot that summarises recent messages
               </Link>
               <br />
               <small className={utilStyles.lightText}>
@@ -45,7 +45,7 @@ export default function Home({ allPostsData }) {
             </li>
             <li className={utilStyles.listItem}>
               <Link href={`/wordle`}>
-                <a>Wordle solver ⬜🟨🟩</a>
+                Wordle solver ⬜🟨🟩
               </Link>
               <br />
               <small className={utilStyles.lightText}>
@@ -54,23 +54,23 @@ export default function Home({ allPostsData }) {
             </li>
             <li className={utilStyles.listItem}>
               <Link href={`/chess`}>
-                <a>♟️Chess position game♟️</a>
+                ♟️Chess position game♟️
               </Link>
               <br />
               <small className={utilStyles.lightText}>
                 Can you tell which side Stockfish favours?
               </small>
             </li>
-        </ul>
-      </section>
-      
+          </ul>
+        </section>
+
         {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         { allPostsData.length > 0 ? <h2 className={utilStyles.headingLg}>Posts</h2> : "" }
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>
-                <a>{title}</a>
+                {title}
               </Link>
               <br />
               <small className={utilStyles.lightText}>
@@ -80,7 +80,7 @@ export default function Home({ allPostsData }) {
           ))}
         </ul>
       </section> */}
-      
+
       </div>
     </Layout>
   )

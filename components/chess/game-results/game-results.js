@@ -35,7 +35,7 @@ export default function GameResults({ mode, positions, display, answers, onResul
         // y n y n
         console.log("Share clicked")
         const difficultyComponent = difficulty == 'Easy' ? "☀️" : difficulty == "Medium" ? "☁️☁️" : "⛈️⛈️⛈️"
-        const correctList = answers.map((a, i) => {
+        let correctList = answers.map((a, i) => {
             const correct = isCorrect(positions[i].evaluation, a)
             let str
             if (correct) {
@@ -48,9 +48,6 @@ export default function GameResults({ mode, positions, display, answers, onResul
             }
             return str
         }).join('')
-        if (correctList.split('').filter(c => c == "❌").length < 3) {
-            correctList += "⏱️"
-        }
         const shareString = `${difficultyComponent} Robbie's ♟️ ⚡\n${correctList}`
         navigator.clipboard.writeText(shareString)
     }

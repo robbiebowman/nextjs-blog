@@ -10,7 +10,7 @@ export default function TirelessAssistant() {
     const router = useRouter()
     const justInstalled = router.query.hasOwnProperty("install") && router.query["install"] == "true"
     const [showSuccessfulInstall, setShowSuccessfulInstall] = useState(true)
-    const onClickSuccess = () => {router.push({ href: '/', query: {} }); setShowSuccessfulInstall(false)}
+    const onClickSuccess = () => { router.push({ href: '/', query: {} }); setShowSuccessfulInstall(false) }
     return (
         <Layout>
             <Head>
@@ -97,10 +97,12 @@ export default function TirelessAssistant() {
                 <p>Probably. However GPT is not a free service. If the bot becomes very popular and the OpenAI API bills get unmanageable, I may seek to monetise it for enterprise orgs.</p>
                 <h2 className={styles.faqHeading}>Privacy Policy</h2>
                 <p>You can read the full privacy policy <Link href="/tireless-assistant/privacy-policy">here</Link></p>
-                <div>
+                <div style={{ position: 'relative', width: '100%', height: '20rem' }}>
                     <Image
                         src="/images/typewriter-footer.png"
-                        width="100%" height="40rem" layout="responsive" objectFit="contain" />
+                        layout="fill"
+                        objectFit="contain"
+                    />
                 </div>
             </div>
         </Layout>
