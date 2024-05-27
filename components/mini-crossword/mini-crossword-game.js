@@ -7,8 +7,22 @@ import 'react-simple-keyboard/build/css/index.css';
 import { Crossword, CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
 import { isMobile } from 'react-device-detect';
 
+function formatDate(date) {
+  // Create a new Date object
+  let d = new Date(date);
+
+  // Get the year, month, and day from the Date object
+  let year = d.getFullYear();
+  let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  let day = String(d.getDate()).padStart(2, '0');
+
+  // Construct the formatted date string
+  return `${year}-${month}-${day}`;
+}
+
 export default function MiniCrosswordGame() {
 
+  const date = useRef(new Date())
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [rawPuzzleData, setRawPuzzleData] = useState(null)
   const [puzzle, setPuzzle] = useState(null)
@@ -18,7 +32,7 @@ export default function MiniCrosswordGame() {
 
   useEffect(() => {
     if (rawPuzzleData == null) return;
-    setDateTitle(new Date().toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
+    setDateTitle(date.current.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
     const clues = rawPuzzleData.clues.clues;
     const acrossWords = rawPuzzleData.puzzle.acrossWords;
     const downWords = rawPuzzleData.puzzle.downWords;
@@ -63,9 +77,10 @@ export default function MiniCrosswordGame() {
     setPuzzle(puzzle)
   }, [rawPuzzleData]
   );
-
+  
   const fetcher = (...args) => fetch(...args).then(res => res.json());
-  useSWR(() => `/api/mini-crossword`, fetcher, {
+  console.log(`Date is: ${date.current.getFullYear()}-${date.current.getMonth()+1}-${date.current.getDate()+1}`)
+  useSWR(() => `/api/mini-crossword?date=${formatDate(date.current)}`, fetcher, {
     onSuccess: (data, key, config) => {
       setRawPuzzleData(data)
     },

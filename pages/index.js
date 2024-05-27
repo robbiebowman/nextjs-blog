@@ -27,11 +27,15 @@ export default function Home({ allPostsData }) {
           <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
               <Link href={`/mini-crossword`}>
-                Daily Mini Crossword
+                📰 Daily Mini Crossword 🗞️
               </Link>
               <br />
               <small className={utilStyles.lightText}>
-                A daily mini crossword game with LLM generated clues.
+                A daily mini crossword game with clever LLM generated clues.
+                <br/>
+                <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/MiniCrosswordController.kt">LLM prompting code.</Link>
+                <br/>
+                <Link href="https://github.com/robbiebowman/mini-crossword-maker">Crossword algorithm library.</Link>
               </small>
             </li>
             <li className={utilStyles.listItem}>
@@ -41,6 +45,8 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 Uses GPT to summarise all the messages you've missed in a Slack channel.
+                <br/>
+                <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/service/SlackSummaryService.kt">Source code.</Link>
               </small>
             </li>
             <li className={utilStyles.listItem}>
@@ -50,6 +56,8 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 Suggests words based on how many remaining possibilities they'll exclude.
+                <br/>
+                <Link href="https://github.com/robbiebowman/WordleSolver">Library source code.</Link>
               </small>
             </li>
             <li className={utilStyles.listItem}>
@@ -59,7 +67,9 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 Can you tell which side Stockfish favours?
-              </small>
+                <br/>
+                <Link href="https://github.com/robbiebowman/nextjs-blog/tree/main/components/chess">Front end source code.</Link>
+                </small>
             </li>
           </ul>
         </section>
