@@ -1,7 +1,9 @@
 import Head from "next/head";
 import useSWR from 'swr';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import utilStyles from '../styles/utils.module.css';
+import { formatDate } from '../lib/date-funcs'
+import { hasCompleted, setCompleted } from '../lib/crossword-cookies';
 import styles from './mini-crossword.module.css';
 import Layout from "../components/layout";
 import MiniCrosswordGame from "../components/mini-crossword/mini-crossword-game";

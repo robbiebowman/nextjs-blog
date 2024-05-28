@@ -2,13 +2,15 @@
     display: flex;
     justify-content: space-around;
     width: 100%;
-    min-height: 50rem;
+    min-height: 45rem;
 }
 
 .dateSelector {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
     width: 100%;
     margin-top: 3rem;
     padding: 0 4rem;
+    row-gap: 1.5rem;
 }

@@ -1,38 +1,21 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import useSWR from 'swr';
 import styles from './mini-crossword-game.module.css';
-import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
-import { Crossword, CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
-import { isMobile } from 'react-device-detect';
+import { hasCompleted, setCompleted } from '../../lib/crossword-cookies'
+import { CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
+import { formatDate } from '../../lib/date-funcs'
 
-function formatDate(date) {
-  // Create a new Date object
-  let d = new Date(date);
-
-  // Get the year, month, and day from the Date object
-  let year = d.getFullYear();
-  let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  let day = String(d.getDate()).padStart(2, '0');
-
-  // Construct the formatted date string
-  return `${year}-${month}-${day}`;
-}
-
-export default function MiniCrosswordGame({date}) {
+export default function MiniCrosswordGame({ date }) {
 
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [rawPuzzleData, setRawPuzzleData] = useState(null)
   const [puzzle, setPuzzle] = useState(null)
   const [dateTitle, setDateTitle] = useState("")
-  const [isCorrect, setCorrect] = useState(false)
   const crosswordComponent = useRef();
-
+  
   useEffect(() => {
     if (rawPuzzleData == null) return;
-    
-    crosswordComponent.current ? console.log("Storagekey: " + JSON.stringify(crosswordComponent)) : ""
 
     setDateTitle(date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
     const clues = rawPuzzleData.clues.clues;
@@ -79,7 +62,7 @@ export default function MiniCrosswordGame({date}) {
     setPuzzle(puzzle)
   }, [rawPuzzleData]
   );
-  
+
   const fetcher = (...args) => fetch(...args).then(res => res.json());
   useSWR(() => `/api/mini-crossword?date=${formatDate(date)}`, fetcher, {
     onSuccess: (data, key, config) => {
@@ -90,16 +73,38 @@ export default function MiniCrosswordGame({date}) {
     }
   })
 
-  const onCrosswordCorrect = (correct) => {
-    setCorrect(correct)
+  const isCompletedSelectedDate = () => {
+    return hasCompleted(formatDate(date))
   }
 
-  return (<div>
+  useEffect(() => {
+    const dateStr = formatDate(date)
+    const hasComplete = hasCompleted(dateStr)
+    console.log(`Has done? ${dateStr} ${hasCompleted(dateStr)}`)
+    if (hasComplete && crosswordComponent.current) {
+      //crosswordComponent.current.fillAllAnswers()
+    }
+  }, [puzzle])
+
+  const onCrosswordCorrect = useCallback((correct) => {
+    const dateString = formatDate(date)
+    if (correct && !hasCompleted(dateString)) {
+      console.log(`You've completed ${dateString}, coorect is: ${JSON.stringify(correct)}`)
+      setCompleted(dateString)
+    }
+  }, [crosswordComponent, date])
+
+  return (<div className={styles.outerBox}>
     <div className={styles.title}>
       <h1>Mini Crossword - {dateTitle}</h1>
     </div>
+    {isCompletedSelectedDate() ? (
+      <div className={`${styles.resultBox} ${styles.successBox}`}>
+        <p className={styles.successText}>Nicely done!</p>
+      </div>
+    ) : ""}
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCrosswordCorrect={(correct) => onCrosswordCorrect(correct)} storageKey={formatDate(date)} useStorage>
+      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCrosswordComplete={(correct) => onCrosswordCorrect(correct)} storageKey={formatDate(date)} useStorage>
         <div className={styles.mainBox}>
           <div className={styles.crossword}><CrosswordGrid /></div>
           <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
