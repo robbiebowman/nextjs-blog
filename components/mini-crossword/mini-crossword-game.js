@@ -13,7 +13,18 @@ export default function MiniCrosswordGame({ date }) {
   const [puzzle, setPuzzle] = useState(null)
   const [dateTitle, setDateTitle] = useState("")
   const crosswordComponent = useRef();
-  
+
+  const [isDoneDate, setDoneDate] = useState(hasCompleted(formatDate(date)))
+
+  useEffect(() => {
+    const done = hasCompleted(formatDate(date))
+    setDoneDate(done)
+    if (done && crosswordComponent.current) {
+      setTimeout(() => crosswordComponent.current.fillAllAnswers(), 500)
+      
+    }
+  }, [date])
+
   useEffect(() => {
     if (rawPuzzleData == null) return;
 
@@ -74,24 +85,22 @@ export default function MiniCrosswordGame({ date }) {
     }
   })
 
-  const isCompletedSelectedDate = () => {
-    return hasCompleted(formatDate(date))
-  }
-
   useEffect(() => {
     const dateStr = formatDate(date)
     const hasComplete = hasCompleted(dateStr)
     console.log(`Has done? ${dateStr} ${hasCompleted(dateStr)}`)
     if (hasComplete && crosswordComponent.current) {
-      //crosswordComponent.current.fillAllAnswers()
+      setDoneDate(true)
     }
   }, [puzzle])
 
-  const onCrosswordCorrect = useCallback((correct) => {
+  const onCrosswordCorrect = useCallback((row, col, char) => {
     const dateString = formatDate(date)
-    if (correct && !hasCompleted(dateString)) {
+    const correct = crosswordComponent.current.isCrosswordCorrect()
+    if (correct && !hasCompleted(dateString) && crosswordComponent.current) {
       console.log(`You've completed ${dateString}, coorect is: ${JSON.stringify(correct)}`)
       setCompleted(dateString)
+      setDoneDate(true)
     }
   }, [crosswordComponent, date])
 
@@ -99,13 +108,13 @@ export default function MiniCrosswordGame({ date }) {
     <div className={styles.title}>
       <h1>Mini Crossword - {dateTitle}</h1>
     </div>
-    {isCompletedSelectedDate() ? (
+    {isDoneDate ? (
       <div className={`${styles.resultBox} ${styles.successBox}`}>
         <p className={styles.successText}>Nicely done!</p>
       </div>
     ) : ""}
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCrosswordComplete={(correct) => onCrosswordCorrect(correct)} storageKey={formatDate(date)} useStorage>
+      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={(correct) => onCrosswordCorrect(correct)} storageKey={formatDate(date)} useStorage>
         <div className={styles.mainBox}>
           <div className={styles.crossword}><CrosswordGrid /></div>
           <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
