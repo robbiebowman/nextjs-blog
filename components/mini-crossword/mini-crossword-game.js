@@ -29,10 +29,11 @@ export default function MiniCrosswordGame({ date }) {
       });
 
     const coordinateLookup = new Map();
+    var x = 1
     for (i in coordinates) {
       const coord = coordinates[i]
       if (!coordinateLookup[`${coord.x}-${coord.y}`]) {
-        coordinateLookup[`${coord.x}-${coord.y}`] = parseInt(i) + 1
+        coordinateLookup[`${coord.x}-${coord.y}`] = x++
       }
     }
 
