@@ -88,16 +88,14 @@ export default function MiniCrosswordGame({ date }) {
 
   useEffect(() => {
     const hasComplete = hasCompleted(dateString)
-    console.log(`Has done? ${dateString} ${hasCompleted(dateString)}`)
     if (hasComplete && crosswordComponent.current) {
       setDoneDate(true)
     }
   }, [puzzle])
 
-  const onCrosswordCorrect = useCallback((row, col, char) => {
+  const onCrosswordCorrect = useCallback(() => {
     const correct = crosswordComponent.current.isCrosswordCorrect()
     if (correct && !hasCompleted(dateString) && crosswordComponent.current) {
-      console.log(`You've completed ${dateString}, coorect is: ${JSON.stringify(correct)}`)
       setCompleted(dateString)
       setDoneDate(true)
     }
@@ -113,7 +111,7 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={(correct) => onCrosswordCorrect(correct)} storageKey={dateString} useStorage>
+      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={() => setTimeout(onCrosswordCorrect, 250)} storageKey={dateString} useStorage>
         <div className={styles.mainBox}>
           <div className={styles.crossword}><CrosswordGrid /></div>
           <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
