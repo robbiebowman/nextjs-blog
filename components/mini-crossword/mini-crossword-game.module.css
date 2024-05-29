@@ -39,7 +39,8 @@
     align-items: center;
 }
 .successBox {
-    background-color: #377a30;
+    color: #143a08;
+    background-color: #c9f2c5;
 }
 .notSuccessBox {
     background-color: #7a7a30;

@@ -13,11 +13,12 @@ export default function MiniCrosswordGame({ date }) {
   const [puzzle, setPuzzle] = useState(null)
   const [dateTitle, setDateTitle] = useState("")
   const crosswordComponent = useRef();
+  const dateString = formatDate(date)
 
-  const [isDoneDate, setDoneDate] = useState(hasCompleted(formatDate(date)))
+  const [isDoneDate, setDoneDate] = useState(hasCompleted(dateString))
 
   useEffect(() => {
-    const done = hasCompleted(formatDate(date))
+    const done = hasCompleted(dateString)
     setDoneDate(done)
     if (done && crosswordComponent.current) {
       setTimeout(() => crosswordComponent.current.fillAllAnswers(), 500)
@@ -76,7 +77,7 @@ export default function MiniCrosswordGame({ date }) {
   );
 
   const fetcher = (...args) => fetch(...args).then(res => res.json());
-  useSWR(() => `/api/mini-crossword?date=${formatDate(date)}`, fetcher, {
+  useSWR(() => `/api/mini-crossword?date=${dateString}`, fetcher, {
     onSuccess: (data, key, config) => {
       setRawPuzzleData(data)
     },
@@ -86,16 +87,14 @@ export default function MiniCrosswordGame({ date }) {
   })
 
   useEffect(() => {
-    const dateStr = formatDate(date)
-    const hasComplete = hasCompleted(dateStr)
-    console.log(`Has done? ${dateStr} ${hasCompleted(dateStr)}`)
+    const hasComplete = hasCompleted(dateString)
+    console.log(`Has done? ${dateString} ${hasCompleted(dateString)}`)
     if (hasComplete && crosswordComponent.current) {
       setDoneDate(true)
     }
   }, [puzzle])
 
   const onCrosswordCorrect = useCallback((row, col, char) => {
-    const dateString = formatDate(date)
     const correct = crosswordComponent.current.isCrosswordCorrect()
     if (correct && !hasCompleted(dateString) && crosswordComponent.current) {
       console.log(`You've completed ${dateString}, coorect is: ${JSON.stringify(correct)}`)
@@ -110,11 +109,11 @@ export default function MiniCrosswordGame({ date }) {
     </div>
     {isDoneDate ? (
       <div className={`${styles.resultBox} ${styles.successBox}`}>
-        <p className={styles.successText}>Nicely done!</p>
+        <p className={styles.successText}>🎉 Completed {dateString} 🎉</p>
       </div>
     ) : ""}
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={(correct) => onCrosswordCorrect(correct)} storageKey={formatDate(date)} useStorage>
+      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={(correct) => onCrosswordCorrect(correct)} storageKey={dateString} useStorage>
         <div className={styles.mainBox}>
           <div className={styles.crossword}><CrosswordGrid /></div>
           <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
