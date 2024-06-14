@@ -5,6 +5,7 @@ import 'react-simple-keyboard/build/css/index.css';
 import { hasCompleted, setCompleted } from '../../lib/crossword-cookies'
 import { CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
 import { formatDate } from '../../lib/date-funcs'
+import Crossword from '../crossword/crossword'
 
 export default function MiniCrosswordGame({ date }) {
 
@@ -22,7 +23,7 @@ export default function MiniCrosswordGame({ date }) {
     setDoneDate(done)
     if (done && crosswordComponent.current) {
       setTimeout(() => crosswordComponent.current.fillAllAnswers(), 500)
-      
+
     }
   }, [date])
 
@@ -111,13 +112,7 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={() => setTimeout(onCrosswordCorrect, 250)} storageKey={dateString} useStorage>
-        <div className={styles.mainBox}>
-          <div className={styles.crossword}><CrosswordGrid /></div>
-          <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
-          <div className={styles.clues}><DirectionClues className={styles.clues} label="Down" direction="down" /></div>
-        </div>
-      </CrosswordProvider>
+      <Crossword />
     ) : ""}
   </div>
   )

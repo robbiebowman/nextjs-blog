@@ -1,0 +1,23 @@
+.box {
+    aspect-ratio: 1;
+}
+
+.innerLetter {
+    text-align: center;
+    font-weight: 500;
+    font-size:  calc(0.5rem + 2vmin);
+    color: #FFF;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+.crosswordRow {
+    display: flex;
+    flex-direction: row;
+}
