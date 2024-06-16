@@ -83,7 +83,8 @@ export default function MiniCrosswordGame({ date }) {
     },
     onError: (err, key, config) => {
       setRawPuzzleData(null)
-    }
+    },
+    revalidateOnFocus: false
   })
 
   useEffect(() => {
