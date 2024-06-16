@@ -80,11 +80,14 @@ export default function MiniCrosswordGame({ date }) {
   const fetcher = (...args) => fetch(...args).then(res => res.json());
   useSWR(() => `/api/mini-crossword?date=${dateString}`, fetcher, {
     onSuccess: (data, key, config) => {
-      setRawPuzzleData(data)
+      if (data != rawPuzzleData) {
+        setRawPuzzleData(data)
+      }
     },
     onError: (err, key, config) => {
       setRawPuzzleData(null)
-    }
+    },
+    revalidateOnFocus: false
   })
 
   useEffect(() => {
@@ -112,7 +115,7 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <Crossword />
+      <Crossword data={puzzle}/>
     ) : ""}
   </div>
   )
