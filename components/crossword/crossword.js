@@ -9,9 +9,9 @@ export default function Crossword({ data }) {
     const [grid, setGrid] = useState([
         ['l', 'o', 'a', '', ''],
         ['', '', 'd', 'i', ''],
-        ['', '', ' ', 'n', ''],
+        ['', '', '#', 'n', ''],
         ['', '.', '.', 'g', ''],
-        ['', '.', '', ' ', '']
+        ['', '.', '', '#', '']
     ]);
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
@@ -45,7 +45,7 @@ export default function Crossword({ data }) {
     }, [data])
     const completedGrid = useMemo(() => {
         const grid = Array.from({ length: dimensions.rows }, () => Array(dimensions.cols).fill('#'));
-    
+
         function placeAnswer(row, col, answer, isAcross) {
             for (let i = 0; i < answer.length; i++) {
                 if (isAcross) {
@@ -55,22 +55,22 @@ export default function Crossword({ data }) {
                 }
             }
         }
-    
+
         for (const key in data.across) {
             const clue = data.across[key];
             placeAnswer(clue.row, clue.col, clue.answer, true);
         }
-    
+
         for (const key in data.down) {
             const clue = data.down[key];
             placeAnswer(clue.row, clue.col, clue.answer, false);
         }
-    
+
         console.log(`Dimensions: ${JSON.stringify(grid)}`)
         return grid;
     }, [data])
     const clueCoordinates = useMemo(() => {
-        
+
         return data.across
     }, [data])
     const createCellCallback = useCallback((x, y) => {
@@ -89,7 +89,7 @@ export default function Crossword({ data }) {
         } else {
             return y == activeCell.y
         }
-    }, [orientation, activeCell]);
+    }, [orientation, activeCell]) ;
 
 
     let x = -1
@@ -108,6 +108,7 @@ export default function Crossword({ data }) {
                                 onClick={createCellCallback(x, y)}
                                 isActiveCell={activeCell.x == x && activeCell.y == y}
                                 isHighlightedRow={isHighlightedRow(x, y)}
+                                number={y % 2 == 0 ? y : null}
                             />
                         })}
                     </div>

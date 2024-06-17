@@ -1,20 +1,9 @@
 .cellBox {
     display: flex;
-    max-width: 7rem;
-    align-items: center;
-    justify-content: center;
-    border: 0.1rem solid #0006;
+    align-items: start;
+    border: 0.11rem solid #0006;
     flex: 1;
     aspect-ratio: 1;
-}
-
-.innerLetter {
-    padding: calc(0.25rem + 2vmin);;
-    margin-bottom: calc(-0.25rem - 2vmin);
-    text-align: center;
-    font-weight: 500;
-    font-size: calc(2.5rem + 2vmin);
-    color: #090303;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -22,7 +11,23 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
 
+.innerLetter {
+    padding-top: 0.2rem;
+    text-align: center;
+    width: 100%;
+    font-weight: 350;
+    font-size: max(6vmin, 3rem);
+    color: #090303;
+}
+
+.number {
+    position: absolute;
+    font-weight: 600;
+    font-size: max(2vmin, 1rem);
+    color: #BBB;
+    padding: 0.1rem 0.35rem;
 }
 
 .blackBox {
