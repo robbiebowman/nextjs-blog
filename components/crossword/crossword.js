@@ -117,20 +117,26 @@ export default function Crossword({ puzzle }) {
         let xSize = guessGrid[0].length
         let ySize = guessGrid.length
         if (key === 'Backspace') {
-            if (guessGrid[activeCell.y][activeCell.x] == '') {
-                if (activeCell.x == 0 && activeCell.y == 0) return;
+            const findPreviousCell = (orientation, activeCell) => {
+                if (activeCell.x == 0 && activeCell.y == 0) activeCell;
                 if (orientation == 'vertical') {
                     if (activeCell.x == 0) {
-                        setActiveCell({ x: xSize - 1, y: activeCell.y - 1 })
+                        return { x: xSize - 1, y: activeCell.y - 1 }
                     } else {
-                        setActiveCell({ x: activeCell.x - 1, y: activeCell.y })
+                        return { x: activeCell.x - 1, y: activeCell.y }
                     }
                 } else {
                     if (activeCell.y == 0) {
-                        setActiveCell({ x: activeCell.x - 1, y: ySize - 1 })
+                        return { x: activeCell.x - 1, y: ySize - 1 }
                     } else {
-                        setActiveCell({ x: activeCell.x, y: activeCell.y - 1 })
+                        return { x: activeCell.x, y: activeCell.y - 1 }
                     }
+                }
+            }
+            if (guessGrid[activeCell.y][activeCell.x] == '') {
+                const backspaceCell = findPreviousCell(orientation, activeCell)
+                if (guessGrid[backspaceCell.y][backspaceCell.x] != '#' && (backspaceCell.y >= 0 && backspaceCell.x >= 0)) {
+                    setActiveCell(backspaceCell)
                 }
             } else {
                 setGuessGrid(oldGrid => {
@@ -195,7 +201,7 @@ export default function Crossword({ puzzle }) {
                             x++
                             return <Cell
                                 letter={char}
-                                onClick={createCellCallback(x, y)}
+                                onClick={char == '' ? null : createCellCallback(x, y)}
                                 isActiveCell={activeCell.x == x && activeCell.y == y}
                                 isHighlightedRow={isHighlightedRow(x, y)}
                                 number={y % 2 == 0 ? y : null}
