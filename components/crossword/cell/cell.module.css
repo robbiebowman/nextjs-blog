@@ -1,9 +1,8 @@
 .cellBox {
-    display: flex;
-    align-items: start;
     border: 0.11rem solid #0006;
-    flex: 1;
+    width: max(8.4vmin, 4.2rem);
     aspect-ratio: 1;
+    position: relative;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -14,9 +13,13 @@
 }
 
 .innerLetter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
     padding-top: 0.2rem;
     text-align: center;
-    width: 100%;
     font-weight: 350;
     font-size: max(6vmin, 3rem);
     color: #090303;

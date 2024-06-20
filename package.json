@@ -12,6 +12,7 @@
     "@jaredreisinger/react-crossword": "5.2.0",
     "cookie": "^0.4.2",
     "cookies-next": "^2.0.4",
+    "crypto-browserify": "^3.12.0",
     "date-fns": "^2.28.0",
     "eslint-config-next": "^14.2.3",
     "gray-matter": "^4.0.3",

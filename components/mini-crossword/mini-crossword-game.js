@@ -115,7 +115,7 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <Crossword data={puzzle}/>
+      <Crossword puzzle={puzzle}/>
     ) : ""}
   </div>
   )
