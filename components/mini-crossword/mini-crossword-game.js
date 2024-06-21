@@ -12,6 +12,7 @@ export default function MiniCrosswordGame({ date }) {
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [rawPuzzleData, setRawPuzzleData] = useState(null)
   const [puzzle, setPuzzle] = useState(null)
+  const [clues, setClues] = useState(null)
   const [dateTitle, setDateTitle] = useState("")
   const crosswordComponent = useRef();
   const dateString = formatDate(date)
@@ -31,7 +32,7 @@ export default function MiniCrosswordGame({ date }) {
     if (rawPuzzleData == null) return;
 
     setDateTitle(date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
-    const clues = rawPuzzleData.clues.clues;
+    const cluesWords = rawPuzzleData.clues.clues;
     const acrossWords = rawPuzzleData.puzzle.acrossWords;
     const downWords = rawPuzzleData.puzzle.downWords;
 
@@ -54,7 +55,7 @@ export default function MiniCrosswordGame({ date }) {
     const across = acrossWords.reduce((acc, cur) => {
       const coord = coordinateLookup[`${cur.x}-${cur.y}`]
       acc[coord] = {
-        clue: clues.find((c) => c.word == cur.word).clue,
+        clue: cluesWords.find((c) => c.word == cur.word).clue,
         answer: cur.word.toUpperCase(),
         row: cur.x,
         col: cur.y
@@ -65,14 +66,16 @@ export default function MiniCrosswordGame({ date }) {
     const down = downWords.reduce((acc, cur) => {
       const coord = coordinateLookup[`${cur.x}-${cur.y}`]
       acc[coord] = {
-        clue: clues.find((c) => c.word == cur.word).clue,
+        clue: cluesWords.find((c) => c.word == cur.word).clue,
         answer: cur.word.toUpperCase(),
         row: cur.x,
         col: cur.y
       };
       return acc;
     }, {});
-    const puzzle = { across: across, down: down };
+    const clues = { across: across, down: down };
+    setClues(clues)
+    const puzzle = rawPuzzleData.puzzle.crossword.map(row => row.map(char => char === ' ' ? '#' : char));
     setPuzzle(puzzle)
   }, [rawPuzzleData]
   );
@@ -115,7 +118,7 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <Crossword puzzle={puzzle}/>
+      <Crossword clues={clues} puzzle={puzzle}/>
     ) : ""}
   </div>
   )

@@ -2,15 +2,18 @@ import { act, useCallback, useEffect, useState, useMemo } from 'react'
 import styles from './crossword.module.css'
 import Cell from './cell/cell';
 import { getGridProgress, setGridProgress } from '../../lib/crossword-cookies'
-
-export default function Crossword({ puzzle }) {
+/**
+ * 
+ * @param {puzzle} 2d array of chars
+ * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
+ */
+export default function Crossword({ puzzle, clues }) {
 
     const puzzleId = useMemo(() => {
         const crypto = require('crypto');
         return crypto.createHash('sha256').update(JSON.stringify(puzzle)).digest('hex')
     }, [puzzle])
 
-    const [clues, setClues] = useState(null)
     const [guessGrid, setGuessGrid] = useState([
         ['l', 'o', 'a', '', ''],
         ['', '', 'd', 'i', ''],
@@ -21,75 +24,10 @@ export default function Crossword({ puzzle }) {
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
 
-    const dimensions = useMemo(() => {
-        let maxRow = 0;
-        let maxCol = 0;
-
-        // Helper function to update maxRow and maxCol
-        function updateMax(row, col, length, isAcross) {
-            if (isAcross) {
-                maxRow = Math.max(maxRow, row);
-                maxCol = Math.max(maxCol, col + length - 1);
-            } else {
-                maxRow = Math.max(maxRow, row + length - 1);
-                maxCol = Math.max(maxCol, col);
-            }
-        }
-        for (const key in puzzle.across) {
-            const clue = puzzle.across[key];
-            updateMax(clue.row, clue.col, clue.answer.length, true);
-        }
-        for (const key in puzzle.down) {
-            const clue = puzzle.down[key];
-            updateMax(clue.row, clue.col, clue.answer.length, false);
-        }
-
-        return {
-            rows: maxRow + 1,
-            cols: maxCol + 1
-        };
-    }, [puzzle])
-    const completedGrid = useMemo(() => {
-        const grid = Array.from({ length: dimensions.rows }, () => Array(dimensions.cols).fill('#'));
-
-        function placeAnswer(row, col, answer, isAcross) {
-            for (let i = 0; i < answer.length; i++) {
-                if (isAcross) {
-                    grid[row][col + i] = answer[i];
-                } else {
-                    grid[row + i][col] = answer[i];
-                }
-            }
-        }
-
-        for (const key in puzzle.across) {
-            const clue = puzzle.across[key];
-            placeAnswer(clue.row, clue.col, clue.answer, true);
-        }
-
-        for (const key in puzzle.down) {
-            const clue = puzzle.down[key];
-            placeAnswer(clue.row, clue.col, clue.answer, false);
-        }
-
-        console.log(`Dimensions: ${JSON.stringify(grid)}`)
-        return grid;
-    }, [puzzle])
     const blankGrid = useMemo(() => {
-        let newArray = [];
-        for (let i = 0; i < completedGrid.length; i++) {
-            let newRow = [];
-            for (let j = 0; j < completedGrid[i].length; j++) {
-                if (completedGrid[i][j] !== '#') {
-                    newRow.push('');
-                } else {
-                    newRow.push(completedGrid[i][j]);
-                }
-            }
-            newArray.push(newRow);
-        }
-        return newArray;
-    }, [completedGrid])
+        return puzzle.map(row => row.map(c => c == '#' ? '#' : ''))
+    }, [puzzle])
+
     const createCellCallback = useCallback((x, y) => {
         return () => {
             if (x == activeCell.x && y == activeCell.y) {
@@ -151,11 +89,9 @@ export default function Crossword({ puzzle }) {
     useEffect(() => {
         const savedProgress = getGridProgress(puzzleId) ?? blankGrid
         setGuessGrid(savedProgress)
-    }, [completedGrid])
+    })
 
     const keyPressedHandler = useCallback((key) => {
-        let xSize = guessGrid[0].length
-        let ySize = guessGrid.length
         if (key === 'Backspace') {
             if (guessGrid[activeCell.y][activeCell.x] == '') {
                 const dx = orientation == 'horizontal' ? -1 : 0
@@ -171,8 +107,6 @@ export default function Crossword({ puzzle }) {
             }
         } else if (key.length == 1 && ((key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z'))) {
             setActiveCell((oldCell) => {
-                let x = oldCell.x
-                let y = oldCell.y
                 const dx = orientation == 'horizontal' ? 1 : 0
                 const dy = orientation == 'horizontal' ? 0 : 1
                 return findNextCell(oldCell.x, oldCell.y, dx, dy, true, true)
@@ -214,12 +148,9 @@ export default function Crossword({ puzzle }) {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
-            console.log(`${event.key}`)
             keyPressedHandler(event.key)
         };
-
         window.addEventListener('keydown', handleKeyDown);
-
         // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
