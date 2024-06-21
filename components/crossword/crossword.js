@@ -14,6 +14,21 @@ export default function Crossword({ puzzle, clues }) {
         return crypto.createHash('sha256').update(JSON.stringify(puzzle)).digest('hex')
     }, [puzzle])
 
+    const clueNumberLookup = useMemo(() => {
+        const lookup = {};
+
+        const processClues = (clueSet) => {
+            Object.entries(clueSet || {}).forEach(([number, { x, y }]) => {
+                if (!lookup[y]) lookup[y] = {};
+                if (!lookup[y][x]) lookup[y][x] = parseInt(number, 10);
+            });
+        };
+        processClues(clues.across);
+        processClues(clues.down);
+
+        return lookup;
+    }, [clues])
+
     const [guessGrid, setGuessGrid] = useState([
         ['l', 'o', 'a', '', ''],
         ['', '', 'd', 'i', ''],
@@ -89,62 +104,61 @@ export default function Crossword({ puzzle, clues }) {
     useEffect(() => {
         const savedProgress = getGridProgress(puzzleId) ?? blankGrid
         setGuessGrid(savedProgress)
-    })
+    }, [puzzleId])
+
+    const handleBackspace = useCallback(() => {
+        if (guessGrid[activeCell.y][activeCell.x] === '') {
+            const dx = orientation === 'horizontal' ? -1 : 0;
+            const dy = orientation === 'horizontal' ? 0 : -1;
+            const backspaceCell = findNextCell(activeCell.x, activeCell.y, dx, dy, false, true);
+            setActiveCell(backspaceCell);
+        } else {
+            setGuessGrid(oldGrid => {
+                const newGrid = [...oldGrid];
+                newGrid[activeCell.y][activeCell.x] = '';
+                return newGrid;
+            });
+        }
+    }, [activeCell, guessGrid, orientation, findNextCell]);
+
+    const handleLetterInput = useCallback((key) => {
+        setActiveCell((oldCell) => {
+            const dx = orientation === 'horizontal' ? 1 : 0;
+            const dy = orientation === 'horizontal' ? 0 : 1;
+            return findNextCell(oldCell.x, oldCell.y, dx, dy, true, true);
+        });
+        setGuessGrid(oldGrid => {
+            const newGrid = [...oldGrid];
+            newGrid[activeCell.y][activeCell.x] = key;
+            return newGrid;
+        });
+    }, [activeCell, orientation, findNextCell]);
+
+    const handleArrowKey = useCallback((key) => {
+        const { x, y } = activeCell;
+        let dx = 0, dy = 0;
+        switch (key) {
+            case 'ArrowUp': dy = -1; break;
+            case 'ArrowDown': dy = 1; break;
+            case 'ArrowLeft': dx = -1; break;
+            case 'ArrowRight': dx = 1; break;
+        }
+        const newCell = findNextCell(x, y, dx, dy);
+        if (newCell.x !== x || newCell.y !== y) {
+            setActiveCell(newCell);
+            setOrientation(dx !== 0 ? 'horizontal' : 'vertical');
+        }
+    }, [activeCell, findNextCell]);
 
     const keyPressedHandler = useCallback((key) => {
         if (key === 'Backspace') {
-            if (guessGrid[activeCell.y][activeCell.x] == '') {
-                const dx = orientation == 'horizontal' ? -1 : 0
-                const dy = orientation == 'horizontal' ? 0 : -1
-                const backspaceCell = findNextCell(activeCell.x, activeCell.y, dx, dy, false, true)
-                setActiveCell(backspaceCell)
-            } else {
-                setGuessGrid(oldGrid => {
-                    const newGrid = [...oldGrid]
-                    newGrid[activeCell.y][activeCell.x] = ''
-                    return newGrid
-                })
-            }
-        } else if (key.length == 1 && ((key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z'))) {
-            setActiveCell((oldCell) => {
-                const dx = orientation == 'horizontal' ? 1 : 0
-                const dy = orientation == 'horizontal' ? 0 : 1
-                return findNextCell(oldCell.x, oldCell.y, dx, dy, true, true)
-            })
-            setGuessGrid(oldGrid => {
-                const newGrid = [...oldGrid]
-                newGrid[activeCell.y][activeCell.x] = key
-                return newGrid
-            })
+            handleBackspace();
+        } else if (key.length === 1 && key.match(/[a-zA-Z]/)) {
+            handleLetterInput(key.toLowerCase());
         } else if (key.startsWith("Arrow")) {
-            let newCell;
-            const x = activeCell.x
-            const y = activeCell.y
-
-            switch (key) {
-                case 'ArrowUp':
-                    newCell = findNextCell(x, y, 0, -1);
-                    break;
-                case 'ArrowDown':
-                    newCell = findNextCell(x, y, 0, 1);
-                    break;
-                case 'ArrowLeft':
-                    newCell = findNextCell(x, y, -1, 0);
-                    break;
-                case 'ArrowRight':
-                    newCell = findNextCell(x, y, 1, 0);
-                    break;
-            }
-
-            if (newCell.x !== x) {
-                setActiveCell(newCell);
-                setOrientation('horizontal')
-            } else if (newCell.y !== y) {
-                setActiveCell(newCell)
-                setOrientation('vertical')
-            }
+            handleArrowKey(key);
         }
-    }, [activeCell, guessGrid, orientation, findNextCell])
+    }, [handleBackspace, handleLetterInput, handleArrowKey]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -158,6 +172,8 @@ export default function Crossword({ puzzle, clues }) {
     }, [keyPressedHandler]);
 
     let y = -1
+
+    console.log(`Clue lookup: ${JSON.stringify(clueNumberLookup)}`)
 
     return (
         <div className={styles.box}>
@@ -173,7 +189,7 @@ export default function Crossword({ puzzle, clues }) {
                                 onClick={char == '#' ? null : createCellCallback(x, y)}
                                 isActiveCell={activeCell.x == x && activeCell.y == y}
                                 isHighlightedRow={isHighlightedRow(x, y)}
-                                number={y % 2 == 0 ? y : null}
+                                number={clueNumberLookup[y]?.[x]}
                             />
                         })}
                     </div>

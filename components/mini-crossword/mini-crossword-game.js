@@ -56,9 +56,9 @@ export default function MiniCrosswordGame({ date }) {
       const coord = coordinateLookup[`${cur.x}-${cur.y}`]
       acc[coord] = {
         clue: cluesWords.find((c) => c.word == cur.word).clue,
-        answer: cur.word.toUpperCase(),
-        row: cur.x,
-        col: cur.y
+        answer: cur.word.toLowerCase(),
+        x: cur.x,
+        y: cur.y
       };
       return acc;
     }, {});
@@ -67,9 +67,9 @@ export default function MiniCrosswordGame({ date }) {
       const coord = coordinateLookup[`${cur.x}-${cur.y}`]
       acc[coord] = {
         clue: cluesWords.find((c) => c.word == cur.word).clue,
-        answer: cur.word.toUpperCase(),
-        row: cur.x,
-        col: cur.y
+        answer: cur.word.toLowerCase(),
+        x: cur.x,
+        y: cur.y
       };
       return acc;
     }, {});
