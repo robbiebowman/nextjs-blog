@@ -102,11 +102,28 @@ export default function Crossword({ puzzle }) {
 
     const isHighlightedRow = useCallback((x, y) => {
         if (orientation == 'horizontal') {
-            return x == activeCell.x
-        } else {
             return y == activeCell.y
+        } else {
+            return x == activeCell.x
         }
     }, [orientation, activeCell])
+
+    const findNextCell = useCallback((x, y, dx, dy) => {
+        const gridHeight = guessGrid.length
+        const gridWidth = guessGrid[0].length
+        let newX = x + dx;
+        let newY = y + dy;
+
+        while (newX >= 0 && newX < gridWidth && newY >= 0 && newY < gridHeight) {
+            if (guessGrid[newY][newX] !== '#') {
+                return { x: newX, y: newY };
+            }
+            newX += dx;
+            newY += dy;
+        }
+
+        return { x, y }; // Return original position if no valid cell found
+    }, [guessGrid])
 
     useEffect(() => {
         const savedProgress = getGridProgress(puzzleId) ?? blankGrid
@@ -119,7 +136,7 @@ export default function Crossword({ puzzle }) {
         if (key === 'Backspace') {
             const findPreviousCell = (orientation, activeCell) => {
                 if (activeCell.x == 0 && activeCell.y == 0) activeCell;
-                if (orientation == 'vertical') {
+                if (orientation == 'horizontal') {
                     if (activeCell.x == 0) {
                         return { x: xSize - 1, y: activeCell.y - 1 }
                     } else {
@@ -150,7 +167,7 @@ export default function Crossword({ puzzle }) {
                 let x = oldCell.x
                 let y = oldCell.y
                 while (guessGrid[y][x] != '') {
-                    if (orientation == 'vertical') {
+                    if (orientation == 'horizontal') {
                         x = (x + 1) % xSize
                         if (x == 0) {
                             y = (y + 1) % ySize
@@ -172,11 +189,39 @@ export default function Crossword({ puzzle }) {
                 newGrid[activeCell.y][activeCell.x] = key
                 return newGrid
             })
+        } else if (key.startsWith("Arrow")) {
+            let newCell;
+            const x = activeCell.x
+            const y = activeCell.y
+
+            switch (key) {
+                case 'ArrowUp':
+                    newCell = findNextCell(x, y, 0, -1);
+                    break;
+                case 'ArrowDown':
+                    newCell = findNextCell(x, y, 0, 1);
+                    break;
+                case 'ArrowLeft':
+                    newCell = findNextCell(x, y, -1, 0);
+                    break;
+                case 'ArrowRight':
+                    newCell = findNextCell(x, y, 1, 0);
+                    break;
+            }
+            
+            if (newCell.x !== x) {
+                setActiveCell(newCell);
+                setOrientation('horizontal')
+            } else if (newCell.y !== y) {
+                setActiveCell(newCell)
+                setOrientation('vertical')
+            }
         }
-    }, [activeCell, guessGrid, orientation])
+    }, [activeCell, guessGrid, orientation, findNextCell])
 
     useEffect(() => {
         const handleKeyDown = (event) => {
+            console.log(`${event.key}`)
             keyPressedHandler(event.key)
         };
 
@@ -201,7 +246,7 @@ export default function Crossword({ puzzle }) {
                             x++
                             return <Cell
                                 letter={char}
-                                onClick={char == '' ? null : createCellCallback(x, y)}
+                                onClick={char == '#' ? null : createCellCallback(x, y)}
                                 isActiveCell={activeCell.x == x && activeCell.y == y}
                                 isHighlightedRow={isHighlightedRow(x, y)}
                                 number={y % 2 == 0 ? y : null}
