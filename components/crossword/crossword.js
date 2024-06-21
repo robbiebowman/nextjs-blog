@@ -108,22 +108,45 @@ export default function Crossword({ puzzle }) {
         }
     }, [orientation, activeCell])
 
-    const findNextCell = useCallback((x, y, dx, dy) => {
-        const gridHeight = guessGrid.length
-        const gridWidth = guessGrid[0].length
-        let newX = x + dx;
-        let newY = y + dy;
+    const findNextCell = useCallback((x, y, dx, dy, skipLetters = false, wrap = false) => {
+        const gridHeight = guessGrid.length;
+        const gridWidth = guessGrid[0].length;
+        let newX = x;
+        let newY = y;
+        let cellsChecked = 0;
+        const totalCells = gridWidth * gridHeight;
 
-        while (newX >= 0 && newX < gridWidth && newY >= 0 && newY < gridHeight) {
-            if (guessGrid[newY][newX] !== '#') {
-                return { x: newX, y: newY };
-            }
+        while (cellsChecked < totalCells) {
             newX += dx;
             newY += dy;
-        }
 
-        return { x, y }; // Return original position if no valid cell found
-    }, [guessGrid])
+            // Handle wrapping
+            if (wrap) {
+                if (newX >= gridWidth) {
+                    newX = 0;
+                    newY = (newY + 1) % gridHeight;
+                } else if (newX < 0) {
+                    newX = gridWidth - 1;
+                    newY = (newY - 1 + gridHeight) % gridHeight;
+                } else if (newY >= gridHeight) {
+                    newY = 0;
+                    newX = (newX + 1) % gridWidth;
+                } else if (newY < 0) {
+                    newY = gridHeight - 1;
+                    newX = (newX - 1 + gridWidth) % gridWidth;
+                }
+            } else if (newX < 0 || newX >= gridWidth || newY < 0 || newY >= gridHeight) {
+                return { x, y }; // Return original position if out of bounds and not wrapping
+            }
+
+            const char = guessGrid[newY][newX];
+            if (char !== '#' && (!skipLetters || (char < 'a' || char > 'z'))) {
+                return { x: newX, y: newY };
+            }
+            cellsChecked++;
+        }
+        return { x, y }; // Return original position if no valid cell found after checking all cells
+    }, [guessGrid]);
 
     useEffect(() => {
         const savedProgress = getGridProgress(puzzleId) ?? blankGrid
@@ -134,27 +157,11 @@ export default function Crossword({ puzzle }) {
         let xSize = guessGrid[0].length
         let ySize = guessGrid.length
         if (key === 'Backspace') {
-            const findPreviousCell = (orientation, activeCell) => {
-                if (activeCell.x == 0 && activeCell.y == 0) activeCell;
-                if (orientation == 'horizontal') {
-                    if (activeCell.x == 0) {
-                        return { x: xSize - 1, y: activeCell.y - 1 }
-                    } else {
-                        return { x: activeCell.x - 1, y: activeCell.y }
-                    }
-                } else {
-                    if (activeCell.y == 0) {
-                        return { x: activeCell.x - 1, y: ySize - 1 }
-                    } else {
-                        return { x: activeCell.x, y: activeCell.y - 1 }
-                    }
-                }
-            }
             if (guessGrid[activeCell.y][activeCell.x] == '') {
-                const backspaceCell = findPreviousCell(orientation, activeCell)
-                if (guessGrid[backspaceCell.y][backspaceCell.x] != '#' && (backspaceCell.y >= 0 && backspaceCell.x >= 0)) {
-                    setActiveCell(backspaceCell)
-                }
+                const dx = orientation == 'horizontal' ? -1 : 0
+                const dy = orientation == 'horizontal' ? 0 : -1
+                const backspaceCell = findNextCell(activeCell.x, activeCell.y, dx, dy, false, true)
+                setActiveCell(backspaceCell)
             } else {
                 setGuessGrid(oldGrid => {
                     const newGrid = [...oldGrid]
@@ -166,23 +173,9 @@ export default function Crossword({ puzzle }) {
             setActiveCell((oldCell) => {
                 let x = oldCell.x
                 let y = oldCell.y
-                while (guessGrid[y][x] != '') {
-                    if (orientation == 'horizontal') {
-                        x = (x + 1) % xSize
-                        if (x == 0) {
-                            y = (y + 1) % ySize
-                        }
-                    } else {
-                        y = (y + 1) % xSize
-                        if (y == 0) {
-                            x = (x + 1) % xSize
-                        }
-                    }
-                    if (x == oldCell.x && y == oldCell.y) {
-                        return oldCell
-                    }
-                }
-                return { x: x, y: y }
+                const dx = orientation == 'horizontal' ? 1 : 0
+                const dy = orientation == 'horizontal' ? 0 : 1
+                return findNextCell(oldCell.x, oldCell.y, dx, dy, true, true)
             })
             setGuessGrid(oldGrid => {
                 const newGrid = [...oldGrid]
@@ -208,7 +201,7 @@ export default function Crossword({ puzzle }) {
                     newCell = findNextCell(x, y, 1, 0);
                     break;
             }
-            
+
             if (newCell.x !== x) {
                 setActiveCell(newCell);
                 setOrientation('horizontal')
