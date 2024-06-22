@@ -35,16 +35,22 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
 
   return (
     <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
-      <div className={styles.number}>{number ?? ""}</div>
-      <div className={styles.innerLetter}>{letter.toLowerCase()}</div>
+      {number && <div className={styles.number}>{number}</div>}
       <input
         className={styles.mobileInput}
         ref={inputRef}
         type="text"
-        maxLength="1"
-        readOnly={true}
         inputMode="text"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+        maxLength="1"
+        value={letter || ''}
+        onChange={handleInput}
+        onInput={handleInput}
       />
+      <div className={styles.innerLetter}>{letter.toLowerCase()}</div>
     </div>
   )
 }
