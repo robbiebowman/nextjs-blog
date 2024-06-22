@@ -14,7 +14,6 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
   useEffect(() => {
     if (isActiveCell && inputRef.current) {
       inputRef.current.focus();
-      inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [isActiveCell]);
 
