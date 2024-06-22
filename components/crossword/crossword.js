@@ -2,7 +2,6 @@ import { act, useCallback, useEffect, useState, useMemo } from 'react'
 import styles from './crossword.module.css'
 import Cell from './cell/cell';
 import Clues from './clues';
-import { getGridProgress, setGridProgress } from '../../lib/crossword-cookies'
 /**
  * 
  * @param {puzzle} 2d array of chars
@@ -21,7 +20,7 @@ export default function Crossword({ puzzle, clues }) {
             const [number, clue] = clueRaw
             const { x, y } = clue
             if (!lookup[y]) lookup[y] = []
-            if (!lookup[y][x]) lookup[y][x] = {...clue, number, direction}
+            if (!lookup[y][x]) lookup[y][x] = { ...clue, number, direction }
         })
         return lookup
     }, []);
@@ -34,8 +33,6 @@ export default function Crossword({ puzzle, clues }) {
         return processClues(clues.down, 'down');
     }, [clues])
 
-
-
     const [guessGrid, setGuessGrid] = useState([
         ['l', 'o', 'a', '', ''],
         ['', '', 'd', 'i', ''],
@@ -45,6 +42,15 @@ export default function Crossword({ puzzle, clues }) {
     ]);
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
+
+    const loadProgress = useCallback(() => {
+        const savedState = localStorage.getItem(`${puzzleId}-progress`);
+        return savedState ? JSON.parse(savedState) : null;
+    }, [puzzleId]);
+
+    const saveProgress = useCallback(() => {
+        localStorage.setItem(`${puzzleId}-progress`, JSON.stringify(guessGrid));
+    }, [puzzleId, guessGrid]);
 
     const onClueClicked = useCallback((number, acrossOrDown) => {
         const newOrientation = acrossOrDown == 'across' ? 'horizontal' : 'vertical'
@@ -148,19 +154,23 @@ export default function Crossword({ puzzle, clues }) {
         if (orientation == 'horizontal') {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
             const answer = acrossClueLookup[startingCell.y][startingCell.x]
-            return clues['across'][answer.number]
+            return clues['across'][answer?.number]
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
-            console.log(`${JSON.stringify(startingCell)}`)
             const answer = downClueLookup[startingCell.y][startingCell.x]
-            return clues['down'][answer.number]
+            return clues['down'][answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
 
     useEffect(() => {
-        const savedProgress = getGridProgress(puzzleId) ?? blankGrid
-        setGuessGrid(savedProgress)
-    }, [puzzleId])
+        const savedProgress = loadProgress()
+        if (savedProgress) {
+            console.log(`savedProgress: ${JSON.stringify(savedProgress)}`)
+            setGuessGrid(savedProgress)
+        } else {
+            setGuessGrid(blankGrid)
+        }
+    }, [puzzleId, puzzle])
 
     const handleBackspace = useCallback(() => {
         if (guessGrid[activeCell.y][activeCell.x] === '') {
@@ -217,6 +227,7 @@ export default function Crossword({ puzzle, clues }) {
         } else if (key.startsWith("Arrow")) {
             handleArrowKey(key);
         }
+        saveProgress()
     }, [handleBackspace, handleLetterInput, handleArrowKey]);
 
     useEffect(() => {
