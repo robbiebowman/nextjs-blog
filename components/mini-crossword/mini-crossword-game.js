@@ -59,7 +59,9 @@ export default function MiniCrosswordGame({ date }) {
         clue: cluesWords.find((c) => c.word == cur.word).clue,
         answer: cur.word.toLowerCase(),
         x: cur.y, // Orientation is reversed for my crossword component
-        y: cur.x
+        y: cur.x,
+        direction: 'across',
+        number: coord
       };
       return acc;
     }, {});
@@ -70,7 +72,9 @@ export default function MiniCrosswordGame({ date }) {
         clue: cluesWords.find((c) => c.word == cur.word).clue,
         answer: cur.word.toLowerCase(),
         x: cur.y, // Orientation is reversed for my crossword component
-        y: cur.x
+        y: cur.x,
+        direction: 'down',
+        number: coord
       };
       return acc;
     }, {});
