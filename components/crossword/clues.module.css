@@ -20,6 +20,12 @@
     transition: background-color 0.3s ease;
 }
 
+.highlightRow {
+    padding: 0.2rem;
+    transition: background-color 0.3s ease;
+    background-color: rgba(229, 255, 0, 0.2);
+}
+
 .clueRow:hover {
     background-color: rgba(0, 153, 255, 0.2);
 }

@@ -6,7 +6,7 @@ import { getGridProgress, setGridProgress } from '../../lib/crossword-cookies'
  * 
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
-export default function Clues({ clues }) {
+export default function Clues({ clues, onClueClick, activeClue }) {
 
     const formatClues = useCallback((clueObject) => {
         let formattedClues = []
@@ -27,17 +27,23 @@ export default function Clues({ clues }) {
 
     return (<div className={styles.box}>
         <div className={styles.clueBox}>
-        <h1>Across</h1>
+            <h1>Across</h1>
             {acrossClues.map(c => {
                 const { number, clue } = c;
-                return (<div className={styles.clueRow}><span className={styles.number}>{number}</span> {clue}</div>)
+                const isActiveClue = activeClue?.number == number && activeClue.direction == 'across'
+                return (<div key={number + 'across'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'across') }}>
+                    <span className={styles.number}>{number}</span> {clue}
+                </div>)
             })}
         </div>
         <div className={styles.clueBox}>
             <h1>Down</h1>
             {downClues.map(c => {
                 const { number, clue } = c;
-                return (<div className={styles.clueRow}><span className={styles.number}>{number}</span> {clue}</div>)
+                const isActiveClue = activeClue?.number == number && activeClue.direction == 'down'
+                return (<div key={number + 'down'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'down') }}>
+                    <span className={styles.number}>{number}</span> {clue}
+                </div>)
             })}
         </div>
     </div>)

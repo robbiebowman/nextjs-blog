@@ -58,8 +58,8 @@ export default function MiniCrosswordGame({ date }) {
       acc[coord] = {
         clue: cluesWords.find((c) => c.word == cur.word).clue,
         answer: cur.word.toLowerCase(),
-        x: cur.x,
-        y: cur.y
+        x: cur.y, // Orientation is reversed for my crossword component
+        y: cur.x
       };
       return acc;
     }, {});
@@ -69,8 +69,8 @@ export default function MiniCrosswordGame({ date }) {
       acc[coord] = {
         clue: cluesWords.find((c) => c.word == cur.word).clue,
         answer: cur.word.toLowerCase(),
-        x: cur.x,
-        y: cur.y
+        x: cur.y, // Orientation is reversed for my crossword component
+        y: cur.x
       };
       return acc;
     }, {});
@@ -121,10 +121,6 @@ export default function MiniCrosswordGame({ date }) {
     {puzzle ? (
       <Crossword clues={clues} puzzle={puzzle} />
     ) : ""}
-    {clues ?
-      <Clues clues={clues} />
-      : ""
-    }
   </div>
   )
 }
