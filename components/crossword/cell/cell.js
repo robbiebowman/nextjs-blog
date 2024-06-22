@@ -31,21 +31,19 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
   return (
     <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
       {number && <div className={styles.number}>{number}</div>}
-      <form>
-        <input
-          className={styles.mobileInput}
-          ref={inputRef}
-          type="text"
-          inputMode="text"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          data-quicktypes="off"
-          onChange={handleInput}
-          onInput={handleInput}
-        />
-      </form>
+      <input
+        className={styles.mobileInput}
+        ref={inputRef}
+        type="text"
+        inputMode="text"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+        data-quicktypes="off"
+        onChange={handleInput}
+        onInput={handleInput}
+      />
       <div className={styles.innerLetter}>{letter.toLowerCase()}</div>
     </div>
   )
