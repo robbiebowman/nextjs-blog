@@ -31,7 +31,7 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
   return (
     <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
       {number && <div className={styles.number}>{number}</div>}
-      <textarea
+      <input
         className={styles.mobileInput}
         ref={inputRef}
         type="text"
@@ -40,6 +40,7 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
+        data-quicktypes="off"
         maxLength="1"
         value={letter || ''}
         onChange={handleInput}
