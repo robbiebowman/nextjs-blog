@@ -17,18 +17,24 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
     }
   }, [isActiveCell]);
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
   const handleInput = (e) => {
     e.preventDefault();
   };
 
   return (
-    <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={onClick}>
+    <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
       {number && <div className={styles.number}>{number}</div>}
       <input
         className={styles.mobileInput}
         ref={inputRef}
         type="text"
-        inputMode="none"
+        inputMode="text"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
