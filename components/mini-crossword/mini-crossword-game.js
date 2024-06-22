@@ -7,6 +7,7 @@ import { CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinge
 import { formatDate } from '../../lib/date-funcs'
 import Crossword from '../crossword/crossword'
 import Clues from '../crossword/clues'
+import { getPuzzleId } from '../crossword/utils';
 
 export default function MiniCrosswordGame({ date }) {
 
@@ -97,13 +98,6 @@ export default function MiniCrosswordGame({ date }) {
     },
     revalidateOnFocus: false
   })
-
-  useEffect(() => {
-    const hasComplete = hasCompleted(dateString)
-    if (hasComplete && crosswordComponent.current) {
-      setDoneDate(true)
-    }
-  }, [puzzle])
 
   const onCrosswordCorrect = useCallback(() => {
     const correct = crosswordComponent.current.isCrosswordCorrect()

@@ -1,6 +1,7 @@
 import { act, useCallback, useEffect, useState, useMemo } from 'react'
 import styles from './crossword.module.css'
 import Cell from './cell/cell';
+import { getPuzzleId } from './utils';
 import Clues from './clues';
 /**
  * 
@@ -10,8 +11,7 @@ import Clues from './clues';
 export default function Crossword({ puzzle, clues }) {
 
     const puzzleId = useMemo(() => {
-        const crypto = require('crypto');
-        return crypto.createHash('sha256').update(JSON.stringify(puzzle)).digest('hex')
+        return getPuzzleId(puzzle)
     }, [puzzle])
 
     const processClues = useCallback((clueSet, direction) => {
@@ -42,6 +42,7 @@ export default function Crossword({ puzzle, clues }) {
     ]);
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
+    const [isComplete, setComplete] = useState(false)
 
     const loadProgress = useCallback(() => {
         const savedState = localStorage.getItem(`${puzzleId}-progress`);
@@ -165,12 +166,21 @@ export default function Crossword({ puzzle, clues }) {
     useEffect(() => {
         const savedProgress = loadProgress()
         if (savedProgress) {
-            console.log(`savedProgress: ${JSON.stringify(savedProgress)}`)
             setGuessGrid(savedProgress)
         } else {
             setGuessGrid(blankGrid)
         }
     }, [puzzleId, puzzle])
+
+    useEffect(() => {
+        const savedCompleted = localStorage.getItem(`${puzzleId}-completed`)
+        const isCurrentlyCompleted = JSON.stringify(guessGrid) == JSON.stringify(puzzle)
+        const eitherCompleted = isCurrentlyCompleted || savedCompleted
+        if (eitherCompleted) {
+            localStorage.setItem(`${puzzleId}-completed`, true);
+        }
+        setComplete(eitherCompleted)
+    }, [guessGrid])
 
     const handleBackspace = useCallback(() => {
         if (guessGrid[activeCell.y][activeCell.x] === '') {
@@ -272,30 +282,37 @@ export default function Crossword({ puzzle, clues }) {
     console.log(`activeClue: ${JSON.stringify(activeClue)}`)
 
     return (
-        <div className={styles.box}>
-            <div className={styles.crosswordBox}>
-                {
-                    guessGrid.map(row => {
-                        y++
-                        let x = -1
-                        return <div key={`${y}-row`} className={styles.crosswordRow}>
-                            {row.map((char) => {
-                                x++
-                                const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
-                                return <Cell
-                                    key={`${x}-${y}`}
-                                    letter={char}
-                                    onClick={char == '#' ? null : createCellCallback(x, y)}
-                                    isActiveCell={activeCell.x == x && activeCell.y == y}
-                                    isHighlightedRow={isHighlightedRow(x, y)}
-                                    number={number}
-                                />
-                            })}
-                        </div>
-                    })
-                }
+        <div className={styles.outerBox}>
+            {isComplete ? (
+                <div className={`${styles.resultBox} ${styles.successBox}`}>
+                    <p className={styles.successText}>🎉 Completed Puzzle! 🎉</p>
+                </div>
+            ) : ""}
+            <div className={styles.box}>
+                <div className={styles.crosswordBox}>
+                    {
+                        guessGrid.map(row => {
+                            y++
+                            let x = -1
+                            return <div key={`${y}-row`} className={styles.crosswordRow}>
+                                {row.map((char) => {
+                                    x++
+                                    const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
+                                    return <Cell
+                                        key={`${x}-${y}`}
+                                        letter={char}
+                                        onClick={char == '#' ? null : createCellCallback(x, y)}
+                                        isActiveCell={activeCell.x == x && activeCell.y == y}
+                                        isHighlightedRow={isHighlightedRow(x, y)}
+                                        number={number}
+                                    />
+                                })}
+                            </div>
+                        })
+                    }
+                </div>
+                <Clues clues={clues} onClueClick={onClueClicked} activeClue={activeClue} />
             </div>
-            <Clues clues={clues} onClueClick={onClueClicked} activeClue={activeClue} />
         </div>
     )
 }
