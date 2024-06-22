@@ -14,8 +14,6 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
   useEffect(() => {
     if (isActiveCell && inputRef.current) {
       inputRef.current.focus();
-      // Try to force the keyboard to open
-      inputRef.current.click();
     }
   }, [isActiveCell]);
 
