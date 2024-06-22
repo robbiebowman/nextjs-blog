@@ -288,6 +288,7 @@ export default function Crossword({ puzzle, clues }) {
                     <p className={styles.successText}>🎉 Completed Puzzle! 🎉</p>
                 </div>
             ) : ""}
+            v1
             <div className={styles.box}>
                 <div className={styles.crosswordBox}>
                     {
