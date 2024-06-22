@@ -36,7 +36,7 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
         type="text"
         maxLength="1"
         readOnly={true}
-        inputMode="none"
+        inputMode="text"
       />
       <div className={styles.number}>{number ?? ""}</div>
       <div className={styles.innerLetter}>{letter.toLowerCase()}</div>
