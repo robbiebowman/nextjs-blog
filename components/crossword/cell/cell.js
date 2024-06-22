@@ -25,6 +25,9 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
     }
   };
 
+  const handleInput = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
@@ -40,6 +43,8 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
         spellCheck="false"
         maxLength="1"
         value={letter || ''}
+        onChange={handleInput}
+        onInput={handleInput}
       />
       <div className={styles.innerLetter}>{letter.toLowerCase()}</div>
     </div>
