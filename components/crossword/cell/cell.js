@@ -3,28 +3,33 @@ import styles from './cell.module.css'
 
 export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, number }) {
 
-  const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (isActiveCell && inputRef.current) {
-      console.log('Active cell activated')
-      inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      inputRef.current.focus();
-    }
-  }, [isActiveCell]);
-
   const boxStyle = styles.cellBox + " " + (
     letter == '#' ? `${styles.blackBox}` :
       isActiveCell ? styles.activeBox :
         isHighlightedRow ? styles.highlightedBox : ""
   );
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isActiveCell && inputRef.current) {
+      inputRef.current.focus();
+      // Try to force the keyboard to open
+      inputRef.current.click();
+    }
+  }, [isActiveCell]);
+
   const handleClick = () => {
     if (onClick) {
       onClick();
     }
-    if (inputRef.current) {
-      inputRef.current.focus();
+  };
+
+  const handleInput = (e) => {
+    e.preventDefault();
+    const input = e.target.value;
+    if (input && onInput) {
+      onInput(input[input.length - 1].toUpperCase());
     }
   };
 
