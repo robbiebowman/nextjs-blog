@@ -7,6 +7,7 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
 
   useEffect(() => {
     if (isActiveCell && inputRef.current) {
+      console.log('Active cell activated')
       inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       inputRef.current.focus();
     }
@@ -18,8 +19,17 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
         isHighlightedRow ? styles.highlightedBox : ""
   );
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
-    <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={onClick}>
+    <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
       <input
         className={styles.mobileInput}
         ref={inputRef}
