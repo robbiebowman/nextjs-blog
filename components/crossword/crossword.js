@@ -180,7 +180,8 @@ export default function Crossword({ puzzle, clues }) {
             localStorage.setItem(`${puzzleId}-completed`, true);
         }
         setComplete(eitherCompleted)
-    }, [guessGrid])
+        saveProgress()
+    }, [guessGrid, saveProgress])
 
     const handleBackspace = useCallback(() => {
         if (guessGrid[activeCell.y][activeCell.x] === '') {
@@ -237,7 +238,6 @@ export default function Crossword({ puzzle, clues }) {
         } else if (key.startsWith("Arrow")) {
             handleArrowKey(key);
         }
-        saveProgress()
     }, [handleBackspace, handleLetterInput, handleArrowKey]);
 
     useEffect(() => {

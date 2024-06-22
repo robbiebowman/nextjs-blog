@@ -36,9 +36,20 @@
 .blackBox {
     background-color: #000;
 }
+
 .activeBox {
     background-color: #f2f4cf;
 }
+
 .highlightedBox {
     background-color: #bdeaf9;
+}
+
+.mobileInput {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    background-color: aqua;
+    aspect-ratio: 1;
 }
