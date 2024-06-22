@@ -14,27 +14,22 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
   useEffect(() => {
     if (isActiveCell && inputRef.current) {
       inputRef.current.focus();
+      inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [isActiveCell]);
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    }
-  };
 
   const handleInput = (e) => {
     e.preventDefault();
   };
 
   return (
-    <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={handleClick}>
+    <div className={boxStyle} style={{ aspectRatio: 1 }} onClick={onClick}>
       {number && <div className={styles.number}>{number}</div>}
       <input
         className={styles.mobileInput}
         ref={inputRef}
         type="text"
-        inputMode="text"
+        inputMode="none"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
