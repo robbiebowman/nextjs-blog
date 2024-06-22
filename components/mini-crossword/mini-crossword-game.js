@@ -6,6 +6,7 @@ import { hasCompleted, setCompleted } from '../../lib/crossword-cookies'
 import { CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
 import { formatDate } from '../../lib/date-funcs'
 import Crossword from '../crossword/crossword'
+import Clues from '../crossword/clues'
 
 export default function MiniCrosswordGame({ date }) {
 
@@ -118,8 +119,12 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <Crossword clues={clues} puzzle={puzzle}/>
+      <Crossword clues={clues} puzzle={puzzle} />
     ) : ""}
+    {clues ?
+      <Clues clues={clues} />
+      : ""
+    }
   </div>
   )
 }

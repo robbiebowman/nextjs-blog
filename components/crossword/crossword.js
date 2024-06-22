@@ -19,8 +19,8 @@ export default function Crossword({ puzzle, clues }) {
 
         const processClues = (clueSet) => {
             Object.entries(clueSet || {}).forEach(([number, { x, y }]) => {
-                if (!lookup[y]) lookup[y] = {};
-                if (!lookup[y][x]) lookup[y][x] = parseInt(number, 10);
+                if (!lookup[x]) lookup[x] = {};
+                if (!lookup[x][y]) lookup[x][y] = parseInt(number, 10);
             });
         };
         processClues(clues.across);
@@ -128,6 +128,9 @@ export default function Crossword({ puzzle, clues }) {
             return findNextCell(oldCell.x, oldCell.y, dx, dy, true, true);
         });
         setGuessGrid(oldGrid => {
+            if (oldGrid[activeCell.y][activeCell.x] == '#') {
+                return oldGrid
+            }
             const newGrid = [...oldGrid];
             newGrid[activeCell.y][activeCell.x] = key;
             return newGrid;
