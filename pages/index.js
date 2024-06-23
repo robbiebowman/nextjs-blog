@@ -26,7 +26,7 @@ export default function Home({ allPostsData }) {
           <h1 className={utilStyles.headingLg}>Things I made</h1>
           <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
-              <Link href={`/mini-crossword`}>
+              <Link href={`/crossword/daily`}>
                 📰 Daily Mini Crossword 🗞️
               </Link>
               <br />

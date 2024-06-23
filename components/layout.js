@@ -57,12 +57,12 @@ export default function Layout({ children, home }) {
                 </div>
                 <div className={styles.headerLinks}>
                     <Link href="https://github.com/robbiebowman/">
-                        <div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} /></div>Github</div>
+                        <div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} alt="Github icon"/></div>Github</div>
                     </Link>
 
                     <div>
                         <div className={styles.socialIcon}>
-                            <Image src="/images/gmail.webp" height={14} width={14} />
+                            <Image src="/images/gmail.webp" height={14} width={14} alt="Gmail icon" />
                         </div>
                         <div className={styles.emailBox}>
 
@@ -83,10 +83,10 @@ export default function Layout({ children, home }) {
                         </div>
                     </div>
                     <Link href="https://www.linkedin.com/in/robbie-bowman/">
-                        <div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} /></div>LinkedIn</div>
+                        <div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} alt="LinkedIn icon"/></div>LinkedIn</div>
                     </Link>
                     <Link href="https://www.instagram.com/robbiebowman/">
-                        <div><div className={styles.socialIcon}><Image src="/images/instagram.webp" height={14} width={14} /></div>Instagram</div>
+                        <div><div className={styles.socialIcon}><Image src="/images/instagram.webp" height={14} width={14} alt="Instagram icon"/></div>Instagram</div>
                     </Link>
                 </div>
             </header>

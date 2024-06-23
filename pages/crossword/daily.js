@@ -1,12 +1,13 @@
 import Head from "next/head";
 import useSWR from 'swr';
 import React, { useEffect, useRef, useState } from 'react';
-import utilStyles from '../styles/utils.module.css';
-import { formatDate } from '../lib/date-funcs'
-import { hasCompleted, setCompleted } from '../lib/crossword-cookies';
-import styles from './mini-crossword.module.css';
-import Layout from "../components/layout";
-import MiniCrosswordGame from "../components/mini-crossword/mini-crossword-game";
+import utilStyles from '../../styles/utils.module.css';
+import { formatDate } from '../../lib/date-funcs'
+import { hasCompleted, setCompleted } from '../../lib/crossword-cookies';
+import styles from './index.module.css';
+import Layout from "../../components/layout";
+import MiniCrosswordGame from "../../components/mini-crossword/mini-crossword-game";
+import { CrosswordGameSelector } from "../../components/game-selector/game-selector";
 
 export default function MiniCrossword() {
 
@@ -29,6 +30,7 @@ export default function MiniCrossword() {
             <Head>
                 <title>Daily Mini Crossword</title>
             </Head>
+            <CrosswordGameSelector selectedTitle="Daily" />
             <div className={styles.puzzleBox}>
                 <MiniCrosswordGame date={selectedDate} />
             </div>
@@ -37,7 +39,7 @@ export default function MiniCrossword() {
                     availableDates.current ? availableDates.current.map((date) => {
                         const dateString = date.toLocaleDateString('en-us', { month: "short", day: "numeric" })
                         const buttonStyle = date.getDate() == selectedDate.getDate() ? "btn btn-dark" : "btn btn-light"
-                        return (<button type="button"
+                        return (<button key={date.getDate()} type="button"
                             className={buttonStyle}
                             onClick={() => setSelectedDate(date)}>{dateString}</button>)
                     }) : ""

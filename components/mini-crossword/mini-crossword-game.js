@@ -3,11 +3,8 @@ import useSWR from 'swr';
 import styles from './mini-crossword-game.module.css';
 import 'react-simple-keyboard/build/css/index.css';
 import { hasCompleted, setCompleted } from '../../lib/crossword-cookies'
-import { CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
 import { formatDate } from '../../lib/date-funcs'
 import Crossword from '../crossword/crossword'
-import Clues from '../crossword/clues'
-import { getPuzzleId } from '../crossword/utils';
 
 export default function MiniCrosswordGame({ date }) {
 

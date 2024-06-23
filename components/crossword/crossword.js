@@ -257,7 +257,6 @@ export default function Crossword({ puzzle, clues }) {
         let y = activeClue.y
         let clueCells = [{ x: x, y: y }]
         for (let i = 1; i < activeClue.answer.length; i++) {
-            console.log(`${JSON.stringify(activeClue)}`)
             if (activeClue.direction == 'across') {
                 clueCells.push({ x: x + i, y: y })
             } else {
@@ -278,8 +277,6 @@ export default function Crossword({ puzzle, clues }) {
     }, [clueCells])
 
     let y = -1
-
-    console.log(`activeClue: ${JSON.stringify(activeClue)}`)
 
     return (
         <div className={styles.outerBox}>
