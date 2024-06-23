@@ -5,12 +5,16 @@ import 'react-simple-keyboard/build/css/index.css';
 import { hasCompleted, setCompleted } from '../../lib/crossword-cookies'
 import { CrosswordProvider, DirectionClues, CrosswordGrid } from '@jaredreisinger/react-crossword';
 import { formatDate } from '../../lib/date-funcs'
+import Crossword from '../crossword/crossword'
+import Clues from '../crossword/clues'
+import { getPuzzleId } from '../crossword/utils';
 
 export default function MiniCrosswordGame({ date }) {
 
   const [isMobileDevice, setIsMobileDevice] = useState(false)
   const [rawPuzzleData, setRawPuzzleData] = useState(null)
   const [puzzle, setPuzzle] = useState(null)
+  const [clues, setClues] = useState(null)
   const [dateTitle, setDateTitle] = useState("")
   const crosswordComponent = useRef();
   const dateString = formatDate(date)
@@ -22,7 +26,7 @@ export default function MiniCrosswordGame({ date }) {
     setDoneDate(done)
     if (done && crosswordComponent.current) {
       setTimeout(() => crosswordComponent.current.fillAllAnswers(), 500)
-      
+
     }
   }, [date])
 
@@ -30,7 +34,7 @@ export default function MiniCrosswordGame({ date }) {
     if (rawPuzzleData == null) return;
 
     setDateTitle(date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" }))
-    const clues = rawPuzzleData.clues.clues;
+    const cluesWords = rawPuzzleData.clues.clues;
     const acrossWords = rawPuzzleData.puzzle.acrossWords;
     const downWords = rawPuzzleData.puzzle.downWords;
 
@@ -53,10 +57,12 @@ export default function MiniCrosswordGame({ date }) {
     const across = acrossWords.reduce((acc, cur) => {
       const coord = coordinateLookup[`${cur.x}-${cur.y}`]
       acc[coord] = {
-        clue: clues.find((c) => c.word == cur.word).clue,
-        answer: cur.word.toUpperCase(),
-        row: cur.x,
-        col: cur.y
+        clue: cluesWords.find((c) => c.word == cur.word).clue,
+        answer: cur.word.toLowerCase(),
+        x: cur.y, // Orientation is reversed for my crossword component
+        y: cur.x,
+        direction: 'across',
+        number: coord
       };
       return acc;
     }, {});
@@ -64,14 +70,18 @@ export default function MiniCrosswordGame({ date }) {
     const down = downWords.reduce((acc, cur) => {
       const coord = coordinateLookup[`${cur.x}-${cur.y}`]
       acc[coord] = {
-        clue: clues.find((c) => c.word == cur.word).clue,
-        answer: cur.word.toUpperCase(),
-        row: cur.x,
-        col: cur.y
+        clue: cluesWords.find((c) => c.word == cur.word).clue,
+        answer: cur.word.toLowerCase(),
+        x: cur.y, // Orientation is reversed for my crossword component
+        y: cur.x,
+        direction: 'down',
+        number: coord
       };
       return acc;
     }, {});
-    const puzzle = { across: across, down: down };
+    const clues = { across: across, down: down };
+    setClues(clues)
+    const puzzle = rawPuzzleData.puzzle.crossword.map(row => row.map(char => char === ' ' ? '#' : char));
     setPuzzle(puzzle)
   }, [rawPuzzleData]
   );
@@ -79,20 +89,15 @@ export default function MiniCrosswordGame({ date }) {
   const fetcher = (...args) => fetch(...args).then(res => res.json());
   useSWR(() => `/api/mini-crossword?date=${dateString}`, fetcher, {
     onSuccess: (data, key, config) => {
-      setRawPuzzleData(data)
+      if (data != rawPuzzleData) {
+        setRawPuzzleData(data)
+      }
     },
     onError: (err, key, config) => {
       setRawPuzzleData(null)
     },
     revalidateOnFocus: false
   })
-
-  useEffect(() => {
-    const hasComplete = hasCompleted(dateString)
-    if (hasComplete && crosswordComponent.current) {
-      setDoneDate(true)
-    }
-  }, [puzzle])
 
   const onCrosswordCorrect = useCallback(() => {
     const correct = crosswordComponent.current.isCrosswordCorrect()
@@ -112,13 +117,7 @@ export default function MiniCrosswordGame({ date }) {
       </div>
     ) : ""}
     {puzzle ? (
-      <CrosswordProvider ref={crosswordComponent} data={puzzle} onCellChange={() => setTimeout(onCrosswordCorrect, 250)} storageKey={dateString} useStorage>
-        <div className={styles.mainBox}>
-          <div className={styles.crossword}><CrosswordGrid /></div>
-          <div className={styles.clues}><DirectionClues label="Across" direction="across" /></div>
-          <div className={styles.clues}><DirectionClues className={styles.clues} label="Down" direction="down" /></div>
-        </div>
-      </CrosswordProvider>
+      <Crossword clues={clues} puzzle={puzzle} />
     ) : ""}
   </div>
   )

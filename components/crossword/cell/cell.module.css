@@ -1,0 +1,55 @@
+.cellBox {
+    border: 0.11rem solid #0006;
+    width: max(8.4vmin, 4.2rem);
+    aspect-ratio: 1;
+    position: relative;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.innerLetter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    padding-top: 0.2rem;
+    text-align: center;
+    font-weight: 350;
+    font-size: max(5.5vmin, 3rem);
+    color: #090303;
+}
+
+.number {
+    position: absolute;
+    font-weight: 600;
+    font-size: max(2vmin, 1rem);
+    color: #BBB;
+    padding: 0.1rem 0.35rem;
+}
+
+.blackBox {
+    background-color: #000;
+}
+
+.activeBox {
+    background-color: #f2f4cf;
+}
+
+.highlightedBox {
+    background-color: #bdeaf9;
+}
+
+.mobileInput {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    background-color: aqua;
+    aspect-ratio: 1;
+}

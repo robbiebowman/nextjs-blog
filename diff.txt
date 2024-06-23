@@ -1,0 +1,129 @@
+diff --git a/components/crossword/crossword.js b/components/crossword/crossword.js
+index 3608161..052750a 100644
+--- a/components/crossword/crossword.js
++++ b/components/crossword/crossword.js
+@@ -15,19 +15,21 @@ export default function Crossword({ puzzle, clues }) {
+         return crypto.createHash('sha256').update(JSON.stringify(puzzle)).digest('hex')
+     }, [puzzle])
+ 
+-    const clueNumberCoordinateLookup = useMemo(() => {
++    const processClues = useCallback((clueSet) => {
+         const lookup = {};
++        Object.entries(clueSet || {}).forEach(([number, { x, y }]) => {
++            if (!lookup[y]) lookup[y] = {};
++            if (!lookup[y][x]) lookup[y][x] = parseInt(number, 10);
++        });
++        return lookup;
++    }, []);
+ 
+-        const processClues = (clueSet) => {
+-            Object.entries(clueSet || {}).forEach(([number, { x, y }]) => {
+-                if (!lookup[y]) lookup[y] = {};
+-                if (!lookup[y][x]) lookup[y][x] = parseInt(number, 10);
+-            });
+-        };
+-        processClues(clues.across);
+-        processClues(clues.down);
++    const acrossClueLookup = useMemo(() => {
++        return processClues(clues.across);
++    }, [clues])
+ 
+-        return lookup;
++    const downClueLookup = useMemo(() => {
++        return processClues(clues.down);
+     }, [clues])
+ 
+ 
+@@ -42,27 +44,6 @@ export default function Crossword({ puzzle, clues }) {
+     const [orientation, setOrientation] = useState('horizontal')
+     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
+ 
+-    const activeClue = useMemo(() => {
+-        let newActiveClue;
+-        if (orientation == 'horizontal') {
+-            Object.entries(clues.across).forEach(([number, { x, y }]) => {
+-                if (y == activeCell.y) {
+-                    console.log(`mnatch`)
+-                    newActiveClue = { number, direction: 'across' }
+-                }
+-            })
+-        } else if (orientation == 'vertical') {
+-            Object.entries(clues.down).forEach(([number, { x, y }]) => {
+-                if (x == activeCell.x) {
+-                    console.log(`mnatch`)
+-                    newActiveClue = { number, direction: 'down' }
+-                }
+-            })
+-        }
+-        return newActiveClue
+-
+-    }, [activeCell, orientation, clues]);
+-
+     const onClueClicked = useCallback((number, acrossOrDown) => {
+         const newOrientation = acrossOrDown == 'across' ? 'horizontal' : 'vertical'
+         setOrientation(newOrientation)
+@@ -91,14 +72,6 @@ export default function Crossword({ puzzle, clues }) {
+         }
+     }, [guessGrid, orientation, activeCell])
+ 
+-    const isHighlightedRow = useCallback((x, y) => {
+-        if (orientation == 'horizontal') {
+-            return y == activeCell.y
+-        } else {
+-            return x == activeCell.x
+-        }
+-    }, [orientation, activeCell])
+-
+     const findNextCell = useCallback((x, y, dx, dy, skipLetters = false, wrap = false) => {
+         const gridHeight = guessGrid.length;
+         const gridWidth = guessGrid[0].length;
+@@ -139,6 +112,18 @@ export default function Crossword({ puzzle, clues }) {
+         return { x, y }; // Return original position if no valid cell found after checking all cells
+     }, [guessGrid]);
+ 
++    const activeClue = useMemo(() => {
++        if (orientation == 'horizontal') {
++            const startingCell = findNextCell(activeCell.x, activeCell.y, -1, 0, true, false)
++            const answer = acrossClueLookup[startingCell.y][startingCell.x]
++            return clues['across'][answer]
++        } else {
++            const startingCell = findNextCell(activeCell.x, activeCell.y, 0, -1, true, false)
++            const answer = downClueLookup[startingCell.y][startingCell.x]
++            return clues['down'][answer]
++        }
++    }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues]);
++
+     useEffect(() => {
+         const savedProgress = getGridProgress(puzzleId) ?? blankGrid
+         setGuessGrid(savedProgress)
+@@ -212,6 +197,30 @@ export default function Crossword({ puzzle, clues }) {
+         };
+     }, [keyPressedHandler]);
+ 
++    const clueCells = useMemo(() => {
++        console.log(`${JSON.stringify(activeClue)}`)
++        let x = activeClue.x
++        let y = activeClue.y
++        let clueCells = [{ x: x, y: y }]
++        for (let i = 1; i < activeClue.answer.length; i++) {
++            if (activeClue.direction == 'across') {
++                clueCells.push({ x: x + i, y: y })
++            } else {
++                clueCells.push({ x: x, y: y + i })
++            }
++        }
++        return clueCells
++    }, [activeClue, clues])
++
++    const isHighlightedRow = useCallback((x, y) => {
++        for (let cell of clueCells) {
++            if (cell.x == x && cell.y == y) {
++                return true
++            }
++        }
++        return false
++    }, [clueCells])
++
+     let y = -1
+ 
+     console.log(`activeClue: ${JSON.stringify(activeClue)}`)
