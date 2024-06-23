@@ -1,12 +1,13 @@
-import { act, useCallback, useEffect, useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styles from './clues.module.css'
-import Cell from './cell/cell';
-import { getGridProgress, setGridProgress } from '../../lib/crossword-cookies'
+import { FlexWrapDetector } from './utils'
+
 /**
  * 
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
 export default function Clues({ clues, onClueClick, activeClue }) {
+    const [isMobile, setIsMobile] = useState(false);
 
     const formatClues = useCallback((clueObject) => {
         let formattedClues = []
@@ -25,26 +26,32 @@ export default function Clues({ clues, onClueClick, activeClue }) {
         return formatClues(clues.down)
     }, [clues])
 
-    return (<div className={styles.box}>
-        <div className={styles.clueBox}>
-            <h1>Across</h1>
-            {acrossClues.map(c => {
-                const { number, clue } = c;
-                const isActiveClue = activeClue?.number == number && activeClue.direction == 'across'
-                return (<div key={number + 'across'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'across') }}>
-                    <span className={styles.number}>{number}</span> {clue}
-                </div>)
-            })}
-        </div>
-        <div className={styles.clueBox}>
-            <h1>Down</h1>
-            {downClues.map(c => {
-                const { number, clue } = c;
-                const isActiveClue = activeClue?.number == number && activeClue.direction == 'down'
-                return (<div key={number + 'down'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'down') }}>
-                    <span className={styles.number}>{number}</span> {clue}
-                </div>)
-            })}
-        </div>
-    </div>)
+    return (
+        <div>
+            {isMobile && <div className={styles.bannerClue}>
+                <span className={styles.highlightRow}><span className={styles.number}>{activeClue.number}</span> {activeClue.clue}</span>
+            </div>}
+            <FlexWrapDetector className={styles.box} onWrap={setIsMobile}>
+                <div className={styles.clueBox}>
+                    <h1>Across</h1>
+                    {acrossClues.map(c => {
+                        const { number, clue } = c;
+                        const isActiveClue = activeClue?.number == number && activeClue.direction == 'across'
+                        return (<div key={number + 'across'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'across') }}>
+                            <span className={styles.number}>{number}</span> {clue}
+                        </div>)
+                    })}
+                </div>
+                <div className={styles.clueBox}>
+                    <h1>Down</h1>
+                    {downClues.map(c => {
+                        const { number, clue } = c;
+                        const isActiveClue = activeClue?.number == number && activeClue.direction == 'down'
+                        return (<div key={number + 'down'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'down') }}>
+                            <span className={styles.number}>{number}</span> {clue}
+                        </div>)
+                    })}
+                </div>
+            </FlexWrapDetector>
+        </div>)
 }
