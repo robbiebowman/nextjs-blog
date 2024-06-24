@@ -129,6 +129,7 @@ export default function Crossword({ puzzle, clues }) {
     }, [guessGrid]);
 
     const findCellBeforeBlack = useCallback((x, y, dx, dy) => {
+        if (!guessGrid) return null;
         const gridHeight = guessGrid.length;
         const gridWidth = guessGrid[0].length;
         let currentX = x;
@@ -161,11 +162,11 @@ export default function Crossword({ puzzle, clues }) {
     const activeClue = useMemo(() => {
         if (orientation == 'horizontal') {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
-            const answer = acrossClueLookup[startingCell?.y]?.[startingCell?.x]
+            const answer = startingCell && acrossClueLookup[startingCell?.y]?.[startingCell?.x]
             return clues?.['across']?.[answer?.number]
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
-            const answer = downClueLookup[startingCell.y][startingCell.x]
+            const answer = startingCell && downClueLookup[startingCell.y][startingCell.x]
             return clues['down'][answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
