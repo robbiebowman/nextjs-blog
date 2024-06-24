@@ -22,6 +22,7 @@ export default function MiniCrossword() {
         return listedDates
     }
 
+    const [selectedDate, setSelectedDate] = useState(new Date())
     return (
         <Layout>
             <Head>
@@ -29,7 +30,7 @@ export default function MiniCrossword() {
             </Head>
             <CrosswordGameSelector selectedTitle="Creator" />
             <div className={styles.puzzleBox}>
-                <MiniCrosswordGame date={new Date()} />
+                <MiniCrosswordGame date={selectedDate} />
             </div>
         </Layout>
     )

@@ -26,10 +26,16 @@ export default function Crossword({ puzzle, clues }) {
     }, []);
 
     const acrossClueLookup = useMemo(() => {
-        return processClues(clues.across, 'across');
+        if (!clues) {
+            return []
+        }
+        return clues && processClues(clues.across, 'across');
     }, [clues])
 
     const downClueLookup = useMemo(() => {
+        if (!clues) {
+            return []
+        }
         return processClues(clues.down, 'down');
     }, [clues])
 
@@ -56,7 +62,7 @@ export default function Crossword({ puzzle, clues }) {
     const onClueClicked = useCallback((number, acrossOrDown) => {
         const newOrientation = acrossOrDown == 'across' ? 'horizontal' : 'vertical'
         setOrientation(newOrientation)
-        const { x, y } = clues[acrossOrDown][number]
+        const { x, y } = (clues)[acrossOrDown][number]
         if (guessGrid[y][x] === '') {
             setActiveCell({ x: x, y: y })
         } else {
@@ -68,7 +74,7 @@ export default function Crossword({ puzzle, clues }) {
     }, [clues, guessGrid])
 
     const blankGrid = useMemo(() => {
-        return puzzle.map(row => row.map(c => c == '#' ? '#' : ''))
+        return puzzle?.map(row => row.map(c => c == '#' ? '#' : ''))
     }, [puzzle])
 
     const createCellCallback = useCallback((x, y) => {
@@ -82,6 +88,7 @@ export default function Crossword({ puzzle, clues }) {
     }, [guessGrid, orientation, activeCell])
 
     const findNextCell = useCallback((x, y, dx, dy, skipLetters = false, wrap = false) => {
+        if (!guessGrid) return null;
         const gridHeight = guessGrid.length;
         const gridWidth = guessGrid[0].length;
         let newX = x;
@@ -154,8 +161,8 @@ export default function Crossword({ puzzle, clues }) {
     const activeClue = useMemo(() => {
         if (orientation == 'horizontal') {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
-            const answer = acrossClueLookup[startingCell.y][startingCell.x]
-            return clues['across'][answer?.number]
+            const answer = acrossClueLookup[startingCell?.y]?.[startingCell?.x]
+            return clues?.['across']?.[answer?.number]
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
             const answer = downClueLookup[startingCell.y][startingCell.x]
