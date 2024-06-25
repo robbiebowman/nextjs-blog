@@ -166,8 +166,8 @@ export default function Crossword({ puzzle, clues }) {
             return clues?.['across']?.[answer?.number]
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
-            const answer = startingCell && downClueLookup[startingCell.y][startingCell.x]
-            return clues['down'][answer?.number]
+            const answer = startingCell && downClueLookup[startingCell.y]?.[startingCell.x]
+            return clues?.['down'][answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
 
