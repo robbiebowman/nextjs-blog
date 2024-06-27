@@ -154,11 +154,11 @@ export default function Crossword({ puzzle, clues }) {
     const activeClue = useMemo(() => {
         if (orientation == 'horizontal') {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
-            const answer = acrossClueLookup[startingCell.y][startingCell.x]
+            const answer = acrossClueLookup[startingCell.y]?.[startingCell.x]
             return clues['across'][answer?.number]
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
-            const answer = downClueLookup[startingCell.y][startingCell.x]
+            const answer = downClueLookup[startingCell.y]?.[startingCell.x]
             return clues['down'][answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
