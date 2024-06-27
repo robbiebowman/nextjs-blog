@@ -8,11 +8,7 @@ import Clues from './clues';
  * @param {puzzle} 2d array of chars
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
-export default function Crossword({ puzzle, clues }) {
-
-    const puzzleId = useMemo(() => {
-        return getPuzzleId(puzzle)
-    }, [puzzle])
+export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onActiveClueChange }) {
 
     const processClues = useCallback((clueSet, direction) => {
         const lookup = [];
@@ -39,43 +35,8 @@ export default function Crossword({ puzzle, clues }) {
         return processClues(clues.down, 'down');
     }, [clues])
 
-    const [guessGrid, setGuessGrid] = useState([
-        ['l', 'o', 'a', '', ''],
-        ['', '', 'd', 'i', ''],
-        ['', '', '#', 'n', ''],
-        ['', '.', '.', 'g', ''],
-        ['', '.', '', '#', '']
-    ]);
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
-    const [isComplete, setComplete] = useState(false)
-
-    const loadProgress = useCallback(() => {
-        const savedState = localStorage.getItem(`${puzzleId}-progress`);
-        return savedState ? JSON.parse(savedState) : null;
-    }, [puzzleId]);
-
-    const saveProgress = useCallback(() => {
-        localStorage.setItem(`${puzzleId}-progress`, JSON.stringify(guessGrid));
-    }, [puzzleId, guessGrid]);
-
-    const onClueClicked = useCallback((number, acrossOrDown) => {
-        const newOrientation = acrossOrDown == 'across' ? 'horizontal' : 'vertical'
-        setOrientation(newOrientation)
-        const { x, y } = (clues)[acrossOrDown][number]
-        if (guessGrid[y][x] === '') {
-            setActiveCell({ x: x, y: y })
-        } else {
-            const dx = newOrientation === 'horizontal' ? 1 : 0;
-            const dy = newOrientation === 'horizontal' ? 0 : 1;
-            const newCoordinate = findNextCell(x, y, dx, dy, true, false)
-            setActiveCell(newCoordinate)
-        }
-    }, [clues, guessGrid])
-
-    const blankGrid = useMemo(() => {
-        return puzzle?.map(row => row.map(c => c == '#' ? '#' : ''))
-    }, [puzzle])
 
     const createCellCallback = useCallback((x, y) => {
         return () => {
@@ -158,38 +119,21 @@ export default function Crossword({ puzzle, clues }) {
         }
     }, [guessGrid]);
 
-
     const activeClue = useMemo(() => {
         if (orientation == 'horizontal') {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
             const answer = startingCell && acrossClueLookup[startingCell?.y]?.[startingCell?.x]
-            return clues?.['across']?.[answer?.number]
+            const activeClue = clues?.['across']?.[answer?.number]
+            onActiveClueChange(activeClue)
+            return activeClue
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
             const answer = startingCell && downClueLookup[startingCell.y]?.[startingCell.x]
+            const activeClue = clues?.['down'][answer?.number]
+            onActiveClueChange(activeClue)
             return clues?.['down'][answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
-
-    useEffect(() => {
-        const savedProgress = loadProgress()
-        if (savedProgress) {
-            setGuessGrid(savedProgress)
-        } else {
-            setGuessGrid(blankGrid)
-        }
-    }, [puzzleId, puzzle])
-
-    useEffect(() => {
-        const savedCompleted = localStorage.getItem(`${puzzleId}-completed`)
-        const isCurrentlyCompleted = JSON.stringify(guessGrid) == JSON.stringify(puzzle)
-        const eitherCompleted = isCurrentlyCompleted || savedCompleted
-        if (eitherCompleted) {
-            localStorage.setItem(`${puzzleId}-completed`, true);
-        }
-        setComplete(eitherCompleted)
-        saveProgress()
-    }, [guessGrid, saveProgress])
 
     const handleBackspace = useCallback(() => {
         if (guessGrid[activeCell.y][activeCell.x] === '') {
@@ -287,37 +231,27 @@ export default function Crossword({ puzzle, clues }) {
     let y = -1
 
     return (
-        <div className={styles.outerBox}>
-            {isComplete ? (
-                <div className={`${styles.resultBox} ${styles.successBox}`}>
-                    <p className={styles.successText}>🎉 Completed Puzzle! 🎉</p>
-                </div>
-            ) : ""}
-            <div className={styles.box}>
-                <div className={styles.crosswordBox}>
-                    {
-                        guessGrid.map(row => {
-                            y++
-                            let x = -1
-                            return <div key={`${y}-row`} className={styles.crosswordRow}>
-                                {row.map((char) => {
-                                    x++
-                                    const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
-                                    return <Cell
-                                        key={`${x}-${y}`}
-                                        letter={char}
-                                        onClick={char == '#' ? null : createCellCallback(x, y)}
-                                        isActiveCell={activeCell.x == x && activeCell.y == y}
-                                        isHighlightedRow={isHighlightedRow(x, y)}
-                                        number={number}
-                                    />
-                                })}
-                            </div>
-                        })
-                    }
-                </div>
-                <Clues clues={clues} onClueClick={onClueClicked} activeClue={activeClue} />
-            </div>
+        <div className={styles.crosswordBox}>
+            {
+                guessGrid.map(row => {
+                    y++
+                    let x = -1
+                    return <div key={`${y}-row`} className={styles.crosswordRow}>
+                        {row.map((char) => {
+                            x++
+                            const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
+                            return <Cell
+                                key={`${x}-${y}`}
+                                letter={char}
+                                onClick={char == '#' ? null : createCellCallback(x, y)}
+                                isActiveCell={activeCell.x == x && activeCell.y == y}
+                                isHighlightedRow={isHighlightedRow(x, y)}
+                                number={number}
+                            />
+                        })}
+                    </div>
+                })
+            }
         </div>
     )
 }

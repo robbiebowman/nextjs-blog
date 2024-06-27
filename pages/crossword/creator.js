@@ -11,6 +11,13 @@ import { CrosswordGameSelector } from "../../components/game-selector/game-selec
 
 export default function MiniCrossword() {
 
+    const [guessGrid, setGuessGrid] = useState([
+        ['', '', '', '', ''],
+        ['', '', '', '', ''],
+        ['', '', '', '', ''],
+        ['', '', '', '', ''],
+        ['', '', '', '', '']
+    ])
     const [rawPuzzleData, setRawPuzzleData] = useState({
         clues: {
             clues: []
@@ -94,7 +101,11 @@ export default function MiniCrossword() {
                     <div className={styles.title}>
                         <h1>Crossword Creator</h1>
                     </div>
-                    <Crossword clues={clues} puzzle={puzzle} />
+                    <Crossword puzzle={puzzle} clues={clues} guessGrid={guessGrid} setGuessGrid={setGuessGrid} onActiveClueChange={() => {}} />
+                    <p></p>
+                    <button type="button"
+                            className="btn btn-dark"
+                            onClick={() => {}}>Fill in puzzle</button>
                 </div>
             </div>
         </Layout>

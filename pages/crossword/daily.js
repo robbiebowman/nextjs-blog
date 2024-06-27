@@ -6,7 +6,7 @@ import { formatDate } from '../../lib/date-funcs'
 import { hasCompleted, setCompleted } from '../../lib/crossword-cookies';
 import styles from './index.module.css';
 import Layout from "../../components/layout";
-import Crossword from "../../components/crossword/crossword";
+import Crossword from "../../components/crossword/crossword-game";
 import { CrosswordGameSelector } from "../../components/game-selector/game-selector";
 
 export default function DailyCrossword() {
