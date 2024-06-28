@@ -129,9 +129,9 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
             const answer = startingCell && downClueLookup[startingCell.y]?.[startingCell.x]
-            const activeClue = clues?.['down'][answer?.number]
+            const activeClue = clues?.['down']?.[answer?.number]
             onActiveClueChange(activeClue)
-            return clues?.['down'][answer?.number]
+            return clues?.['down']?.[answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
 
