@@ -8,7 +8,7 @@ import Clues from './clues';
  * @param {puzzle} 2d array of chars
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
-export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onActiveClueChange }) {
+export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onActiveClueChange, isEditMode = false }) {
 
     const processClues = useCallback((clueSet, direction) => {
         const lookup = [];
@@ -145,9 +145,6 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
             setGuessGrid(oldGrid => {
                 const newGrid = [...oldGrid];
                 newGrid[activeCell.y][activeCell.x] = '';
-                console.log(`activeCell: ${JSON.stringify(activeCell)}`)
-                console.log(`oldGrid: ${JSON.stringify(oldGrid)}`)
-                console.log(`newGrid: ${JSON.stringify(newGrid)}`)
                 return newGrid;
             });
         }
@@ -186,16 +183,23 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
     }, [activeCell, findNextCell]);
 
     const keyPressedHandler = useCallback((event) => {
+        if (isEditMode && event.key === ' ') {
+            setGuessGrid(oldGrid => {
+                const newGrid = [...oldGrid];
+                newGrid[activeCell.y][activeCell.x] = newGrid[activeCell.y][activeCell.x] === '#' ? '' : '#';
+                return newGrid;
+            });
+        }
         // Check if any modifier keys are pressed
         const isModifierKeyPressed = event.ctrlKey || event.metaKey || event.altKey;
-    
+
         // If a modifier key is pressed, don't handle the event
         if (isModifierKeyPressed) {
             return;
         }
-    
+
         const key = event.key;
-    
+
         if (key === 'Backspace') {
             event.preventDefault(); // Prevent default backspace behavior
             handleBackspace();
@@ -206,7 +210,8 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
             event.preventDefault(); // Prevent default arrow key behavior
             handleArrowKey(key);
         }
-    }, [handleBackspace, handleLetterInput, handleArrowKey]);
+        
+    }, [isEditMode, handleBackspace, handleLetterInput, handleArrowKey]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -248,26 +253,22 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
 
     return (
         <div className={styles.crosswordBox}>
-            {
-                guessGrid.map(row => {
-                    y++
-                    let x = -1
-                    return <div key={`${y}-row`} className={styles.crosswordRow}>
-                        {row.map((char) => {
-                            x++
-                            const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
-                            return <Cell
-                                key={`${x}-${y}`}
-                                letter={char}
-                                onClick={char == '#' ? null : createCellCallback(x, y)}
-                                isActiveCell={activeCell.x == x && activeCell.y == y}
-                                isHighlightedRow={isHighlightedRow(x, y)}
-                                number={number}
-                            />
-                        })}
-                    </div>
-                })
-            }
+            {guessGrid.map((row, y) => (
+                <div key={`${y}-row`} className={styles.crosswordRow}>
+                    {row.map((char, x) => {
+                        const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
+                        return <Cell
+                            key={`${x}-${y}`}
+                            letter={char}
+                            onClick={createCellCallback(x, y)}
+                            isActiveCell={activeCell.x == x && activeCell.y == y}
+                            isHighlightedRow={isHighlightedRow(x, y)}
+                            number={number}
+                            isEditMode={isEditMode}
+                        />
+                    })}
+                </div>
+            ))}
         </div>
     )
 }

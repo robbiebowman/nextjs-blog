@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styles from './cell.module.css'
 
-export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, number }) {
-
+export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, number, isEditMode }) {
   const boxStyle = styles.cellBox + " " + (
     letter == '#' ? `${styles.blackBox}` :
       isActiveCell ? styles.activeBox :
@@ -21,6 +20,9 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
   const handleClick = () => {
     if (onClick) {
       onClick();
+    }
+    if (isEditMode && letter === '#') {
+      onClick(); // This will trigger the callback to remove the black square
     }
   };
 

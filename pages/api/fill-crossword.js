@@ -25,8 +25,9 @@ export default async function fillCrosswordHandler(req, res) {
     }
 
     const data = await response.json();
-    console.log(`Response2: ${JSON.stringify(data)}`)
-    res.status(200).json(data);
+    const mappedPuzzle = data.filledPuzzle?.map(row => row.map(c => c == ' ' ? '#' : c))
+    const newData = { ...data, filledPuzzle: mappedPuzzle }
+    res.status(200).json(newData);
   } catch (error) {
     console.error('Error in crossword fill handler:', error);
     res.status(500).json({ error: 'Internal Server Error' });

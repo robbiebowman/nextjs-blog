@@ -15,7 +15,7 @@ export default function MiniCrossword() {
         ['', '', '', '', ''],
         ['', '', '', '', '']
     ]);
-    const [clues, setClues] = useState({downWords: [], acrossWords: []});
+    const [clues, setClues] = useState({ downWords: [], acrossWords: [] });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -90,6 +90,7 @@ export default function MiniCrossword() {
                         guessGrid={filledPuzzle || guessGrid}
                         setGuessGrid={setGuessGrid}
                         onActiveClueChange={() => { }}
+                        isEditMode={true}
                     />
                     <div className={styles.actionArea}>
                         {!filledPuzzle && (
