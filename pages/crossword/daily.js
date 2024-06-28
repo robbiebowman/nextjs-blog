@@ -31,8 +31,6 @@ export default function DailyCrossword() {
     const [dateTitle, setDateTitle] = useState("")
     const dateString = formatDate(selectedDate)
 
-    console.log(`Loaded ${selectedDate}`)
-
     const fetcher = (...args) => fetch(...args).then(res => res.json());
     const { mutate } = useSWR(() => `/api/mini-crossword?date=${dateString}`, fetcher, {
         onSuccess: (data, key, config) => {

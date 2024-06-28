@@ -29,13 +29,36 @@ export default function MiniCrossword() {
                 ['', '', '', '', ''],
                 ['', '', '', '', ''],
                 ['', '', '', '', '']
-            ],      
+            ],
             acrossWords: [],
             downWords: []
         }
     })
     const [puzzle, setPuzzle] = useState(null)
     const [clues, setClues] = useState(null)
+
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('/api/fill-crossword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(guessGrid),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || response.status == '204') {
+                throw new Error(data.error || 'Failed to fill crossword');
+            }
+
+            setGuessGrid(data.filledPuzzle);
+        } catch (e) {
+            console.log(`Error: ${JSON.stringify(e)}`)
+        }
+
+    };
 
     useEffect(() => {
         const cluesWords = rawPuzzleData.clues.clues;
@@ -101,11 +124,11 @@ export default function MiniCrossword() {
                     <div className={styles.title}>
                         <h1>Crossword Creator</h1>
                     </div>
-                    <Crossword puzzle={puzzle} clues={clues} guessGrid={guessGrid} setGuessGrid={setGuessGrid} onActiveClueChange={() => {}} />
+                    <Crossword puzzle={puzzle} clues={clues} guessGrid={guessGrid} setGuessGrid={setGuessGrid} onActiveClueChange={() => { }} />
                     <p></p>
                     <button type="button"
-                            className="btn btn-dark"
-                            onClick={() => {}}>Fill in puzzle</button>
+                        className="btn btn-dark"
+                        onClick={handleSubmit}>Fill in puzzle</button>
                 </div>
             </div>
         </Layout>
