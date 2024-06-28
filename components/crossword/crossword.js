@@ -145,6 +145,9 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
             setGuessGrid(oldGrid => {
                 const newGrid = [...oldGrid];
                 newGrid[activeCell.y][activeCell.x] = '';
+                console.log(`activeCell: ${JSON.stringify(activeCell)}`)
+                console.log(`oldGrid: ${JSON.stringify(oldGrid)}`)
+                console.log(`newGrid: ${JSON.stringify(newGrid)}`)
                 return newGrid;
             });
         }
@@ -182,19 +185,32 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
         }
     }, [activeCell, findNextCell]);
 
-    const keyPressedHandler = useCallback((key) => {
+    const keyPressedHandler = useCallback((event) => {
+        // Check if any modifier keys are pressed
+        const isModifierKeyPressed = event.ctrlKey || event.metaKey || event.altKey;
+    
+        // If a modifier key is pressed, don't handle the event
+        if (isModifierKeyPressed) {
+            return;
+        }
+    
+        const key = event.key;
+    
         if (key === 'Backspace') {
+            event.preventDefault(); // Prevent default backspace behavior
             handleBackspace();
         } else if (key.length === 1 && key.match(/[a-zA-Z]/)) {
+            event.preventDefault(); // Prevent default letter input behavior
             handleLetterInput(key.toLowerCase());
         } else if (key.startsWith("Arrow")) {
+            event.preventDefault(); // Prevent default arrow key behavior
             handleArrowKey(key);
         }
     }, [handleBackspace, handleLetterInput, handleArrowKey]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
-            keyPressedHandler(event.key)
+            keyPressedHandler(event)
         };
         window.addEventListener('keydown', handleKeyDown);
         // Cleanup the event listener on component unmount

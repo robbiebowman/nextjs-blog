@@ -1,43 +1,39 @@
 import Head from "next/head";
-import useSWR from 'swr';
-import React, { useEffect, useRef, useState } from 'react';
-import utilStyles from '../../styles/utils.module.css';
-import { formatDate } from '../../lib/date-funcs'
-import { hasCompleted, setCompleted } from '../../lib/crossword-cookies';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.css';
 import Layout from "../../components/layout";
 import Crossword from "../../components/crossword/crossword";
 import { CrosswordGameSelector } from "../../components/game-selector/game-selector";
+import { Spinner } from '../../components/ui/spinner';
+import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
 
 export default function MiniCrossword() {
-
     const [guessGrid, setGuessGrid] = useState([
         ['', '', '', '', ''],
         ['', '', '', '', ''],
         ['', '', '', '', ''],
         ['', '', '', '', ''],
         ['', '', '', '', '']
-    ])
+    ]);
     const [rawPuzzleData, setRawPuzzleData] = useState({
-        clues: {
-            clues: []
-        },
+        clues: { clues: [] },
         puzzle: {
-            crossword: [
-                ['', '', '', '', ''],
-                ['', '', '', '', ''],
-                ['', '', '', '', ''],
-                ['', '', '', '', ''],
-                ['', '', '', '', '']
-            ],
+            crossword: Array(5).fill(Array(5).fill('')),
             acrossWords: [],
             downWords: []
         }
-    })
-    const [puzzle, setPuzzle] = useState(null)
-    const [clues, setClues] = useState(null)
+    });
+    const [puzzle, setPuzzle] = useState(null);
+    const [clues, setClues] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async () => {
+        setIsLoading(true);
+        setError(null);
+        setSuccess(false);
+
         try {
             const response = await fetch('/api/fill-crossword', {
                 method: 'POST',
@@ -47,71 +43,65 @@ export default function MiniCrossword() {
                 body: JSON.stringify(guessGrid),
             });
 
-            const data = await response.json();
-
-            if (!response.ok || response.status == '204') {
-                throw new Error(data.error || 'Failed to fill crossword');
+            if (response.status === 204) {
+                setError("No valid crossword solution found. Try adjusting your grid!");
+                return;
             }
 
-            setGuessGrid(data.filledPuzzle);
-        } catch (e) {
-            console.log(`Error: ${JSON.stringify(e)}`)
-        }
+            if (!response.ok) {
+                throw new Error('Failed to fill crossword');
+            }
 
+            const data = await response.json();
+            if (data.filledPuzzle) {
+                setGuessGrid(data.filledPuzzle);
+                setSuccess(true);
+            }
+        } catch (e) {
+            console.error(`Error: ${e.message}`);
+            setError("An error occurred while filling the crossword. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
-        const cluesWords = rawPuzzleData.clues.clues;
-        const acrossWords = rawPuzzleData.puzzle.acrossWords;
-        const downWords = rawPuzzleData.puzzle.downWords;
+        const { clues: { clues: cluesWords }, puzzle: { acrossWords, downWords, crossword } } = rawPuzzleData;
 
-        const coordinates = acrossWords.concat(downWords)
-            .map(w => { return { x: w.x, y: w.y } })
-            .sort((a, b) => {
-                return a.x - b.x || a.y - b.y;
-            });
+        const coordinates = [...acrossWords, ...downWords]
+            .map(w => ({ x: w.x, y: w.y }))
+            .sort((a, b) => a.x - b.x || a.y - b.y);
 
         const coordinateLookup = new Map();
-        var x = 1
-        for (i in coordinates) {
-            const coord = coordinates[i]
-            if (!coordinateLookup[`${coord.x}-${coord.y}`]) {
-                coordinateLookup[`${coord.x}-${coord.y}`] = x++
+        let x = 1;
+        coordinates.forEach(coord => {
+            if (!coordinateLookup.has(`${coord.x}-${coord.y}`)) {
+                coordinateLookup.set(`${coord.x}-${coord.y}`, x++);
             }
-        }
+        });
 
-        var i = 1;
-        const across = acrossWords.reduce((acc, cur) => {
-            const coord = coordinateLookup[`${cur.x}-${cur.y}`]
+        const createClueObject = (words, direction) => words.reduce((acc, cur) => {
+            const coord = coordinateLookup.get(`${cur.x}-${cur.y}`);
             acc[coord] = {
-                clue: cluesWords.find((c) => c.word == cur.word).clue,
+                clue: cluesWords.find(c => c.word === cur.word)?.clue,
                 answer: cur.word.toLowerCase(),
-                x: cur.y, // Orientation is reversed for my crossword component
+                x: cur.y,
                 y: cur.x,
-                direction: 'across',
+                direction,
                 number: coord
             };
             return acc;
         }, {});
-        i = 1;
-        const down = downWords.reduce((acc, cur) => {
-            const coord = coordinateLookup[`${cur.x}-${cur.y}`]
-            acc[coord] = {
-                clue: cluesWords.find((c) => c.word == cur.word).clue,
-                answer: cur.word.toLowerCase(),
-                x: cur.y, // Orientation is reversed for my crossword component
-                y: cur.x,
-                direction: 'down',
-                number: coord
-            };
-            return acc;
-        }, {});
-        const clues = { across: across, down: down };
-        setClues(clues)
-        const puzzle = rawPuzzleData.puzzle.crossword.map(row => row.map(char => char === ' ' ? '#' : char));
-        setPuzzle(puzzle)
-    }, [rawPuzzleData]
-    );
+
+        setClues({
+            across: createClueObject(acrossWords, 'across'),
+            down: createClueObject(downWords, 'down')
+        });
+
+        setPuzzle(crossword.map(row => row.map(char => char === ' ' ? '#' : char)));
+    }, [rawPuzzleData]);
+
+    console.log(`Guess grid: ${JSON.stringify(guessGrid)}`)
 
     return (
         <Layout>
@@ -124,13 +114,37 @@ export default function MiniCrossword() {
                     <div className={styles.title}>
                         <h1>Crossword Creator</h1>
                     </div>
-                    <Crossword puzzle={puzzle} clues={clues} guessGrid={guessGrid} setGuessGrid={setGuessGrid} onActiveClueChange={() => { }} />
-                    <p></p>
-                    <button type="button"
-                        className="btn btn-dark"
-                        onClick={handleSubmit}>Fill in puzzle</button>
+                    <Crossword
+                        puzzle={puzzle}
+                        clues={clues}
+                        guessGrid={guessGrid}
+                        setGuessGrid={setGuessGrid}
+                        onActiveClueChange={() => { }}
+                    />
+                    <div className={styles.actionArea}>
+                        <button
+                            type="button"
+                            className="btn btn-dark"
+                            onClick={handleSubmit}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <Spinner /> : 'Fill in puzzle'}
+                        </button>
+                        {error && (
+                            <Alert variant="destructive">
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>{error}</AlertDescription>
+                            </Alert>
+                        )}
+                        {success && (
+                            <Alert>
+                                <AlertTitle>Success!</AlertTitle>
+                                <AlertDescription>Your crossword has been filled successfully.</AlertDescription>
+                            </Alert>
+                        )}
+                    </div>
                 </div>
             </div>
         </Layout>
-    )
+    );
 }

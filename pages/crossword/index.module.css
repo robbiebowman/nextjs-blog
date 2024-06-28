@@ -72,3 +72,26 @@
 .successText {
     margin: auto;
 }
+.actionArea {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.alert {
+    margin-top: 1rem;
+    max-width: 400px;
+}
+
+/* You might want to adjust the existing styles for the button */
+.actionArea button {
+    min-width: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* If your Spinner component doesn't come with built-in styles */
+.actionArea button > :global(.spinner) {
+    margin-right: 0.5rem;
+}
