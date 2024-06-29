@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styles from './index.module.css';
 import Layout from "../../components/layout";
 import Crossword from "../../components/crossword/crossword";
@@ -72,6 +72,17 @@ export default function MiniCrossword() {
         }
     };
 
+    const crosswordIsFull = useMemo(() => {
+        for (const row of guessGrid) {
+            for (const c of row) {
+                if (c == '') {
+                    return false
+                }
+            }
+        }
+        return true
+    }, [guessGrid])
+
     const handleAccept = () => {
         setGuessGrid(filledPuzzle);
         setFilledPuzzle(null);
@@ -85,6 +96,10 @@ export default function MiniCrossword() {
         setSuccess(false);
     };
 
+    const handleStartClues = () => {
+        
+    }
+
     return (
         <Layout>
             <Head>
@@ -96,6 +111,7 @@ export default function MiniCrossword() {
                     <div className={styles.title}>
                         <h1>Crossword Creator</h1>
                     </div>
+                    <p>Hint: Press Space to toggle black boxes</p>
                     <Crossword
                         puzzle={filledPuzzle || guessGrid}
                         clues={clues}
@@ -118,7 +134,17 @@ export default function MiniCrossword() {
                             className="btn btn-secondary"
                             onClick={handleClear}
                         >
-                            Clear Grid
+                            Clear grid
+                        </button>
+                    </div>
+                    <div className={styles.actionArea}>
+                        <button
+                            type="button"
+                            className="btn btn-info"
+                            onClick={handleStartClues}
+                            disabled={!crosswordIsFull}
+                        >
+                            Start clues
                         </button>
                     </div>
                     {filledPuzzle && (
@@ -128,7 +154,7 @@ export default function MiniCrossword() {
                                 className="btn btn-success"
                                 onClick={handleAccept}
                             >
-                                Accept Fill
+                                Accept fill
                             </button><button
                                 type="button"
                                 className="btn btn-info"
@@ -142,7 +168,7 @@ export default function MiniCrossword() {
                                 className="btn btn-danger"
                                 onClick={handleReject}
                             >
-                                Reject Fill
+                                Reject fill
                             </button>
                         </div>
                     )}
@@ -158,7 +184,6 @@ export default function MiniCrossword() {
                             <AlertDescription>Your crossword has been filled successfully.</AlertDescription>
                         </Alert>
                     )}
-                    <p>Hint: Press Space to toggle black boxes</p>
                 </div>
             </div>
         </Layout>

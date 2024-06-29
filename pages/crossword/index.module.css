@@ -97,3 +97,7 @@
 .actionArea button > :global(.spinner) {
     margin-right: 0.5rem;
 }
+
+.outerBox p {
+    color:#0008;
+}
