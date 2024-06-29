@@ -22,6 +22,18 @@ export default function MiniCrossword() {
     const [filledPuzzle, setFilledPuzzle] = useState(null);
     const [originalPuzzle, setOriginalPuzzle] = useState(null);
 
+    const handleClear = () => {
+        setGuessGrid(oldGrid =>
+            oldGrid.map(row =>
+                row.map(cell => cell === '#' ? '#' : '')
+            )
+        );
+        setFilledPuzzle(null);
+        setOriginalPuzzle(null);
+        setSuccess(false);
+        setError(null);
+    };
+
     const handleSubmit = async () => {
         setIsLoading(true);
         setError(null);
@@ -93,47 +105,60 @@ export default function MiniCrossword() {
                         isEditMode={true}
                     />
                     <div className={styles.actionArea}>
-                        {!filledPuzzle && (
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={handleSubmit}
+                            disabled={isLoading || filledPuzzle}
+                        >
+                            {isLoading ? <Spinner /> : 'Fill in puzzle'}
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={handleClear}
+                        >
+                            Clear Grid
+                        </button>
+                    </div>
+                    {filledPuzzle && (
+                        <div className={styles.actionArea}>
                             <button
                                 type="button"
-                                className="btn btn-dark"
-                                onClick={handleSubmit}
-                                disabled={isLoading}
+                                className="btn btn-success"
+                                onClick={handleAccept}
                             >
-                                {isLoading ? <Spinner /> : 'Fill in puzzle'}
+                                Accept Fill
+                            </button><button
+                                type="button"
+                                className="btn btn-info"
+                                onClick={handleSubmit}
+                                aria-label="Reload Grid"
+                            >
+                                ↻ 
                             </button>
-                        )}
-                        {filledPuzzle && (
-                            <>
-                                <button
-                                    type="button"
-                                    className="btn btn-success"
-                                    onClick={handleAccept}
-                                >
-                                    Accept Fill
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    onClick={handleReject}
-                                >
-                                    Reject Fill
-                                </button>
-                            </>
-                        )}
-                        {error && (
-                            <Alert variant="destructive">
-                                <AlertTitle>Error</AlertTitle>
-                                <AlertDescription>{error}</AlertDescription>
-                            </Alert>
-                        )}
-                        {success && !filledPuzzle && (
-                            <Alert>
-                                <AlertTitle>Success!</AlertTitle>
-                                <AlertDescription>Your crossword has been filled successfully.</AlertDescription>
-                            </Alert>
-                        )}
-                    </div>
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                onClick={handleReject}
+                            >
+                                Reject Fill
+                            </button>
+                        </div>
+                    )}
+                    {error && (
+                        <Alert variant="destructive">
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+                    {success && !filledPuzzle && (
+                        <Alert>
+                            <AlertTitle>Success!</AlertTitle>
+                            <AlertDescription>Your crossword has been filled successfully.</AlertDescription>
+                        </Alert>
+                    )}
+                    <p>Hint: Press Space to toggle black boxes</p>
                 </div>
             </div>
         </Layout>

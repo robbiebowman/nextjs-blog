@@ -75,7 +75,9 @@
 .actionArea {
     margin-top: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    padding:0 0 1rem 0;
+    width:100%;
 }
 
 .alert {
