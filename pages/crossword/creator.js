@@ -15,7 +15,7 @@ export default function MiniCrossword() {
         ['', '', '', '', ''],
         ['', '', '', '', '']
     ]);
-    const [clues, setClues] = useState({ downWords: [], acrossWords: [] });
+    const [clues, setClues] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -96,8 +96,48 @@ export default function MiniCrossword() {
         setSuccess(false);
     };
 
-    const handleStartClues = () => {
-        
+    function extractCrosswordWords(crossword) {
+        const words = [];
+        let wordNumber = 1;
+        const numberedCells = Array(5).fill().map(() => Array(5).fill(0));
+    
+        // Helper function to extract words from a line
+        function extractWordsFromLine(line, lineIndex, isVertical) {
+            let startIndex = 0;
+            for (let i = 0; i < line.length; i++) {
+                if (line[i] !== '#') {
+                    if (i === 0 || line[i - 1] === '#') {
+                        const word = line.slice(i).split('#')[0];
+                        if (word.length > 1) {
+                            const x = isVertical ? lineIndex : i;
+                            const y = isVertical ? i : lineIndex;
+                            if (numberedCells[y][x] === 0) {
+                                numberedCells[y][x] = wordNumber++;
+                            }
+                            words.push({
+                                direction: isVertical ? 'down' : 'across',
+                                number: numberedCells[y][x],
+                                word: word.toLowerCase()
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    
+        // Extract horizontal words
+        for (let i = 0; i < 5; i++) {
+            const row = crossword[i].join('');
+            extractWordsFromLine(row, i, false);
+        }
+    
+        // Extract vertical words
+        for (let j = 0; j < 5; j++) {
+            const column = crossword.map(row => row[j]).join('');
+            extractWordsFromLine(column, j, true);
+        }
+    
+        setClues(words);
     }
 
     return (
@@ -141,7 +181,7 @@ export default function MiniCrossword() {
                         <button
                             type="button"
                             className="btn btn-info"
-                            onClick={handleStartClues}
+                            onClick={() => extractCrosswordWords(guessGrid)}
                             disabled={!crosswordIsFull}
                         >
                             Start clues
@@ -161,7 +201,7 @@ export default function MiniCrossword() {
                                 onClick={handleSubmit}
                                 aria-label="Reload Grid"
                             >
-                                ↻ 
+                                ↻
                             </button>
                             <button
                                 type="button"
@@ -172,6 +212,9 @@ export default function MiniCrossword() {
                             </button>
                         </div>
                     )}
+                    <div className={styles.actionArea}>
+                        {clues && clues.map(c => <p>{c.number} {c.direction}: {c.word}</p>)}
+                    </div>
                     {error && (
                         <Alert variant="destructive">
                             <AlertTitle>Error</AlertTitle>
