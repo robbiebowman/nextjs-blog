@@ -179,7 +179,7 @@ export default function MiniCrossword() {
                         clues={clues}
                         guessGrid={filledPuzzle || guessGrid}
                         setGuessGrid={setGuessGrid}
-                        disabled={() => { }}
+                        disabled={!editable}
                         isEditMode={true}
                     />
                     <div className={styles.actionArea}>
@@ -238,7 +238,7 @@ export default function MiniCrossword() {
                     <div className={styles.cluesArea}>
                         {clues.map((c, index) => (
                             <div key={`${c.number}-${c.direction}`} className={styles.clueInput}>
-                                <label>{c.number} {c.direction}: {c.word}</label>
+                                <label>{c.word}</label>
                                 <input
                                     type="text"
                                     value={c.userClue || ''}
