@@ -21,6 +21,27 @@ export default function MiniCrossword() {
     const [success, setSuccess] = useState(false);
     const [filledPuzzle, setFilledPuzzle] = useState(null);
     const [originalPuzzle, setOriginalPuzzle] = useState(null);
+    const [editable, setEditable] = useState(true);
+
+    const handleClueChange = (index, newClue) => {
+        setClues(prevClues =>
+            prevClues.map((clue, i) =>
+                i === index ? { ...clue, userClue: newClue } : clue
+            )
+        );
+    };
+
+    const allCluesFilled = useMemo(() => {
+        return clues.every(clue => clue.userClue && clue.userClue.trim() !== '');
+    }, [clues]);
+
+    const handleShareSubmit = () => {
+        console.log({
+            grid: guessGrid,
+            clues: clues
+        });
+        // You could also send this data to an API endpoint here
+    };
 
     const handleClear = () => {
         setGuessGrid(oldGrid =>
@@ -97,10 +118,11 @@ export default function MiniCrossword() {
     };
 
     function extractCrosswordWords(crossword) {
+        setEditable(false)
         const words = [];
         let wordNumber = 1;
         const numberedCells = Array(5).fill().map(() => Array(5).fill(0));
-    
+
         // Helper function to extract words from a line
         function extractWordsFromLine(line, lineIndex, isVertical) {
             let startIndex = 0;
@@ -124,19 +146,19 @@ export default function MiniCrossword() {
                 }
             }
         }
-    
+
         // Extract horizontal words
         for (let i = 0; i < 5; i++) {
             const row = crossword[i].join('');
             extractWordsFromLine(row, i, false);
         }
-    
+
         // Extract vertical words
         for (let j = 0; j < 5; j++) {
             const column = crossword.map(row => row[j]).join('');
             extractWordsFromLine(column, j, true);
         }
-    
+
         setClues(words);
     }
 
@@ -157,7 +179,7 @@ export default function MiniCrossword() {
                         clues={clues}
                         guessGrid={filledPuzzle || guessGrid}
                         setGuessGrid={setGuessGrid}
-                        onActiveClueChange={() => { }}
+                        disabled={() => { }}
                         isEditMode={true}
                     />
                     <div className={styles.actionArea}>
@@ -195,7 +217,8 @@ export default function MiniCrossword() {
                                 onClick={handleAccept}
                             >
                                 Accept fill
-                            </button><button
+                            </button>
+                            <button
                                 type="button"
                                 className="btn btn-info"
                                 onClick={handleSubmit}
@@ -212,9 +235,31 @@ export default function MiniCrossword() {
                             </button>
                         </div>
                     )}
-                    <div className={styles.actionArea}>
-                        {clues && clues.map(c => <p>{c.number} {c.direction}: {c.word}</p>)}
+                    <div className={styles.cluesArea}>
+                        {clues.map((c, index) => (
+                            <div key={`${c.number}-${c.direction}`} className={styles.clueInput}>
+                                <label>{c.number} {c.direction}: {c.word}</label>
+                                <input
+                                    type="text"
+                                    value={c.userClue || ''}
+                                    onChange={(e) => handleClueChange(index, e.target.value)}
+                                    placeholder="Enter your clue here"
+                                />
+                            </div>
+                        ))}
                     </div>
+                    {clues.length > 0 && (
+                        <div className={styles.actionArea}>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={handleShareSubmit}
+                                disabled={!allCluesFilled}
+                            >
+                                Share/Submit
+                            </button>
+                        </div>
+                    )}
                     {error && (
                         <Alert variant="destructive">
                             <AlertTitle>Error</AlertTitle>

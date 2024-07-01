@@ -101,3 +101,25 @@
 .outerBox p {
     color:#0008;
 }
+
+.cluesArea {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.clueInput {
+    margin-bottom: 0.5rem;
+}
+
+.clueInput label {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.clueInput input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

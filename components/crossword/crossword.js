@@ -8,7 +8,7 @@ import Clues from './clues';
  * @param {puzzle} 2d array of chars
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
-export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onActiveClueChange, isEditMode = false }) {
+export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, disabled = false, isEditMode = false }) {
 
     const processClues = useCallback((clueSet, direction) => {
         const lookup = [];
@@ -124,13 +124,11 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
             const answer = startingCell && acrossClueLookup[startingCell?.y]?.[startingCell?.x]
             const activeClue = clues?.['across']?.[answer?.number]
-            onActiveClueChange(activeClue)
             return activeClue
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
             const answer = startingCell && downClueLookup[startingCell.y]?.[startingCell.x]
             const activeClue = clues?.['down']?.[answer?.number]
-            onActiveClueChange(activeClue)
             return clues?.['down']?.[answer?.number]
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
@@ -183,6 +181,9 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
     }, [activeCell, findNextCell]);
 
     const keyPressedHandler = useCallback((event) => {
+        if (disabled) {
+            return;
+        }
         if (isEditMode && event.key === ' ') {
             setGuessGrid(oldGrid => {
                 const newGrid = [...oldGrid];
@@ -211,7 +212,7 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, onAc
             handleArrowKey(key);
         }
         
-    }, [isEditMode, handleBackspace, handleLetterInput, handleArrowKey]);
+    }, [disabled, isEditMode, handleBackspace, handleLetterInput, handleArrowKey]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
