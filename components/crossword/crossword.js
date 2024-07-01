@@ -279,8 +279,6 @@ export default function Crossword({ puzzle, clues }) {
 
     let y = -1
 
-    console.log(`activeClue: ${JSON.stringify(activeClue)}`)
-
     return (
         <div className={styles.outerBox}>
             {isComplete ? (

@@ -28,7 +28,7 @@ export default function Clues({ clues, onClueClick, activeClue }) {
 
     return (
         <div>
-            {isMobile && <div className={styles.bannerClue}>
+            {isMobile && activeClue && <div className={styles.bannerClue}>
                 <span className={styles.highlightRow}><span className={styles.number}>{activeClue.number}</span> {activeClue.clue}</span>
             </div>}
             <FlexWrapDetector className={styles.box} onWrap={setIsMobile}>
