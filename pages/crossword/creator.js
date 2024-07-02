@@ -52,6 +52,7 @@ export default function MiniCrossword() {
         setFilledPuzzle(null);
         setOriginalPuzzle(null);
         setSuccess(false);
+        setEditable(true)
         setError(null);
     };
 
@@ -125,7 +126,6 @@ export default function MiniCrossword() {
 
         // Helper function to extract words from a line
         function extractWordsFromLine(line, lineIndex, isVertical) {
-            let startIndex = 0;
             for (let i = 0; i < line.length; i++) {
                 if (line[i] !== '#') {
                     if (i === 0 || line[i - 1] === '#') {
@@ -162,6 +162,45 @@ export default function MiniCrossword() {
         setClues(words);
     }
 
+    const handleClueCancel = () => {
+        setEditable(true)
+        setClues([])
+        setSuccess(null)
+        setError(null)
+    }
+
+    const handleFillClues = async () => {
+        setIsLoading(true);
+        setError(null);
+        setSuccess(false);
+        setFilledPuzzle(null);
+
+        try {
+            const response = await fetch('/api/fill-clues', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(guessGrid),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fill clues');
+            }
+
+            const data = await response.json();
+            if (data.clues) {
+                setClues(data.clues);
+                setSuccess(true);
+            }
+        } catch (e) {
+            console.error(`Error: ${e.message}`);
+            setError("An error occurred generating clues.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <Layout>
             <Head>
@@ -182,33 +221,59 @@ export default function MiniCrossword() {
                         disabled={!editable}
                         isEditMode={true}
                     />
-                    <div className={styles.actionArea}>
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={handleSubmit}
-                            disabled={isLoading || filledPuzzle}
-                        >
-                            {isLoading ? <Spinner /> : 'Fill in puzzle'}
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={handleClear}
-                        >
-                            Clear grid
-                        </button>
-                    </div>
-                    <div className={styles.actionArea}>
-                        <button
-                            type="button"
-                            className="btn btn-info"
-                            onClick={() => extractCrosswordWords(guessGrid)}
-                            disabled={!crosswordIsFull}
-                        >
-                            Start clues
-                        </button>
-                    </div>
+                    {
+                        editable &&
+                        <div className={styles.actionArea}>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={handleSubmit}
+                                disabled={isLoading || filledPuzzle}
+                            >
+                                {isLoading ? <Spinner /> : 'Fill in puzzle'}
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={handleClear}
+                            >
+                                Clear grid
+                            </button>
+                        </div>
+                    }
+                    {
+                        crosswordIsFull &&
+                        <div className={styles.actionArea}>
+                            <button
+                                type="button"
+                                className="btn btn-info"
+                                onClick={() => extractCrosswordWords(guessGrid)}
+                                disabled={!crosswordIsFull || !editable}
+                            >
+                                Start clues
+                            </button>
+                        </div>
+                    }
+                    {
+                        !editable && crosswordIsFull &&
+                        <div className={styles.actionArea}>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={handleFillClues}
+                            >
+                                Fill in clues
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={handleClueCancel}
+                                aria-label="Go back to edit mode"
+                            >
+                                Back to drawing board
+                            </button>
+                        </div>
+                    }
                     {filledPuzzle && (
                         <div className={styles.actionArea}>
                             <button
