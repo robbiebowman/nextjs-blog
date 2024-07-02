@@ -22,6 +22,8 @@ export default function MiniCrossword() {
     const [filledPuzzle, setFilledPuzzle] = useState(null);
     const [originalPuzzle, setOriginalPuzzle] = useState(null);
     const [editable, setEditable] = useState(true);
+    const [isGeneratingClues, setIsGeneratingClues] = useState(false);
+
 
     const handleClueChange = (clueObj, newClueText) => {
         setClues(prevClues =>
@@ -172,8 +174,9 @@ export default function MiniCrossword() {
         setError(null)
     }
 
+
     const handleFillClues = async () => {
-        setIsLoading(true);
+        setIsGeneratingClues(true);
         setError(null);
         setSuccess(false);
         setFilledPuzzle(null);
@@ -198,7 +201,7 @@ export default function MiniCrossword() {
                 setClues(prevClues =>
                     prevClues.map(prevClue => {
                         const matchingClue = data.find(c => c.word == prevClue.word)
-                        return matchingClue ?  { ...prevClue, clue: matchingClue.clue } : prevClue
+                        return matchingClue ? { ...prevClue, clue: matchingClue.clue } : prevClue
                     }
                     )
                 )
@@ -208,7 +211,7 @@ export default function MiniCrossword() {
             console.error(`Error: ${e.message}`);
             setError("An error occurred generating clues.");
         } finally {
-            setIsLoading(false);
+            setIsGeneratingClues(false);
         }
     };
 
@@ -312,15 +315,19 @@ export default function MiniCrossword() {
                         </div>
                     )}
                     <div className={styles.cluesArea}>
+                        <h2>Clues</h2>
                         {clues.map(c => (
-                            <div key={`${c.number}-${c.direction}`} className={styles.clueInput}>
-                                <label>{c.word}</label>
-                                <input
-                                    type="text"
-                                    value={c.clue || ''}
-                                    onChange={(e) => handleClueChange(c, e.target.value)}
-                                    placeholder="Enter your clue here"
-                                />
+                            <div key={`${c.number}-${c.direction}`} className={`${styles.clueInput} ${!c.clue ? styles.emptyClue : ''}`}>
+                                <label>{c.number} {c.direction.charAt(0).toUpperCase() + c.direction.slice(1)}: {c.word}</label>
+                                <div className={styles.clueInputWrapper}>
+                                    <input
+                                        type="text"
+                                        value={c.clue || ''}
+                                        onChange={(e) => handleClueChange(c, e.target.value)}
+                                        placeholder="Enter your clue here"
+                                    />
+                                    {isGeneratingClues && !c.clue && <Spinner className={styles.clueSpinner} />}
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -330,7 +337,7 @@ export default function MiniCrossword() {
                                 type="button"
                                 className="btn btn-primary"
                                 onClick={handleShareSubmit}
-                                disabled={!allCluesFilled}
+                                disabled={!allCluesFilled || isGeneratingClues}
                             >
                                 Share/Submit
                             </button>

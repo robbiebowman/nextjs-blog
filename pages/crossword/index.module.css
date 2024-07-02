@@ -72,53 +72,92 @@
 .successText {
     margin: auto;
 }
-.actionArea {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: space-around;
-    padding:0 0 1rem 0;
-    width:100%;
-}
-
-.alert {
-    margin-top: 1rem;
-    max-width: 400px;
-}
-
-/* You might want to adjust the existing styles for the button */
-.actionArea button {
-    min-width: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* If your Spinner component doesn't come with built-in styles */
-.actionArea button > :global(.spinner) {
-    margin-right: 0.5rem;
-}
-
-.outerBox p {
-    color:#0008;
-}
 
 .cluesArea {
-    margin-top: 1rem;
+    margin-top: 2rem;
     width: 100%;
     max-width: 400px;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cluesArea h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #333;
 }
 
 .clueInput {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
 }
 
 .clueInput label {
-    margin-bottom: 0.25rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.clueInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .clueInput input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.clueInput input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.emptyClue input {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.clueSpinner {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.actionArea {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    padding: 0 0 1rem 0;
+    width: 100%;
+}
+
+.actionArea button {
+    min-width: 150px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.actionArea button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.actionArea button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
