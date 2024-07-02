@@ -23,16 +23,19 @@ export default function MiniCrossword() {
     const [originalPuzzle, setOriginalPuzzle] = useState(null);
     const [editable, setEditable] = useState(true);
 
-    const handleClueChange = (index, newClue) => {
+    const handleClueChange = (clueObj, newClueText) => {
         setClues(prevClues =>
-            prevClues.map((clue, i) =>
-                i === index ? { ...clue, userClue: newClue } : clue
+            prevClues.map(prevClue => {
+                const newClue = { ...prevClue, clue: newClueText }
+                const matchesClue = clueObj.direction == prevClue.direction && clueObj.number == prevClue.number
+                return matchesClue ? newClue : prevClue
+            }
             )
         );
     };
 
     const allCluesFilled = useMemo(() => {
-        return clues.every(clue => clue.userClue && clue.userClue.trim() !== '');
+        return clues.every(clue => clue.clue && clue.clue.trim() !== '');
     }, [clues]);
 
     const handleShareSubmit = () => {
@@ -40,7 +43,6 @@ export default function MiniCrossword() {
             grid: guessGrid,
             clues: clues
         });
-        // You could also send this data to an API endpoint here
     };
 
     const handleClear = () => {
@@ -139,7 +141,8 @@ export default function MiniCrossword() {
                             words.push({
                                 direction: isVertical ? 'down' : 'across',
                                 number: numberedCells[y][x],
-                                word: word.toLowerCase()
+                                word: word.toLowerCase(),
+                                clue: ''
                             });
                         }
                     }
@@ -176,12 +179,13 @@ export default function MiniCrossword() {
         setFilledPuzzle(null);
 
         try {
+            const emptyClues = clues.filter(c => !c.clue)
             const response = await fetch('/api/fill-clues', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(guessGrid),
+                body: JSON.stringify(emptyClues.map(c => c.word)),
             });
 
             if (!response.ok) {
@@ -189,8 +193,15 @@ export default function MiniCrossword() {
             }
 
             const data = await response.json();
-            if (data.clues) {
-                setClues(data.clues);
+            if (data) {
+                console.log(`clues ${JSON.stringify(data)}`)
+                setClues(prevClues =>
+                    prevClues.map(prevClue => {
+                        const matchingClue = data.find(c => c.word == prevClue.word)
+                        return matchingClue ?  { ...prevClue, clue: matchingClue.clue } : prevClue
+                    }
+                    )
+                )
                 setSuccess(true);
             }
         } catch (e) {
@@ -301,13 +312,13 @@ export default function MiniCrossword() {
                         </div>
                     )}
                     <div className={styles.cluesArea}>
-                        {clues.map((c, index) => (
+                        {clues.map(c => (
                             <div key={`${c.number}-${c.direction}`} className={styles.clueInput}>
                                 <label>{c.word}</label>
                                 <input
                                     type="text"
-                                    value={c.userClue || ''}
-                                    onChange={(e) => handleClueChange(index, e.target.value)}
+                                    value={c.clue || ''}
+                                    onChange={(e) => handleClueChange(c, e.target.value)}
                                     placeholder="Enter your clue here"
                                 />
                             </div>

@@ -6,7 +6,7 @@ export default async function fillCrosswordHandler(req, res) {
   }
 
   try {
-    const words = req.words;
+    const words = req.body;
 
     const response = await fetch(`${process.env.PERSONAL_API_URL}/mini-crossword/fill-clues`, {
       method: 'POST',
@@ -16,6 +16,7 @@ export default async function fillCrosswordHandler(req, res) {
       body: JSON.stringify(words),
     });
 
+    console.log(`response is: ${JSON.stringify(response)}`)
     const data = await response.json();
     res.status(200).json(data.clues);
   } catch (error) {
