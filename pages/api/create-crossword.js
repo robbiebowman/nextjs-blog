@@ -6,7 +6,7 @@ export default async function fillCrosswordHandler(req, res) {
   }
 
   try {
-    const response = await fetch(`${process.env.PERSONAL_API_URL}/mini-crossword/custom-create`, {
+    const response = await fetch(`${process.env.PERSONAL_API_URL}/mini-crossword/create-custom`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
