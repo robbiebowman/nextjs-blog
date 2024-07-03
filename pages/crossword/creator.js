@@ -40,11 +40,28 @@ export default function MiniCrossword() {
         return clues.every(clue => clue.clue && clue.clue.trim() !== '');
     }, [clues]);
 
-    const handleShareSubmit = () => {
-        console.log({
-            grid: guessGrid,
-            clues: clues
-        });
+    const handleCreate = async () => {
+        try {
+            const response = await fetch('/api/create-crossword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ puzzle: guessGrid, clues }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fill crossword');
+            }
+
+            const data = await response.json();
+            
+        } catch (e) {
+            console.error(`Error: ${e.message}`);
+            setError("An error occurred while saving the crossword. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleClear = () => {
@@ -111,6 +128,7 @@ export default function MiniCrossword() {
 
     const handleAccept = () => {
         setGuessGrid(filledPuzzle);
+        setSuccess(null)
         setFilledPuzzle(null);
         setOriginalPuzzle(null);
     };
@@ -336,10 +354,10 @@ export default function MiniCrossword() {
                             <button
                                 type="button"
                                 className="btn btn-primary"
-                                onClick={handleShareSubmit}
+                                onClick={handleCreate}
                                 disabled={!allCluesFilled || isGeneratingClues}
                             >
-                                Share/Submit
+                                Create
                             </button>
                         </div>
                     )}
