@@ -9,14 +9,18 @@ import styles from './index.module.css';
 import Layout from "../../components/layout";
 import Crossword from "../../components/crossword/crossword-game";
 import { CrosswordGameSelector } from "../../components/game-selector/game-selector";
+import { Alert, AlertDescription } from '../../components/ui/alert';
+import { Link } from "lucide-react";
 
 export default function CustomCrossword() {
 
     const router = useRouter()
     const { id } = router.query
+    const formattedId = id?.replaceAll('-', ' ')
     const [rawPuzzleData, setRawPuzzleData] = useState(null)
     const [puzzle, setPuzzle] = useState(null)
     const [clues, setClues] = useState(null)
+    const [isShared, setIsShared] = useState(false);
 
     const fetcher = (...args) => fetch(...args).then(res => res.json());
     const { mutate } = useSWR(() => `/api/custom-crossword?id=${id}`, fetcher, {
@@ -29,6 +33,16 @@ export default function CustomCrossword() {
             setRawPuzzleData(null)
         }
     })
+
+    const handleShare = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            setIsShared(true);
+            setTimeout(() => setIsShared(false), 2000);
+        }, (err) => {
+            console.error('Could not copy text: ', err);
+        });
+    };
 
     useEffect(() => {
         if (rawPuzzleData == null) {
@@ -99,8 +113,17 @@ export default function CustomCrossword() {
             <CrosswordGameSelector />
             <div className={styles.puzzleBox}>
                 <div className={styles.outerBox}>
-                    <div className={styles.title}>
-                        <h1>Mini Crossword - {id}</h1>
+                    <div className={styles.titleContainer}>
+                        <h1 className={styles.title}>Mini Crossword - {formattedId}</h1>
+                        <button
+                            onClick={handleShare}
+                            className={`${styles.shareButton} ${isShared ? styles.shared : ''}`}
+                            aria-label="Share crossword"
+                            disabled={isShared}
+                        >
+                            <Link className={styles.shareIcon} size={16} />
+                            <span>{isShared ? 'Shared!' : 'Share'}</span>
+                        </button>
                     </div>
                     <Crossword clues={clues} puzzle={puzzle} />
                 </div>

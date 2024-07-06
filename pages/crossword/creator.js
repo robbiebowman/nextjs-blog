@@ -275,25 +275,25 @@ export default function MiniCrossword() {
                             <button
                                 type="button"
                                 className="btn btn-secondary"
+                                disabled={filledPuzzle}
                                 onClick={handleClear}
                             >
                                 Clear grid
                             </button>
                         </div>
                     }
-                    {
-                        crosswordIsFull &&
-                        <div className={styles.actionArea}>
-                            <button
-                                type="button"
-                                className="btn btn-info"
-                                onClick={() => extractCrosswordWords(guessGrid)}
-                                disabled={!crosswordIsFull || !editable}
-                            >
-                                Start clues
-                            </button>
-                        </div>
-                    }
+
+                    <div className={styles.actionArea}>
+                        <button
+                            type="button"
+                            className="btn btn-info"
+                            onClick={() => extractCrosswordWords(guessGrid)}
+                            disabled={!crosswordIsFull || !editable || filledPuzzle}
+                        >
+                            Start clues
+                        </button>
+                    </div>
+
                     {
                         !editable && crosswordIsFull &&
                         <div className={styles.actionArea}>
@@ -340,34 +340,37 @@ export default function MiniCrossword() {
                             </button>
                         </div>
                     )}
-                    <div className={styles.cluesArea}>
-                        <h2>Clues</h2>
-                        {clues.map(c => (
-                            <div key={`${c.number}-${c.direction}`} className={`${styles.clueInput} ${!c.clue ? styles.emptyClue : ''}`}>
-                                <label>{c.number} {c.direction.charAt(0).toUpperCase() + c.direction.slice(1)}: {c.word}</label>
-                                <div className={styles.clueInputWrapper}>
-                                    <input
-                                        type="text"
-                                        value={c.clue || ''}
-                                        onChange={(e) => handleClueChange(c, e.target.value)}
-                                        placeholder="Enter your clue here"
-                                    />
-                                    {isGeneratingClues && !c.clue && <Spinner className={styles.clueSpinner} />}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+
                     {clues.length > 0 && (
-                        <div className={styles.actionArea}>
-                            <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={handleCreate}
-                                disabled={!allCluesFilled || isGeneratingClues || isCreating}
-                            >
-                                {isCreating ? <><Spinner /> Creating...</> : 'Create'}
-                            </button>
-                        </div>
+                        <>
+                            <div className={styles.cluesArea}>
+                                <h2>Clues</h2>
+                                {clues.map(c => (
+                                    <div key={`${c.number}-${c.direction}`} className={`${styles.clueInput} ${!c.clue ? styles.emptyClue : ''}`}>
+                                        <label>{c.number} {c.direction.charAt(0).toUpperCase() + c.direction.slice(1)}: {c.word}</label>
+                                        <div className={styles.clueInputWrapper}>
+                                            <input
+                                                type="text"
+                                                value={c.clue || ''}
+                                                onChange={(e) => handleClueChange(c, e.target.value)}
+                                                placeholder="Enter your clue here"
+                                            />
+                                            {isGeneratingClues && !c.clue && <Spinner className={styles.clueSpinner} />}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className={styles.actionArea}>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={handleCreate}
+                                    disabled={!allCluesFilled || isGeneratingClues || isCreating}
+                                >
+                                    {isCreating ? <><Spinner /> Creating...</> : 'Create'}
+                                </button>
+                            </div>
+                        </>
                     )}
                     {error && (
                         <Alert variant="destructive">

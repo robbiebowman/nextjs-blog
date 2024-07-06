@@ -41,8 +41,22 @@
     align-items: center;
 }
 
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
 .title {
-    margin: 0 1rem;
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+.titleContainer h1 {
+    text-align: center;
+    font-size: 1.75rem;
 }
 
 .title h1 {
@@ -136,21 +150,18 @@
 }
 
 .actionArea {
-    margin-top: 2rem;
+    margin-top: 1rem;
     display: flex;
     justify-content: center;
-    padding: 0 0 1rem 0;
     width: 100%;
 }
 
 .actionArea button {
-    min-width: 150px;
-    padding: 0.75rem 1.5rem;
+    min-width: 3rem;
     font-size: 1rem;
-    font-weight: bold;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
+    margin: 0 0.5rem;
 }
 
 .actionArea button:hover:not(:disabled) {
@@ -161,4 +172,28 @@
 .actionArea button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.shareButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.shareButton:hover {
+    background-color: #2563eb;
+}
+
+.shareButton.shared {
+    background-color: #10b981;
+}
+
+.shareIcon {
+    margin-right: 0.5rem;
 }
