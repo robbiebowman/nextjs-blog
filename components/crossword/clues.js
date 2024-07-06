@@ -19,11 +19,15 @@ export default function Clues({ clues, onClueClick, activeClue }) {
     }, [clues])
 
     const acrossClues = useMemo(() => {
-        return formatClues(clues.across)
+        if (clues?.across) {
+            return formatClues(clues.across)
+        }
     }, [clues])
 
     const downClues = useMemo(() => {
-        return formatClues(clues.down)
+        if (clues?.down) {
+            return formatClues(clues.down)
+        }
     }, [clues])
 
     return (
@@ -34,7 +38,7 @@ export default function Clues({ clues, onClueClick, activeClue }) {
             <FlexWrapDetector className={styles.box} onWrap={setIsMobile}>
                 <div className={styles.clueBox}>
                     <h1>Across</h1>
-                    {acrossClues.map(c => {
+                    {acrossClues && acrossClues.map(c => {
                         const { number, clue } = c;
                         const isActiveClue = activeClue?.number == number && activeClue.direction == 'across'
                         return (<div key={number + 'across'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'across') }}>
@@ -44,7 +48,7 @@ export default function Clues({ clues, onClueClick, activeClue }) {
                 </div>
                 <div className={styles.clueBox}>
                     <h1>Down</h1>
-                    {downClues.map(c => {
+                    {downClues && downClues.map(c => {
                         const { number, clue } = c;
                         const isActiveClue = activeClue?.number == number && activeClue.direction == 'down'
                         return (<div key={number + 'down'} className={isActiveClue ? styles.highlightRow : styles.clueRow} onClick={() => { onClueClick(number, 'down') }}>

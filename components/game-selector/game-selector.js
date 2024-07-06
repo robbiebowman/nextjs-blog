@@ -30,3 +30,15 @@ export function WordleGameSelector({
         selectedTitle
     })
 }
+
+export function CrosswordGameSelector({
+    selectedTitle
+}) {
+    return GameSelector({
+        tabs: [
+            { title: "Daily", link: "/crossword/daily" },
+            { title: "Creator", link: "/crossword/creator" },
+        ],
+        selectedTitle
+    })
+}

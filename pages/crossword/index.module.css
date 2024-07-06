@@ -1,0 +1,199 @@
+.puzzleBox {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    min-height: 45rem;
+}
+
+.dateSelector {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 3rem;
+    padding: 0 4rem;
+    row-gap: 1.5rem;
+}
+
+.mainBox {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 1rem;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.crossword {
+    width: 100%;
+    max-width: 22rem;
+}
+
+.clues {
+    max-width: 17rem;
+}
+
+.outerBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.title {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+.titleContainer h1 {
+    text-align: center;
+    font-size: 1.75rem;
+}
+
+.title h1 {
+    text-align: center;
+    font-size: 1.75rem;
+}
+
+.resultBox {
+    max-width: 15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    color: white;
+    border-radius: 0.4rem;
+    align-items: center;
+}
+
+.successBox {
+    color: #143a08;
+    background-color: #c9f2c5;
+}
+
+.notSuccessBox {
+    background-color: #7a7a30;
+}
+
+.successText {
+    margin: auto;
+}
+
+.cluesArea {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 400px;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cluesArea h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.clueInput {
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.clueInput label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.clueInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.clueInput input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.clueInput input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.emptyClue input {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.clueSpinner {
+    position: absolute;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.actionArea {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.actionArea button {
+    min-width: 3rem;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    margin: 0 0.5rem;
+}
+
+.actionArea button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.actionArea button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.shareButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.shareButton:hover {
+    background-color: #2563eb;
+}
+
+.shareButton.shared {
+    background-color: #10b981;
+}
+
+.shareIcon {
+    margin-right: 0.5rem;
+}
