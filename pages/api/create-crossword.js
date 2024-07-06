@@ -15,7 +15,7 @@ export default async function fillCrosswordHandler(req, res) {
     });
 
     const data = await response.json();
-    res.status(200).json(data);
+    res.status(200).json(data); // e.g. { "puzzleId": "djakjwd" }
   } catch (error) {
     console.error('Error in crossword fill handler:', error);
     res.status(500).json({ error: 'Internal Server Error' });

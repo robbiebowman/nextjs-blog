@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from 'next/router';
 import React, { useEffect, useState, useMemo } from 'react';
 import styles from './index.module.css';
 import Layout from "../../components/layout";
@@ -8,6 +9,7 @@ import { Spinner } from '../../components/ui/spinner';
 import { Alert, AlertDescription, AlertTitle } from '../../components/ui/alert';
 
 export default function MiniCrossword() {
+    const router = useRouter();
     const [guessGrid, setGuessGrid] = useState([
         ['', '', '', '', ''],
         ['', '', '', '', ''],
@@ -23,7 +25,7 @@ export default function MiniCrossword() {
     const [originalPuzzle, setOriginalPuzzle] = useState(null);
     const [editable, setEditable] = useState(true);
     const [isGeneratingClues, setIsGeneratingClues] = useState(false);
-
+    const [isCreating, setIsCreating] = useState(false);
 
     const handleClueChange = (clueObj, newClueText) => {
         setClues(prevClues =>
@@ -41,6 +43,8 @@ export default function MiniCrossword() {
     }, [clues]);
 
     const handleCreate = async () => {
+        setIsCreating(true);
+        setError(null);
         try {
             const response = await fetch('/api/create-crossword', {
                 method: 'POST',
@@ -51,16 +55,20 @@ export default function MiniCrossword() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to fill crossword');
+                throw new Error('Failed to create crossword');
             }
 
             const data = await response.json();
-            
+            if (data.puzzleId) {
+                router.push(`/crossword/${data.puzzleId}`);
+            } else {
+                throw new Error('No puzzle ID received');
+            }
         } catch (e) {
             console.error(`Error: ${e.message}`);
             setError("An error occurred while saving the crossword. Please try again.");
         } finally {
-            setIsLoading(false);
+            setIsCreating(false);
         }
     };
 
@@ -355,9 +363,9 @@ export default function MiniCrossword() {
                                 type="button"
                                 className="btn btn-primary"
                                 onClick={handleCreate}
-                                disabled={!allCluesFilled || isGeneratingClues}
+                                disabled={!allCluesFilled || isGeneratingClues || isCreating}
                             >
-                                Create
+                                {isCreating ? <><Spinner /> Creating...</> : 'Create'}
                             </button>
                         </div>
                     )}

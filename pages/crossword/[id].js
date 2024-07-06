@@ -96,7 +96,7 @@ export default function CustomCrossword() {
             <Head>
                 <title>Mini Crossword</title>
             </Head>
-            <CrosswordGameSelector selectedTitle="Daily" />
+            <CrosswordGameSelector />
             <div className={styles.puzzleBox}>
                 <div className={styles.outerBox}>
                     <div className={styles.title}>
