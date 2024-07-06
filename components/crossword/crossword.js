@@ -8,7 +8,7 @@ import Clues from './clues';
  * @param {puzzle} 2d array of chars
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
-export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, disabled = false, isEditMode = false }) {
+export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, selectedClue, onActiveClueChange, disabled = false, isEditMode = false }) {
 
     const processClues = useCallback((clueSet, direction) => {
         const lookup = [];
@@ -124,12 +124,14 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, disa
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
             const answer = startingCell && acrossClueLookup[startingCell?.y]?.[startingCell?.x]
             const activeClue = clues?.['across']?.[answer?.number]
+            onActiveClueChange && onActiveClueChange(activeClue)
             return activeClue
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
             const answer = startingCell && downClueLookup[startingCell.y]?.[startingCell.x]
             const activeClue = clues?.['down']?.[answer?.number]
-            return clues?.['down']?.[answer?.number]
+            onActiveClueChange && onActiveClueChange(activeClue)
+            return activeClue
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
 
@@ -250,7 +252,14 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, disa
         return false
     }, [clueCells])
 
-    let y = -1
+    useEffect(() => {
+        if (!selectedClue) return;
+        const dx = orientation === 'horizontal' ? 1 : 0;
+        const dy = orientation === 'horizontal' ? 0 : 1;
+        const newCell = findNextCell(selectedClue.coordinates.x, selectedClue.coordinates.y, dx, dy, true, false);
+        setActiveCell(newCell)
+        setOrientation(selectedClue.orientation)
+    }, [selectedClue])
 
     return (
         <div className={styles.crosswordBox}>

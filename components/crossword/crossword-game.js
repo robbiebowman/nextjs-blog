@@ -22,9 +22,8 @@ export default function CrosswordGame({ puzzle, clues }) {
         ['', '.', '.', 'g', ''],
         ['', '.', '', '#', '']
     ]);
-    const [orientation, setOrientation] = useState('horizontal')
-    const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
     const [isComplete, setComplete] = useState(false)
+    const [selectedClue, setSelectedClue] = useState(null)
 
     const loadProgress = useCallback(() => {
         const savedState = localStorage.getItem(`${puzzleId}-progress`);
@@ -37,31 +36,20 @@ export default function CrosswordGame({ puzzle, clues }) {
 
     const onClueClicked = useCallback((number, acrossOrDown) => {
         const newOrientation = acrossOrDown == 'across' ? 'horizontal' : 'vertical'
-        setOrientation(newOrientation)
         const { x, y } = (clues)[acrossOrDown][number]
         if (guessGrid[y][x] === '') {
-            setActiveCell({ x: x, y: y })
+            setSelectedClue({ coordinates: { x: x, y: y }, orientation: newOrientation })
         } else {
             const dx = newOrientation === 'horizontal' ? 1 : 0;
             const dy = newOrientation === 'horizontal' ? 0 : 1;
             const newCoordinate = findNextCell(x, y, dx, dy, true, false)
-            setActiveCell(newCoordinate)
+            setSelectedClue({ coordinates: newCoordinate, orientation: newOrientation })
         }
     }, [clues, guessGrid])
 
     const blankGrid = useMemo(() => {
         return puzzle?.map(row => row.map(c => c == '#' ? '#' : ''))
     }, [puzzle])
-
-    const createCellCallback = useCallback((x, y) => {
-        return () => {
-            if (x == activeCell.x && y == activeCell.y) {
-                setOrientation(orientation == 'horizontal' ? 'vertical' : 'horizontal');
-            }
-            const newActiveCell = { x: x, y: y }
-            setActiveCell(newActiveCell)
-        }
-    }, [guessGrid, orientation, activeCell])
 
     const findNextCell = useCallback((x, y, dx, dy, skipLetters = false, wrap = false) => {
         if (!guessGrid) return null;
@@ -126,8 +114,6 @@ export default function CrosswordGame({ puzzle, clues }) {
         saveProgress()
     }, [guessGrid, saveProgress])
 
-    let y = -1
-
     return (
         <div className={styles.outerBox}>
             {isComplete ? (
@@ -141,6 +127,7 @@ export default function CrosswordGame({ puzzle, clues }) {
                     clues={clues}
                     guessGrid={guessGrid}
                     setGuessGrid={setGuessGrid}
+                    selectedClue={selectedClue}
                     onActiveClueChange={setActiveClue}
                 />
                 <Clues clues={clues} onClueClick={onClueClicked} activeClue={activeClue} />
