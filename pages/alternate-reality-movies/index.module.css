@@ -1,0 +1,25 @@
+.mainBox {
+    margin: 1rem;
+    text-align: center;
+}
+
+.mainBox h1 {
+    font-size: xx-large;
+}
+
+.mainBox h2 {
+    font-size: x-large;
+}
+
+.newTitle {
+    font-size: x-large;
+    letter-spacing: 0.4em;;
+}
+
+.blurbText {
+    margin: 0 2rem;
+    font-size: large;
+    line-height: 2rem;
+    text-align: justify;
+    text-justify: inter-word;
+}
