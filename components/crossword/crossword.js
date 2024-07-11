@@ -263,7 +263,7 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
 
     return (
         <div className={styles.crosswordBox}>
-            {guessGrid.map((row, y) => (
+            {guessGrid && guessGrid.map((row, y) => (
                 <div key={`${y}-row`} className={styles.crosswordRow}>
                     {row.map((char, x) => {
                         const number = (acrossClueLookup[y]?.[x] || downClueLookup[y]?.[x])?.number
