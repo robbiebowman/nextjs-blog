@@ -1,13 +1,10 @@
 import Head from "next/head";
 import useSWR from 'swr';
 import React, { useEffect, useRef, useState } from 'react';
-import utilStyles from '../../styles/utils.module.css';
 import { formatDate } from '../../lib/date-funcs'
-import { hasCompleted, setCompleted } from '../../lib/crossword-cookies';
+import TitleGameInput from '../../components/title-game/title-game-input'
 import styles from './index.module.css';
 import Layout from "../../components/layout";
-import Crossword from "../../components/crossword/crossword-game";
-import { CrosswordGameSelector } from "../../components/game-selector/game-selector";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -17,8 +14,8 @@ export default function AlternateRealityMovies() {
 
     // Blurb states
     const [originalTitle, setOriginalTitle] = useState('');
-    const [newTitle, setNewTitle] = useState('');
     const [blurbText, setBlurbText] = useState('');
+    const [newTitle, setNewTitle] = useState('');
 
     // FilmInfo states
     const [title, setTitle] = useState('');
@@ -27,6 +24,10 @@ export default function AlternateRealityMovies() {
     const [crewList, setCrewList] = useState('');
     const [genre, setGenre] = useState('');
     const [userRating, setUserRating] = useState('');
+
+    // Puzzle states
+    const [guessTitle, setGuessTitle] = useState(null); // Lowercase letters & numbers of guess. No symbols or spaces.
+    const [solutionTitle, setSolutionTitle] = useState(''); // Fight Club -> fightclub
 
     useEffect(() => {
         if (data) {
@@ -55,9 +56,7 @@ export default function AlternateRealityMovies() {
             <div className={styles.mainBox}>
                 <h1>Alternate Reality Movie of the Day</h1>
                 <h2>{formatDate(date)}</h2>
-                <p className={styles.newTitle}>{
-                        newTitle.replace(/[a-zA-Z]/g, '_')
-                    }</p>
+                <TitleGameInput solution={newTitle} />
                 <p className={styles.blurbText}>{blurbText}</p>
             </div>
         </Layout>

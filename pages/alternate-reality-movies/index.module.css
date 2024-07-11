@@ -1,25 +1,26 @@
 .mainBox {
-    margin: 1rem;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
 .mainBox h1 {
+    color: #333;
     font-size: xx-large;
 }
 
 .mainBox h2 {
+    color: #999;
     font-size: x-large;
-}
-
-.newTitle {
-    font-size: x-large;
-    letter-spacing: 0.4em;;
+    margin: 0 0 1rem;
 }
 
 .blurbText {
-    margin: 0 2rem;
+    max-width: 25rem;
+    margin: 1rem 2rem;
     font-size: large;
-    line-height: 2rem;
+    line-height: 1.75rem;
     text-align: justify;
     text-justify: inter-word;
 }
