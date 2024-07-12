@@ -100,10 +100,18 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
             <p
                 onClick={handleClick}
                 className={titleStyle}>{guessTitle}
-                <input
-                    ref={inputRef}
-                    style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
-                /></p>
+            </p>
+            <input
+                ref={inputRef}
+                style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+                type="text"
+                inputMode="text"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                data-quicktypes="off"
+            />
 
         </>
     )
