@@ -94,8 +94,15 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
 
     const titleStyle = `${styles.newTitle} ${isSolved ? styles.successTitle : ''}`
 
-    return (<p
-        ref={inputRef}
-        className={titleStyle}>{guessTitle}</p>
+    return (
+        <>
+            <p
+                ref={inputRef}
+                className={titleStyle}>{guessTitle}</p>
+            <input
+                ref={inputRef}
+                style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+            />
+        </>
     )
 }
