@@ -1,4 +1,4 @@
-import { act, useCallback, useEffect, useState, useMemo } from 'react'
+import { act, useCallback, useEffect, useState, useMemo, useRef } from 'react'
 import styles from './title-game.module.css'
 /**
  * 
@@ -26,6 +26,16 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
             onSolutionFound()
         }
     }, [guessTitle])
+
+
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (inputRef && inputRef.current) {
+            inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            inputRef.current.focus();
+        }
+    }, [inputRef]);
 
     const handleBackspace = () => {
         setGuessTitle((prev) => {
@@ -84,6 +94,8 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
 
     const titleStyle = `${styles.newTitle} ${isSolved ? styles.successTitle : ''}`
 
-    return (<p className={titleStyle}>{guessTitle}</p>
+    return (<p
+        ref={inputRef}
+        className={titleStyle}>{guessTitle}</p>
     )
 }
