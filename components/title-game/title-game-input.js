@@ -11,7 +11,7 @@ export default function TitleGameInput({ solution }) {
 
     useEffect(() => {
         if (solution) {
-            setGuessTitle(solution.replace(/[a-zA-Z]/g, '_'))
+            setGuessTitle(solution.replace(/[a-zA-Z0-9]/g, '_'))
         }
     }, [solution])
 
@@ -37,14 +37,22 @@ export default function TitleGameInput({ solution }) {
 
     const keyPressedHandler = (event) => {
 
+        // Check if any modifier keys are pressed
+        const isModifierKeyPressed = event.ctrlKey || event.metaKey || event.altKey;
+
+        // If a modifier key is pressed, don't handle the event
+        if (isModifierKeyPressed) {
+            return;
+        }
+
         const key = event.key;
 
         if (key === 'Backspace') {
             event.preventDefault(); // Prevent default backspace behavior
             handleBackspace();
-        } else if (key === 'Space') {
+        } else if (key === ' ') {
             event.preventDefault(); // Prevent default backspace behavior
-        } else if (key.length === 1 && key.match(/[a-zA-Z]/)) {
+        } else if (key.length === 1 && key.match(/[a-zA-Z0-9]/)) {
             event.preventDefault(); // Prevent default letter input behavior
             handleLetterInput(key);
         }
