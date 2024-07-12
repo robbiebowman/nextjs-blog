@@ -98,11 +98,12 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
         <>
             <p
                 ref={inputRef}
-                className={titleStyle}>{guessTitle}</p>
-            <input
+                className={titleStyle}>{guessTitle}
+                <input
                 ref={inputRef}
                 style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
-            />
+            /></p>
+            
         </>
     )
 }
