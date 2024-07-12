@@ -5,7 +5,7 @@ import styles from './title-game.module.css'
  * @param {puzzle} 2d array of chars
  * @param {clues} { across: { 1: { clue:"...", answer: "...", x: 0, y: 0 } } }
  */
-export default function TitleGameInput({ solution }) {
+export default function TitleGameInput({ solution, onSolutionFound, isSolved }) {
 
     const [guessTitle, setGuessTitle] = useState('')
 
@@ -14,6 +14,18 @@ export default function TitleGameInput({ solution }) {
             setGuessTitle(solution.replace(/[a-zA-Z0-9]/g, '_'))
         }
     }, [solution])
+
+    useEffect(() => {
+        if (isSolved) {
+            setGuessTitle(solution)
+        }
+    }, [isSolved, solution])
+
+    useEffect(() => {
+        if (solution && guessTitle.toLowerCase() === solution.toLowerCase()) {
+            onSolutionFound()
+        }
+    }, [guessTitle])
 
     const handleBackspace = () => {
         setGuessTitle((prev) => {
@@ -70,6 +82,8 @@ export default function TitleGameInput({ solution }) {
         };
     }, [keyPressedHandler]);
 
-    return (<p className={styles.newTitle}>{guessTitle}</p>
+    const titleStyle = `${styles.newTitle} ${isSolved ? styles.successTitle : ''}`
+
+    return (<p className={titleStyle}>{guessTitle}</p>
     )
 }
