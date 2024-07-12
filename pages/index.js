@@ -26,6 +26,28 @@ export default function Home({ allPostsData }) {
           <h1 className={utilStyles.headingLg}>Things I made</h1>
           <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
+              <Link href={`/alternate-reality-movies`}>
+                🍿 Alternate Reality Movies 🎬
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                By changing just 1 letter in a movie title, we end up with an entirely new plot. 
+                The game is to try figure out the title based on the new blurb!
+                <br/>
+                <Link href="https://github.com/robbiebowman/title-game">Source code</Link>
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
+              <Link href={`/crossword/creator`}>
+                🦾 Mini Crossword Creator ✍️
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                Make part of a mini crossword, it'll do the rest.
+                <br/>That includes Claude generated clues!
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
               <Link href={`/crossword/daily`}>
                 📰 Daily Mini Crossword 🗞️
               </Link>
