@@ -30,12 +30,12 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
 
     const inputRef = useRef(null);
 
-    useEffect(() => {
-        if (inputRef && inputRef.current) {
-            inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            inputRef.current.focus();
+    const handleClick = () => {
+        if (inputRef.current) {
+          inputRef.current.focus();
         }
-    }, [inputRef]);
+      };
+
 
     const handleBackspace = () => {
         setGuessTitle((prev) => {
@@ -97,7 +97,7 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
     return (
         <>
             <p
-                ref={inputRef}
+                onClick={handleClick}
                 className={titleStyle}>{guessTitle}
                 <input
                 ref={inputRef}
