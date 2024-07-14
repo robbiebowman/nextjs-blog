@@ -42,7 +42,7 @@ export default function Layout({ children, home }) {
                     <Link href="/">
                         <Image
                             priority
-                            src="/images/13639947.jpg"
+                            src="/images/portrait.png"
                             className={utilStyles.borderCircle}
                             height={108}
                             width={108}

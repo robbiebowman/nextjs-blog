@@ -32,7 +32,7 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 By changing just 1 letter in a movie title, we end up with an entirely new plot. 
-                The game is to try figure out the title based on the new blurb!
+                Try to guess the new title based on the blurb!
                 <br/>
                 <Link href="https://github.com/robbiebowman/title-game">Source code</Link>
               </small>
@@ -43,8 +43,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
-                Make part of a mini crossword, it'll do the rest.
-                <br/>That includes Claude generated clues!
+                Use the crossword creator algorithm to create and share your own crosswords.
+                <br/>Write your own clues or have ones generated for you!
               </small>
             </li>
             <li className={utilStyles.listItem}>
