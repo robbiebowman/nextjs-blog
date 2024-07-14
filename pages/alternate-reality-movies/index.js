@@ -5,13 +5,13 @@ import { formatDate } from '../../lib/date-funcs'
 import TitleGameInput from '../../components/title-game/title-game-input'
 import styles from './index.module.css';
 import Layout from "../../components/layout";
+import { Info, X } from 'lucide-react';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function AlternateRealityMovies() {
     const date = new Date();
     const formattedDate = formatDate(date)
-    console.log(`formattedDate is ${formattedDate}`)
     const { data, error } = useSWR(`/api/title-game?date=${formattedDate}`, fetcher);
 
     // Blurb states
@@ -27,6 +27,10 @@ export default function AlternateRealityMovies() {
     const [crewList, setCrewList] = useState('');
     const [genre, setGenre] = useState('');
     const [userRating, setUserRating] = useState('');
+
+    // Info popup state
+    const [showInfoPopup, setShowInfoPopup] = useState(false);
+    const infoIconRef = useRef(null);
 
     useEffect(() => {
         if (data) {
@@ -46,25 +50,54 @@ export default function AlternateRealityMovies() {
             }
             const solvedMemory = localStorage.getItem(`title-game-${formattedDate}`)
             if (solvedMemory) {
-                console.log(`Local storage says its solved. ${solvedMemory}`)
                 setSolved(true)
             }
         }
     }, [data]);
 
     const onSolutionFound = useCallback(() => {
-        console.log('Solution found!')
         setSolved(true)
         localStorage.setItem(`title-game-${formattedDate}`, true);
     }, [])
 
+    const toggleInfoPopup = (e) => {
+        e.stopPropagation(); // Prevent event from bubbling up
+        setShowInfoPopup(!showInfoPopup);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (infoIconRef.current && !infoIconRef.current.contains(event.target)) {
+                setShowInfoPopup(false);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
     return (
         <Layout>
             <Head>
                 <title>Alternate Reality Movies</title>
             </Head>
             <div className={styles.mainBox}>
-                <h1>Alternate Reality Movie of the Day</h1>
+                <h1>
+                    Alternate Reality Movie of the Day
+                    <span className={styles.infoIcon} onClick={toggleInfoPopup} ref={infoIconRef}>
+                        <Info size={25} />
+                    </span>
+                    {showInfoPopup && (
+                        <div className={styles.infoPopup}>
+                            <p>One letter has been changed in a popular movie title.</p>
+                            <p>Can you guess the new title based on a description of its plot?</p>
+                            <button className={styles.closeButton} onClick={toggleInfoPopup}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                    )}
+                </h1>
                 <h2>{formattedDate}</h2>
                 {isSolved ? (
                     <div className={`${styles.resultBox} ${styles.successBox}`}>
@@ -76,5 +109,4 @@ export default function AlternateRealityMovies() {
             </div>
         </Layout>
     )
-
 }
