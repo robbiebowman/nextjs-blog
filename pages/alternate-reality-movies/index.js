@@ -18,7 +18,7 @@ export default function AlternateRealityMovies() {
         const date = new Date(dateObject);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return date.toLocaleDateString('en-US', options);
-      }
+    }
 
     // Blurb states
     const [originalTitle, setOriginalTitle] = useState('');
@@ -40,7 +40,6 @@ export default function AlternateRealityMovies() {
 
     // Hint states
     const [hintLevel, setHintLevel] = useState(0);
-    const [showHints, setShowHints] = useState(false);
 
     useEffect(() => {
         if (data) {
@@ -91,7 +90,6 @@ export default function AlternateRealityMovies() {
     const handleHintClick = () => {
         if (hintLevel < 3) {
             setHintLevel(hintLevel + 1);
-            setShowHints(true);
         }
     };
 
@@ -104,7 +102,7 @@ export default function AlternateRealityMovies() {
             case 2:
                 return "One last hint...";
             default:
-                return "";
+                return "All hints revealed";
         }
     };
 
@@ -137,30 +135,24 @@ export default function AlternateRealityMovies() {
                 ) : ""}
                 <TitleGameInput solution={newTitle} onSolutionFound={onSolutionFound} isSolved={isSolved} />
                 <p className={styles.blurbText}>{blurbText}</p>
-                
-                {!isSolved && hintLevel < 3 && (
-                    <button onClick={handleHintClick} className={styles.hintButton}>
-                        {getHintButtonText()}
-                    </button>
-                )}
-                
-                {showHints && (
-                    <div className={styles.hintsContainer}>
-                        {hintLevel >= 1 && (
-                            <p className={styles.hint}><span>Release Date</span> {humanReadableDate(releaseDate)}</p>
-                        )}
-                        {hintLevel >= 2 && (
-                            <div className={styles.hint}>
-                                <p><span>Genre</span> {genre}</p>
-                                <p><span>Budget</span> ${budget/1_000_000} million</p>
-                                <p><span>TMDB User Rating</span> {userRating}</p>
-                            </div>
-                        )}
-                        {hintLevel >= 3 && (
-                            <p className={styles.hint}><span>Crew</span> {crewList}</p>
-                        )}
+
+                <button onClick={handleHintClick} className={styles.hintButton} disabled={hintLevel == 3}> 
+                    {getHintButtonText()}
+                </button>
+
+                <div className={styles.hintsContainer}>
+                    <p className={`${styles.hint} ${hintLevel >= 1 ? styles.unblurred : ''}`}>
+                        <span>Release Date</span> {humanReadableDate(releaseDate)}
+                    </p>
+                    <div className={`${styles.hint} ${hintLevel >= 2 ? styles.unblurred : ''}`}>
+                        <p><span>Genre</span> {genre}</p>
+                        <p><span>Budget</span> ${budget / 1_000_000} million</p>
+                        <p><span>TMDB User Rating</span> {userRating}</p>
                     </div>
-                )}
+                    <p className={`${styles.hint} ${hintLevel >= 3 ? styles.unblurred : ''}`}>
+                        <span>Crew</span> {crewList}
+                    </p>
+                </div>
             </div>
         </Layout>
     )
