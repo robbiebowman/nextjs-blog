@@ -14,6 +14,12 @@ export default function AlternateRealityMovies() {
     const formattedDate = formatDate(date)
     const { data, error } = useSWR(`/api/title-game?date=${formattedDate}`, fetcher);
 
+    function humanReadableDate(dateObject) {
+        const date = new Date(dateObject);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+      }
+
     // Blurb states
     const [originalTitle, setOriginalTitle] = useState('');
     const [blurbText, setBlurbText] = useState('');
@@ -31,6 +37,10 @@ export default function AlternateRealityMovies() {
     // Info popup state
     const [showInfoPopup, setShowInfoPopup] = useState(false);
     const infoIconRef = useRef(null);
+
+    // Hint states
+    const [hintLevel, setHintLevel] = useState(0);
+    const [showHints, setShowHints] = useState(false);
 
     useEffect(() => {
         if (data) {
@@ -77,6 +87,27 @@ export default function AlternateRealityMovies() {
             document.removeEventListener('click', handleClickOutside);
         };
     }, []);
+
+    const handleHintClick = () => {
+        if (hintLevel < 3) {
+            setHintLevel(hintLevel + 1);
+            setShowHints(true);
+        }
+    };
+
+    const getHintButtonText = () => {
+        switch (hintLevel) {
+            case 0:
+                return "Give me a hint";
+            case 1:
+                return "Another hint please";
+            case 2:
+                return "One last hint...";
+            default:
+                return "";
+        }
+    };
+
     return (
         <Layout>
             <Head>
@@ -98,7 +129,7 @@ export default function AlternateRealityMovies() {
                         </div>
                     )}
                 </h1>
-                <h2>{formattedDate}</h2>
+                <h2>{humanReadableDate(date)}</h2>
                 {isSolved ? (
                     <div className={`${styles.resultBox} ${styles.successBox}`}>
                         <p className={styles.successText}>🎉 Completed Puzzle! 🎉</p>
@@ -106,6 +137,30 @@ export default function AlternateRealityMovies() {
                 ) : ""}
                 <TitleGameInput solution={newTitle} onSolutionFound={onSolutionFound} isSolved={isSolved} />
                 <p className={styles.blurbText}>{blurbText}</p>
+                
+                {!isSolved && hintLevel < 3 && (
+                    <button onClick={handleHintClick} className={styles.hintButton}>
+                        {getHintButtonText()}
+                    </button>
+                )}
+                
+                {showHints && (
+                    <div className={styles.hintsContainer}>
+                        {hintLevel >= 1 && (
+                            <p className={styles.hint}><span>Release Date</span> {humanReadableDate(releaseDate)}</p>
+                        )}
+                        {hintLevel >= 2 && (
+                            <div className={styles.hint}>
+                                <p><span>Genre</span> {genre}</p>
+                                <p><span>Budget</span> ${budget/1_000_000} million</p>
+                                <p><span>TMDB User Rating</span> {userRating}</p>
+                            </div>
+                        )}
+                        {hintLevel >= 3 && (
+                            <p className={styles.hint}><span>Crew</span> {crewList}</p>
+                        )}
+                    </div>
+                )}
             </div>
         </Layout>
     )
