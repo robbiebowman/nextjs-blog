@@ -94,16 +94,25 @@ export default function AlternateRealityMovies() {
     };
 
     const getHintButtonText = () => {
+        let message;
         switch (hintLevel) {
             case 0:
-                return "Give me a hint";
+                message = "Give me a hint";
+                break;
             case 1:
-                return "Another hint please";
+                message = "Another hint please";
+                break;
             case 2:
-                return "One last hint...";
+                message = "One last hint...";
+                break;
             default:
-                return "All hints revealed";
+                message = "All hints revealed";
+                break;
         }
+        if (isSolved) {
+            message = "Solved!"
+        }
+        return message;
     };
 
     return (
@@ -136,20 +145,20 @@ export default function AlternateRealityMovies() {
                 <TitleGameInput solution={newTitle} onSolutionFound={onSolutionFound} isSolved={isSolved} />
                 <p className={styles.blurbText}>{blurbText}</p>
 
-                <button onClick={handleHintClick} className={styles.hintButton} disabled={hintLevel == 3}> 
+                <button onClick={handleHintClick} className={styles.hintButton} disabled={isSolved || hintLevel == 3}> 
                     {getHintButtonText()}
                 </button>
 
                 <div className={styles.hintsContainer}>
-                    <p className={`${styles.hint} ${hintLevel >= 1 ? styles.unblurred : ''}`}>
+                    <p className={`${styles.hint} ${isSolved || hintLevel >= 1 ? styles.unblurred : ''}`}>
                         <span>Release Date</span> {humanReadableDate(releaseDate)}
                     </p>
-                    <div className={`${styles.hint} ${hintLevel >= 2 ? styles.unblurred : ''}`}>
+                    <div className={`${styles.hint} ${isSolved || hintLevel >= 2 ? styles.unblurred : ''}`}>
                         <p><span>Genre</span> {genre}</p>
                         <p><span>Budget</span> ${budget / 1_000_000} million</p>
                         <p><span>TMDB User Rating</span> {userRating}</p>
                     </div>
-                    <p className={`${styles.hint} ${hintLevel >= 3 ? styles.unblurred : ''}`}>
+                    <p className={`${styles.hint} ${isSolved || hintLevel >= 3 ? styles.unblurred : ''}`}>
                         <span>Crew</span> {crewList}
                     </p>
                 </div>
