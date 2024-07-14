@@ -37,7 +37,6 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
         }
     };
 
-
     const handleBackspace = () => {
         setGuessTitle((prev) => {
             const lastIndex = prev.split('').reverse().findIndex(char => /[a-zA-Z0-9]/.test(char));
@@ -79,7 +78,6 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
             event.preventDefault(); // Prevent default letter input behavior
             handleLetterInput(key);
         }
-
     };
 
     useEffect(() => {

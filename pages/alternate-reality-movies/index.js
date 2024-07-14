@@ -11,6 +11,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function AlternateRealityMovies() {
     const date = new Date();
     const formattedDate = formatDate(date)
+    console.log(`formattedDate is ${formattedDate}`)
     const { data, error } = useSWR(`/api/title-game?date=${formattedDate}`, fetcher);
 
     // Blurb states
@@ -64,7 +65,7 @@ export default function AlternateRealityMovies() {
             </Head>
             <div className={styles.mainBox}>
                 <h1>Alternate Reality Movie of the Day</h1>
-                <h2>{formatDate(formattedDate)}</h2>
+                <h2>{formattedDate}</h2>
                 {isSolved ? (
                     <div className={`${styles.resultBox} ${styles.successBox}`}>
                         <p className={styles.successText}>🎉 Completed Puzzle! 🎉</p>
