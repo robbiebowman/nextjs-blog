@@ -10,6 +10,7 @@ import { Info, X } from 'lucide-react';
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function AlternateRealityMovies() {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const date = new Date();
     const formattedDate = formatDate(date)
     const { data, error } = useSWR(`/api/title-game?date=${formattedDate}`, fetcher);
@@ -115,13 +116,21 @@ export default function AlternateRealityMovies() {
         return message;
     };
 
+    const pageTitle = `Alternate Reality Movies - ${humanReadableDate(date)}`;
+    const pageDescription = data ? data.blurb.blurb : "Can you guess the new movie title based on its alternate reality plot?";
+
     return (
         <Layout>
             <Head>
-                <title>Alternate Reality Movies</title>
+                <title>{pageTitle}</title>
+                <meta property="og:title" content={pageTitle} />
+                <meta property="og:description" content={pageDescription} />
+                <meta property="og:image" content={`${baseUrl}/images/title-game-banner.png`} />
+                <meta property="og:url" content={`${baseUrl}/alternate-reality-movies`} />
+                <meta property="og:type" content="website" />
             </Head>
             <div className={styles.mainBox}>
-                <h1>
+                <h1>    
                     Alternate Reality Movie of the Day
                     <span className={styles.infoIcon} onClick={toggleInfoPopup} ref={infoIconRef}>
                         <Info size={25} />
@@ -145,7 +154,7 @@ export default function AlternateRealityMovies() {
                 <TitleGameInput solution={newTitle} onSolutionFound={onSolutionFound} isSolved={isSolved} />
                 <p className={styles.blurbText}>{blurbText}</p>
 
-                <button onClick={handleHintClick} className={styles.hintButton} disabled={isSolved || hintLevel == 3}> 
+                <button onClick={handleHintClick} className={styles.hintButton} disabled={isSolved || hintLevel == 3}>
                     {getHintButtonText()}
                 </button>
 
