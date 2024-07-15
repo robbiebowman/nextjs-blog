@@ -9,10 +9,10 @@ import { Info, X } from 'lucide-react';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export default function AlternateRealityMovies() {
+export default function AlternateRealityMovies({ initialData, formattedDate }) {
+
     const date = new Date();
-    const formattedDate = formatDate(date)
-    const { data, error } = useSWR(`/api/title-game?date=${formattedDate}`, fetcher);
+    const [data, setData] = useState(initialData);
 
     function humanReadableDate(dateObject) {
         const date = new Date(dateObject);
@@ -115,10 +115,19 @@ export default function AlternateRealityMovies() {
         return message;
     };
 
+    const pageTitle = `Alternate Reality Movies - ${humanReadableDate(new Date(formattedDate))}`;
+    const pageDescription = data ? data.blurb.blurb : "Can you guess the new movie title based on its alternate reality plot?";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
     return (
         <Layout>
             <Head>
-                <title>Alternate Reality Movies</title>
+                <title>{pageTitle}</title>
+                <meta property="og:title" content={pageTitle} />
+                <meta property="og:description" content={pageDescription} />
+                <meta property="og:image" content={`${baseUrl}/images/alternate-reality-movies-banner.png`} />
+                <meta property="og:url" content={`${baseUrl}/alternate-reality-movies?date=${formattedDate}`} />
+                <meta property="og:type" content="website" />
             </Head>
             <div className={styles.mainBox}>
                 <h1>
@@ -145,7 +154,7 @@ export default function AlternateRealityMovies() {
                 <TitleGameInput solution={newTitle} onSolutionFound={onSolutionFound} isSolved={isSolved} />
                 <p className={styles.blurbText}>{blurbText}</p>
 
-                <button onClick={handleHintClick} className={styles.hintButton} disabled={isSolved || hintLevel == 3}> 
+                <button onClick={handleHintClick} className={styles.hintButton} disabled={isSolved || hintLevel == 3}>
                     {getHintButtonText()}
                 </button>
 
@@ -165,4 +174,20 @@ export default function AlternateRealityMovies() {
             </div>
         </Layout>
     )
+}
+
+export async function getServerSideProps(context) {
+    const date = new Date();
+    const formattedDate = formatDate(date);
+
+    // Fetch data from your API
+    const res = await fetch(`https://rjb-personal-api.azurewebsites.net/title-game?date=${formattedDate}`);
+    const initialData = await res.json();
+
+    return {
+        props: {
+            initialData,
+            formattedDate,
+        },
+    }
 }
