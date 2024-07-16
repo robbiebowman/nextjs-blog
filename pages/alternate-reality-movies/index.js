@@ -126,6 +126,7 @@ export default function AlternateRealityMovies({ initialData, formattedDate }) {
                 <meta property="og:title" content={pageTitle} />
                 <meta property="og:description" content={pageDescription} />
                 <meta property="og:image" content={`${baseUrl}/images/alternate-reality-movies-banner.png`} />
+                <meta property="twitter:card" content={`${baseUrl}/images/alternate-reality-movies-banner.png`} />
                 <meta property="og:url" content={`${baseUrl}/alternate-reality-movies?date=${formattedDate}`} />
                 <meta property="og:type" content="website" />
             </Head>
