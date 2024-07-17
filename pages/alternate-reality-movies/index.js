@@ -9,6 +9,7 @@ export default function Home() {
     const localDate = formatDate(new Date())
 
     useEffect(() => {
+        router.prefetch(`/alternate-reality-movies/${localDate}`)
         router.push(`/alternate-reality-movies/${localDate}`)
     }, [])
 
