@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from './layout.module.css'
 import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import React, { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import { createGlobalStyle } from "styled-components";
@@ -34,7 +35,8 @@ export default function Layout({ children, home }) {
                 />
                 <meta name="og:title" content={siteTitle} />
                 <meta name="twitter:card" content="summary_large_image" />
-                </Head>
+            </Head>
+            <SpeedInsights/>
             <header className={styles.header}>
 
                 <GlobalStyles />
@@ -57,7 +59,7 @@ export default function Layout({ children, home }) {
                 </div>
                 <div className={styles.headerLinks}>
                     <Link href="https://github.com/robbiebowman/">
-                        <div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} alt="Github icon"/></div>Github</div>
+                        <div><div className={styles.socialIcon}><Image src="/images/github.webp" height={14} width={14} alt="Github icon" /></div>Github</div>
                     </Link>
 
                     <div>
@@ -83,10 +85,10 @@ export default function Layout({ children, home }) {
                         </div>
                     </div>
                     <Link href="https://www.linkedin.com/in/robbie-bowman/">
-                        <div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} alt="LinkedIn icon"/></div>LinkedIn</div>
+                        <div><div className={styles.socialIcon}><Image src="/images/linkedin.webp" height={14} width={14} alt="LinkedIn icon" /></div>LinkedIn</div>
                     </Link>
                     <Link href="https://www.instagram.com/robbiebowman/">
-                        <div><div className={styles.socialIcon}><Image src="/images/instagram.webp" height={14} width={14} alt="Instagram icon"/></div>Instagram</div>
+                        <div><div className={styles.socialIcon}><Image src="/images/instagram.webp" height={14} width={14} alt="Instagram icon" /></div>Instagram</div>
                     </Link>
                 </div>
             </header>
