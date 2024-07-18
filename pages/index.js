@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import Date from '../components/date'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
+import { formatDate } from '../lib/date-funcs'
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData()
@@ -13,6 +13,7 @@ export async function getStaticProps() {
 }
 
 export default function Home({ allPostsData }) {
+  const currentDate = formatDate(new Date())
   return (
     <Layout home>
       <Head>
@@ -26,7 +27,7 @@ export default function Home({ allPostsData }) {
           <h1 className={utilStyles.headingLg}>Things I made</h1>
           <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
-              <Link href={`/alternate-reality-movies`}>
+              <Link href={`/alternate-reality-movies/${currentDate || ''}`}>
                 🍿 Alternate Reality Movies 🎬
               </Link>
               <br />
