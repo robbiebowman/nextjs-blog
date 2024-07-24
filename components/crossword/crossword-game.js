@@ -27,7 +27,12 @@ export default function CrosswordGame({ puzzle, clues }) {
 
     const loadProgress = useCallback(() => {
         const savedState = localStorage.getItem(`${puzzleId}-progress`);
-        return savedState ? JSON.parse(savedState) : null;
+        try {
+            return savedState ? JSON.parse(savedState) : null
+        } catch (exception) {
+            console.log(exception)
+            return null;
+        }
     }, [puzzleId]);
 
     const saveProgress = useCallback(() => {
@@ -95,11 +100,15 @@ export default function CrosswordGame({ puzzle, clues }) {
     const [activeClue, setActiveClue] = useState()
 
     useEffect(() => {
-        const savedProgress = loadProgress()
-        if (savedProgress) {
-            setGuessGrid(savedProgress)
-        } else {
-            setGuessGrid(blankGrid)
+        try {
+            const savedProgress = loadProgress()
+            if (savedProgress) {
+                setGuessGrid(savedProgress)
+            } else {
+                setGuessGrid(blankGrid)
+            }
+        } catch (e) {
+            console.log(e)
         }
     }, [puzzleId, puzzle])
 

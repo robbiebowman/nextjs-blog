@@ -40,7 +40,6 @@ export default function Cell({ letter, onClick, isHighlightedRow, isActiveCell, 
         inputMode="text"
         autoComplete="off"
         autoCorrect="off"
-        autoCapitalize="off"
         spellCheck="false"
         data-quicktypes="off"
         onChange={handleInput}

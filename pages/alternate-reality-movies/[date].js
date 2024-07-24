@@ -7,6 +7,7 @@ import TitleGameInput from '../../components/title-game/title-game-input'
 import styles from './index.module.css';
 import Layout from "../../components/layout";
 import { Info, X } from 'lucide-react';
+import Link from 'next/link'
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -34,6 +35,9 @@ export default function AlternateRealityMovies({ initialData, formattedDate }) {
 
     // Hint states
     const [hintLevel, setHintLevel] = useState(0);
+
+    const todaysDate = formatDate(new Date())
+    const isCurrentDate = formattedDate == todaysDate
 
     useEffect(() => {
         if (data) {
@@ -140,6 +144,7 @@ export default function AlternateRealityMovies({ initialData, formattedDate }) {
                         </div>
                     )}
                 </h1>
+                {isCurrentDate || <a className={styles.todayPuzzleLink} href={`/alternate-reality-movies/${todaysDate}`}>Go to today's puzzle</a>}
                 <h2>{humanReadableDate(formattedDate)}</h2>
                 {isSolved ? (
                     <div className={`${styles.resultBox} ${styles.successBox}`}>

@@ -124,16 +124,18 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
             const answer = startingCell && acrossClueLookup[startingCell?.y]?.[startingCell?.x]
             const activeClue = clues?.['across']?.[answer?.number]
-            onActiveClueChange && onActiveClueChange(activeClue)
             return activeClue
         } else {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, 0, -1)
             const answer = startingCell && downClueLookup[startingCell.y]?.[startingCell.x]
             const activeClue = clues?.['down']?.[answer?.number]
-            onActiveClueChange && onActiveClueChange(activeClue)
             return activeClue
         }
     }, [activeCell, orientation, downClueLookup, acrossClueLookup, clues, findCellBeforeBlack]);
+
+    useEffect(() => {
+        onActiveClueChange && onActiveClueChange(activeClue)
+    }, [activeClue, onActiveClueChange])
 
     const handleBackspace = useCallback(() => {
         if (guessGrid[activeCell.y][activeCell.x] === '') {
