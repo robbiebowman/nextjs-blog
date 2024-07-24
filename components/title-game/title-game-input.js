@@ -8,6 +8,7 @@ import styles from './title-game.module.css'
 export default function TitleGameInput({ solution, onSolutionFound, isSolved }) {
 
     const [guessTitle, setGuessTitle] = useState('')
+    const [inputHistory, setInputHistory] = useState('');
 
     useEffect(() => {
         if (solution) {
@@ -54,7 +55,9 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
     }
 
     const handleLetterInput = (key) => {
-        setGuessTitle((prev) => prev.replace('_', key))
+        if (key.match(/[a-zA-Z0-9]/)) {
+            setGuessTitle((prev) => prev.replace('_', key))
+        }
     };
 
     const keyPressedHandler = (event) => {
@@ -67,29 +70,49 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
             return;
         }
 
-        const key = event.key;
+        const inputKey = event.key;
 
-        if (key === 'Backspace') {
+        if (inputKey === 'Backspace') {
             event.preventDefault(); // Prevent default backspace behavior
             handleBackspace();
-        } else if (key === ' ') {
+        } else if (inputKey === ' ') {
             event.preventDefault(); // Prevent default backspace behavior
-        } else if (key.length === 1 && key.match(/[a-zA-Z0-9]/)) {
+        } else if (inputKey.length === 1) {
             event.preventDefault(); // Prevent default letter input behavior
-            handleLetterInput(key);
+            handleLetterInput(inputKey);
         }
     };
+
+    const handleInput = (e) => {
+        const currentValue = e.target.value;
+        
+        if (currentValue.length < inputHistory.length) {
+          // Backspace was pressed
+          setInputHistory(prevHistory => prevHistory.slice(0, -1));
+          handleBackspace();
+        } else if (currentValue.length > inputHistory.length) {
+          // New character was added
+          const newChar = currentValue[currentValue.length - 1];
+          setInputHistory(prevHistory => prevHistory + newChar);
+          handleLetterInput(newChar);
+        }
+      };
 
     useEffect(() => {
         const handleKeyDown = (event) => {
             keyPressedHandler(event)
         };
+        const handleInputFunc = (event) => {
+            handleInput(event)
+        };
         window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('input', handleInputFunc);
         // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('input', handleInputFunc);
         };
-    }, [keyPressedHandler]);
+    }, [keyPressedHandler, handleInput]);
 
     const titleStyle = `${styles.newTitle} ${isSolved ? styles.successTitle : ''}`
 
