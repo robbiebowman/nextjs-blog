@@ -1,0 +1,18 @@
+.periodicTable {
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  grid-gap: 2px;
+  margin: 0 auto;
+}
+
+/* Adjust the grid for the lanthanides and actinides */
+.periodicTable > div:nth-child(n+57):nth-child(-n+71),
+.periodicTable > div:nth-child(n+89):nth-child(-n+103) {
+  grid-column: auto;
+}
+
+/* Create space for lanthanides and actinides */
+.periodicTable > div:nth-child(57),
+.periodicTable > div:nth-child(89) {
+  grid-column: 3;
+}

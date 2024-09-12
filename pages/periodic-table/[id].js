@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import styles from './index.module.css';
 import useSWR from 'swr';
 import Layout from "../../components/layout";
-
+import PeriodicTable from "../../components/periodic-table/table";
 export default function CustomPeriodicTable() {
 
     const router = useRouter()
@@ -35,23 +35,13 @@ export default function CustomPeriodicTable() {
         }
     })
     return (
-        <Layout>
+        <Layout maxWidth="65rem">
             <Head>
                 <title>Periodic Table - {query}</title>
             </Head>
-            <div>
-                <h1>{query}</h1>
-                {
-                    elementDescriptions.map((element) => {
-                        return (
-                            <div key={element.id}>
-                                <h2>{element.elementName}</h2>
-                                <p>{element.answerValue}</p>
-                                <p>{element.justification}</p>
-                            </div>
-                        )
-                    })
-                }
+            <div className={styles.periodicTableContainer}>
+                <h1 className={styles.periodicTableTitle}>{query}</h1>
+                <PeriodicTable elements={elementDescriptions} />
             </div>
         </Layout>
     )

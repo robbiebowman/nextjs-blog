@@ -21,10 +21,10 @@ const emailPortionA = 'robbiebo'
 const emailPortionB = 'wman'
 const emailPortionC = '@gmail.com'
 
-export default function Layout({ children, home }) {
+export default function Layout({ children, maxWidth = '45rem' }) {
     const [showEmail, setShowEmail] = useState(false)
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{ maxWidth: maxWidth }}>
             <Head>
                 <link rel="icon" href="/images/favicon.ico" />
                 <meta
@@ -92,7 +92,6 @@ export default function Layout({ children, home }) {
                     </Link>
                 </div>
             </header>
-            <main className={styles.mainContent}>{children}</main>
         </div>
     )
 }
