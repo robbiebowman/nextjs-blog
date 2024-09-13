@@ -23,10 +23,10 @@ export default function CustomPeriodicTable() {
         onSuccess: (data, key, config) => {
             if (JSON.stringify(data) != JSON.stringify(rawPeriodicTableData)) {
                 setRawPeriodicTableData(data)
-                setRangeMin(data.rangeMin)
-                setRangeMax(data.rangeMax)
-                setCategories(data.categories)
-                setQuery(data.query)
+                setRangeMin(data.definition.rangeMin)
+                setRangeMax(data.definition.rangeMax)
+                setCategories(data.definition.categories)
+                setQuery(data.definition.query)
                 setElementDescriptions(data.description.elementDescriptions)
             }
         },
@@ -41,7 +41,13 @@ export default function CustomPeriodicTable() {
             </Head>
             <div className={styles.periodicTableContainer}>
                 <h1 className={styles.periodicTableTitle}>{query}</h1>
-                <PeriodicTable elements={elementDescriptions} />
+                <PeriodicTable
+                    query={query}
+                    rangeMin={rangeMin}
+                    rangeMax={rangeMax}
+                    categories={categories}
+                    elements={elementDescriptions}
+                />
             </div>
         </Layout>
     )

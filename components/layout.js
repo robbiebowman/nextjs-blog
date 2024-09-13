@@ -92,6 +92,7 @@ export default function Layout({ children, maxWidth = '45rem' }) {
                     </Link>
                 </div>
             </header>
+            <main className={styles.mainContent}>{children}</main>
         </div>
     )
 }
