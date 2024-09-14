@@ -9,7 +9,8 @@ const PeriodicTable = ({ query, rangeMin, rangeMax, categories, elements, onSele
         <div className={styles.periodicTable}>
             {elements.map((element) => {
                 const position = getPosition(element.atomicNumber);
-                const color = getElementColor(categories, rangeMin, rangeMax, element.answerValue);
+                const color = getElementColor(categories, rangeMin?.hexColour, rangeMax?.hexColour, rangeMax?.value, element.answerValue);
+                console.log(`Color: ${color}`)
                 return (
                     <div
                         key={element.atomicNumber}

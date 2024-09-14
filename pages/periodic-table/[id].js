@@ -39,7 +39,7 @@ export default function CustomPeriodicTable() {
         }
     })
 
-    console.log(JSON.stringify(selectedElement))
+    const elementColor = getElementColor(categories, rangeMin?.hexColour, rangeMax?.hexColour, rangeMax?.value, selectedElement?.answerValue)
 
     return (
         <Layout maxWidth="68rem">
@@ -52,13 +52,13 @@ export default function CustomPeriodicTable() {
                         <Element
                             atomicNumber={selectedElement?.atomicNumber || 0}
                             symbol={symbolLookup[selectedElement?.atomicNumber] || ""}
-                            hexColor={getElementColor(categories, rangeMin, rangeMax, selectedElement?.answerValue)}
+                            hexColor={elementColor}
                         />
                         <div className={styles.selectedElementBox}>
                             <h2>{selectedElement?.elementName ? selectedElement.elementName.charAt(0).toUpperCase() + selectedElement.elementName.slice(1).toLowerCase() : 'Click an element'}</h2>
                             <AnswerValue
                                 text={selectedElement?.answerValue || "Value"}
-                                backgroundColor={getElementColor(categories, rangeMin, rangeMax, selectedElement?.answerValue)}
+                                backgroundColor={elementColor}
                             />
                             <p className={styles.selectedElementJustification}>
                                 {selectedElement?.justification || "Click an element to see more information"}
@@ -71,7 +71,7 @@ export default function CustomPeriodicTable() {
                             {categories && categories.map((category, index) => (
                                 <AnswerValue
                                     text={category.name}
-                                    backgroundColor={getElementColor(categories, rangeMin, rangeMax, category.name)}
+                                    backgroundColor={getElementColor(categories, rangeMin?.hexColour, rangeMax?.hexColour, rangeMax?.value, category.name)}
                                 />
                             ))}
                         </div>
