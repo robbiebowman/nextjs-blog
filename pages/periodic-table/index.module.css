@@ -2,6 +2,35 @@
     padding: 2rem;
 }
 
+.infoContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.section {
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    background-color: #f8f8f8;
+}
+
+
+.legendContainer {
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: right;
+    flex-direction: column;
+}
+
 .periodicTableTitle {
     font-size: 2rem;
     font-weight: 600;
@@ -13,9 +42,6 @@
     max-width: 30rem;
     margin-bottom: 2rem;
     gap: 2rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 0.5rem;
-    padding: 1rem;  
 }
 
 .selectedElementBox {
@@ -25,17 +51,6 @@
 .selectedElementBox h2 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-}
-
-.selectedElementAnswer {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    text-align: center;
-    border: 1px solid #333;
 }
 
 .selectedElementJustification {

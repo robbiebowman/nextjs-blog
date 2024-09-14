@@ -1,0 +1,10 @@
+.selectedElementAnswer {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    border: 1px solid #333;
+}

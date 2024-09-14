@@ -7,7 +7,7 @@ import Layout from "../../components/layout";
 import PeriodicTable from "../../components/periodic-table/table";
 import Element from "../../components/periodic-table/element";
 import { symbolLookup, getElementColor, getContrastColor } from "../../lib/periodic-table";
-
+import AnswerValue from "../../components/periodic-table/answer-value";
 export default function CustomPeriodicTable() {
 
     const router = useRouter()
@@ -42,42 +42,52 @@ export default function CustomPeriodicTable() {
     console.log(JSON.stringify(selectedElement))
 
     return (
-        <Layout maxWidth="65rem">
+        <Layout maxWidth="68rem">
             <Head>
                 <title>Periodic Table - {query}</title>
             </Head>
             <div className={styles.periodicTableContainer}>
                 <h1 className={styles.periodicTableTitle}>{query}</h1>
-                <div className={styles.selectedElementContainer}>
-                    <Element
-                        atomicNumber={selectedElement?.atomicNumber || 0}
-                        symbol={symbolLookup[selectedElement?.atomicNumber] || ""}
-                        hexColor={getElementColor(categories, rangeMin, rangeMax, selectedElement?.answerValue)}
-                    />
-                    <div className={styles.selectedElementBox}>
-                        <h2>{selectedElement?.elementName ? selectedElement.elementName.charAt(0).toUpperCase() + selectedElement.elementName.slice(1).toLowerCase() : 'Click an element'}</h2>
-                        <div 
-                            className={styles.selectedElementAnswer} 
-                            style={{ 
-                                backgroundColor: getElementColor(categories, rangeMin, rangeMax, selectedElement?.answerValue),
-                                color: selectedElement ? getContrastColor(getElementColor(categories, rangeMin, rangeMax, selectedElement.answerValue)) : 'inherit'
-                            }}
-                        >
-                            {selectedElement?.answerValue || 'Value'}
+                <div className={styles.infoContainer}>
+                    <div className={styles.selectedElementContainer + " " + styles.section}>
+                        <Element
+                            atomicNumber={selectedElement?.atomicNumber || 0}
+                            symbol={symbolLookup[selectedElement?.atomicNumber] || ""}
+                            hexColor={getElementColor(categories, rangeMin, rangeMax, selectedElement?.answerValue)}
+                        />
+                        <div className={styles.selectedElementBox}>
+                            <h2>{selectedElement?.elementName ? selectedElement.elementName.charAt(0).toUpperCase() + selectedElement.elementName.slice(1).toLowerCase() : 'Click an element'}</h2>
+                            <AnswerValue
+                                text={selectedElement?.answerValue || "Value"}
+                                backgroundColor={getElementColor(categories, rangeMin, rangeMax, selectedElement?.answerValue)}
+                            />
+                            <p className={styles.selectedElementJustification}>
+                                {selectedElement?.justification || "Click an element to see more information"}
+                            </p>
                         </div>
-                        <p className={styles.selectedElementJustification}>
-                            {selectedElement?.justification || "Click an element to see more information"}
-                        </p>
+                    </div>
+                    <div className={styles.legendContainer + " " + styles.section}>
+                        <h2>Legend</h2>
+                        <div className={styles.legend}>
+                            {categories && categories.map((category, index) => (
+                                <AnswerValue
+                                    text={category.name}
+                                    backgroundColor={getElementColor(categories, rangeMin, rangeMax, category.name)}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
-                <PeriodicTable
-                    query={query}
+                <div className={styles.section}>
+                    <PeriodicTable
+                        query={query}
                     rangeMin={rangeMin}
                     rangeMax={rangeMax}
                     categories={categories}
                     elements={elementDescriptions}
                     onSelect={setSelectedElement}
-                />
+                    />
+                </div>
             </div>
         </Layout>
     )
