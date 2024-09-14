@@ -47,7 +47,6 @@ export default function CustomPeriodicTable() {
                 <title>Periodic Table - {query}</title>
             </Head>
             <div className={styles.periodicTableContainer}>
-                <h1 className={styles.periodicTableTitle}>{query}</h1>
                 <div className={styles.infoContainer}>
                     <div className={styles.selectedElementContainer + " " + styles.section}>
                         <Element
@@ -78,6 +77,7 @@ export default function CustomPeriodicTable() {
                         </div>
                     </div>
                 </div>
+                <h1 className={styles.periodicTableTitle}>{query}</h1>
                 <div className={styles.section}>
                     <PeriodicTable
                         query={query}
