@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0.2125rem; 
+  padding: 0.2125rem;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }

@@ -79,6 +79,7 @@ export default function CustomPeriodicTable() {
                     rangeMax={rangeMax}
                     categories={categories}
                     elements={elementDescriptions}
+                    selectedElement={selectedElement}
                     onSelect={setSelectedElement}
                 />
             </div>

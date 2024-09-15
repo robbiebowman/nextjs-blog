@@ -16,3 +16,14 @@
 .periodicTable > div:nth-child(89) {
   grid-column: 3;
 }
+
+.selectedElement {
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0;
+  padding: 0;
+  z-index: 100;
+  box-shadow: 0 0 1rem 0.1rem rgba(0, 0, 0, 0.45);
+  font-weight: bold;
+}
+
