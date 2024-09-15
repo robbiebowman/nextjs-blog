@@ -1,10 +1,10 @@
 import styles from './legend.module.css';
+import AnswerValue from './answer-value';
+import { getElementColor } from '../../lib/periodic-table';
 
-export const Legend = ({ }) => {
+export default function Legend({ categories, rangeMin, rangeMax }) {
 
-
-
-    return (<div className={styles.legendContainer + " " + styles.section}>
+    return (<div className={styles.container}>
         <h2>Legend</h2>
         <div className={styles.legend}>
             {categories && categories.map((category, index) => (

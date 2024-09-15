@@ -8,6 +8,8 @@ import PeriodicTable from "../../components/periodic-table/table";
 import Element from "../../components/periodic-table/element";
 import { symbolLookup, getElementColor, getContrastColor } from "../../lib/periodic-table";
 import AnswerValue from "../../components/periodic-table/answer-value";
+import Legend from "../../components/periodic-table/legend";
+
 export default function CustomPeriodicTable() {
 
     const router = useRouter()
@@ -65,31 +67,23 @@ export default function CustomPeriodicTable() {
                             </p>
                         </div>
                     </div>
-                    <div className={styles.legendContainer + " " + styles.section}>
-                        <h2>Legend</h2>
-                        <div className={styles.legend}>
-                            {categories && categories.map((category, index) => (
-                                <AnswerValue
-                                    text={category.name}
-                                    backgroundColor={getElementColor(categories, rangeMin?.hexColour, rangeMax?.hexColour, rangeMax?.value, category.name)}
-                                />
-                            ))}
-                        </div>
+                    <div className={styles.section}>
+                        <Legend categories={categories} rangeMin={rangeMin} rangeMax={rangeMax} />
                     </div>
-                </div>
-                <h1 className={styles.periodicTableTitle}>{query}</h1>
-                <div className={styles.section}>
-                    <PeriodicTable
-                        query={query}
+            </div>
+            <h1 className={styles.periodicTableTitle}>{query}</h1>
+            <div className={styles.section}>
+                <PeriodicTable
+                    query={query}
                     rangeMin={rangeMin}
                     rangeMax={rangeMax}
                     categories={categories}
                     elements={elementDescriptions}
                     onSelect={setSelectedElement}
-                    />
-                </div>
+                />
             </div>
-        </Layout>
+        </div>
+        </Layout >
     )
 
 }

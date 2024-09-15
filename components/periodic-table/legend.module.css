@@ -1,0 +1,13 @@
+
+
+.container {
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: right;
+    flex-direction: column;
+}
