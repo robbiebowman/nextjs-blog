@@ -39,16 +39,6 @@ export default function Home({ allPostsData }) {
               </small>
             </li>
             <li className={utilStyles.listItem}>
-              <Link href={`/crossword/creator`}>
-                🦾 Mini Crossword Creator ✍️
-              </Link>
-              <br />
-              <small className={utilStyles.lightText}>
-                Use the crossword creator algorithm to create and share your own crosswords.
-                <br/>Write your own clues or have ones generated for you!
-              </small>
-            </li>
-            <li className={utilStyles.listItem}>
               <Link href={`/crossword/daily`}>
                 📰 Daily Mini Crossword 🗞️
               </Link>
@@ -59,6 +49,8 @@ export default function Home({ allPostsData }) {
                 <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/MiniCrosswordController.kt">LLM prompting code.</Link>
                 <br/>
                 <Link href="https://github.com/robbiebowman/mini-crossword-maker">Crossword algorithm library.</Link>
+                <br/>
+                You can also <Link href={`/crossword/creator`}>create and share your own crosswords</Link> using the same algorithm!
               </small>
             </li>
             <li className={utilStyles.listItem}>

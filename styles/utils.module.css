@@ -50,6 +50,13 @@
 
 .listItem {
   margin: 0 0 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .lightText {
