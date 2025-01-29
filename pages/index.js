@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import Layout, { siteTitle } from '../components/layout'
+import Image from "next/image";
 import utilStyles from '../styles/utils.module.css'
 import { getSortedPostsData } from '../lib/posts'
 import { formatDate } from '../lib/date-funcs'
@@ -24,17 +25,48 @@ export default function Home({ allPostsData }) {
           <p>I write code for fun. It's also my job.</p>
         </section>
         <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-          <h1 className={utilStyles.headingLg}>Things I made</h1>
+          <h1 className={utilStyles.headingLg}>Weekend Projects</h1>
           <ul className={utilStyles.list}>
+            <li className={utilStyles.listItem}>
+              <Link href={`/sound-out`}>
+                🔊 Sound Out - Smart Tab Audio Manager 🔇
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                A browser extension that automatically manages audio across your tabs.
+                <br/>
+                <a href="https://addons.mozilla.org/firefox/addon/sound-out" className={utilStyles.storeButton}>
+                  <Image
+                    src="/images/firefox.png"
+                    width={16}
+                    height={16}
+                    alt="Firefox"
+                    className={utilStyles.storeIcon}
+                  />
+                  Firefox
+                </a>
+                <a href="https://chromewebstore.google.com/detail/sound-out/emgjfabfplbjfndkgodlkfhnajagobme" className={utilStyles.storeButton}>
+                  <Image
+                    src="/images/chrome.png"
+                    width={16}
+                    height={16}
+                    alt="Chrome"
+                    className={utilStyles.storeIcon}
+                  />
+                  Chrome
+                </a>
+                <Link href="https://github.com/robbiebowman/sound-out">Source code</Link>
+              </small>
+            </li>
             <li className={utilStyles.listItem}>
               <Link href={`/alternate-reality-movies/${currentDate || ''}`}>
                 🍿 Alternate Reality Movies 🎬
               </Link>
               <br />
               <small className={utilStyles.lightText}>
-                By changing just 1 letter in a movie title, we end up with an entirely new plot. 
+                By changing just 1 letter in a movie title, we end up with an entirely new plot.
                 Try to guess the new title based on the blurb!
-                <br/>
+                <br />
                 <Link href="https://github.com/robbiebowman/title-game">Source code</Link>
               </small>
             </li>
@@ -45,11 +77,11 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 A daily mini crossword game with clever LLM generated clues.
-                <br/>
+                <br />
                 <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/MiniCrosswordController.kt">LLM prompting code.</Link>
-                <br/>
+                <br />
                 <Link href="https://github.com/robbiebowman/mini-crossword-maker">Crossword algorithm library.</Link>
-                <br/>
+                <br />
                 You can also <Link href={`/crossword/creator`}>create and share your own crosswords</Link> using the same algorithm!
               </small>
             </li>
@@ -60,7 +92,7 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 Uses GPT to summarise all the messages you've missed in a Slack channel.
-                <br/>
+                <br />
                 <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/service/SlackSummaryService.kt">Source code.</Link>
               </small>
             </li>
@@ -71,7 +103,7 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 Suggests words based on how many remaining possibilities they'll exclude.
-                <br/>
+                <br />
                 <Link href="https://github.com/robbiebowman/WordleSolver">Library source code.</Link>
               </small>
             </li>
@@ -82,9 +114,9 @@ export default function Home({ allPostsData }) {
               <br />
               <small className={utilStyles.lightText}>
                 Can you tell which side Stockfish favours?
-                <br/>
+                <br />
                 <Link href="https://github.com/robbiebowman/nextjs-blog/tree/main/components/chess">Front end source code.</Link>
-                </small>
+              </small>
             </li>
           </ul>
         </section>
