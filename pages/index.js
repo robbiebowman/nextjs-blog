@@ -28,6 +28,17 @@ export default function Home({ allPostsData }) {
           <h1 className={utilStyles.headingLg}>Weekend Projects</h1>
           <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
+              <Link href="https://www.taxonomystery.com">
+                🧩 The Daily Taxonomystery 🔍
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                Can you identify Wikipedia articles from their categories? A daily puzzle that challenges your knowledge and deductive reasoning.
+                <br />
+                <Link href="https://github.com/robbiebowman/taxonomystery">Source code</Link>
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
               <Link href={`/sound-out`}>
                 🔊 Sound Out - Smart Tab Audio Manager 🔇
               </Link>
