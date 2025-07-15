@@ -33,6 +33,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>July 2025</span>
+                <br />
                 Can you identify Wikipedia articles from their categories? A daily puzzle that challenges your knowledge and deductive reasoning.
                 <br />
                 <Link href="https://github.com/robbiebowman/taxonomystery">Source code</Link>
@@ -44,6 +46,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>January 2025</span>
+                <br />
                 A browser extension that automatically manages audio across your tabs.
                 <br/>
                 <a href="https://addons.mozilla.org/firefox/addon/sound-out" className={utilStyles.storeButton}>
@@ -75,6 +79,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>July 2024</span>
+                <br />
                 By changing just 1 letter in a movie title, we end up with an entirely new plot.
                 Try to guess the new title based on the blurb!
                 <br />
@@ -87,6 +93,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>May 2024</span>
+                <br />
                 A daily mini crossword game with clever LLM generated clues.
                 <br />
                 <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/MiniCrosswordController.kt">LLM prompting code.</Link>
@@ -102,6 +110,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>April 2023</span>
+                <br />
                 Uses GPT to summarise all the messages you've missed in a Slack channel.
                 <br />
                 <Link href="https://github.com/robbiebowman/personal-api/blob/master/src/main/kotlin/com/robbiebowman/personalapi/service/SlackSummaryService.kt">Source code.</Link>
@@ -113,6 +123,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>February 2022</span>
+                <br />
                 Suggests words based on how many remaining possibilities they'll exclude.
                 <br />
                 <Link href="https://github.com/robbiebowman/WordleSolver">Library source code.</Link>
@@ -124,6 +136,8 @@ export default function Home({ allPostsData }) {
               </Link>
               <br />
               <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>February 2022</span>
+                <br />
                 Can you tell which side Stockfish favours?
                 <br />
                 <Link href="https://github.com/robbiebowman/nextjs-blog/tree/main/components/chess">Front end source code.</Link>
