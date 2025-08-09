@@ -28,6 +28,39 @@ export default function Home({ allPostsData }) {
           <h1 className={utilStyles.headingLg}>Weekend Projects</h1>
           <ul className={utilStyles.list}>
             <li className={utilStyles.listItem}>
+              <Link href={`/full-tab`}>
+                📺 Full Tab - Video & Iframe Maximizer 🖥️
+              </Link>
+              <br />
+              <small className={utilStyles.lightText}>
+                <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>August 2025</span>
+                <br />
+                Toggle videos or iframes to fill the entire browser tab with pixel-perfect fit.
+                <br/>
+                <a href="https://addons.mozilla.org/en-US/firefox/addon/full-tab/" className={utilStyles.storeButton}>
+                  <Image
+                    src="/images/firefox.png"
+                    width={16}
+                    height={16}
+                    alt="Firefox"
+                    className={utilStyles.storeIcon}
+                  />
+                  Firefox
+                </a>
+                <a href="https://chromewebstore.google.com/detail/full-tab/dhkcndahfmecapcghdcegojdpnadbkgp" className={utilStyles.storeButton}>
+                  <Image
+                    src="/images/chrome.png"
+                    width={16}
+                    height={16}
+                    alt="Chrome"
+                    className={utilStyles.storeIcon}
+                  />
+                  Chrome
+                </a>
+                <Link href="https://github.com/robbiebowman/full-tab">Source code</Link>
+              </small>
+            </li>
+            <li className={utilStyles.listItem}>
               <Link href="https://www.taxonomystery.com">
                 🧩 The Daily Taxonomystery 🔍
               </Link>
