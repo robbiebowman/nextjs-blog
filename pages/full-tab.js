@@ -23,7 +23,7 @@ export default function FullTab() {
                     </div>
                     <div className={styles.slackBotDescBox}>
                         <h1>Full Tab</h1>
-                        <p>A browser extension that toggles videos or iframes to fill the entire browser tab with pixel-perfect fit.</p>
+                        <p>A browser extension that toggles videos or iframes to fill the entire browser tab.</p>
                         <div style={{ display: 'flex', gap: '1rem' }}>
                             <a href="https://addons.mozilla.org/en-US/firefox/addon/full-tab/" className={styles.installButton}>
                                 Install for Firefox
@@ -42,9 +42,19 @@ export default function FullTab() {
                 </p>
                 
                 <p>
-                    Perfect for YouTube, embedded videos, or any site with iframes. Videos maintain their aspect 
+                    Great for YouTube, embedded videos, or any site with iframes. Videos maintain their aspect 
                     ratio for a clean viewing experience.
                 </p>
+
+                <div style={{ margin: '2rem 0', textAlign: 'center' }}>
+                    <Image
+                        src="/images/screenshot-full-tab.png"
+                        alt="Full Tab extension screenshot showing video maximized to fill browser tab"
+                        width={640}
+                        height={400}
+                        style={{ border: '1px solid #ddd', borderRadius: '8px' }}
+                    />
+                </div>
 
                 <h2>Source Code</h2>
                 <p>
