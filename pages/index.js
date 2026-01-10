@@ -107,7 +107,7 @@ export default function Home({ allPostsData }) {
               </small>
             </li>
             <li className={utilStyles.listItem}>
-              <Link href={`/alternate-reality-movies/${currentDate || ''}`}>
+              <Link href={`/alternate-reality-movies`}>
                 🍿 Alternate Reality Movies 🎬
               </Link>
               <br />

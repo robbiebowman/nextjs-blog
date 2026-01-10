@@ -1,5 +1,4 @@
 import Head from "next/head";
-import useSWR from 'swr';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router'
 import { formatDate, humanReadableDate } from '../../lib/date-funcs'
@@ -176,10 +175,9 @@ export default function AlternateRealityMovies({ initialData, formattedDate }) {
     )
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
     const { date } = context.params;
 
-    // Fetch data from your API
     const res = await fetch(`https://rjb-personal-api.azurewebsites.net/title-game?date=${date}`);
     const initialData = await res.json();
 
@@ -188,5 +186,13 @@ export async function getServerSideProps(context) {
             initialData,
             formattedDate: date,
         },
+        revalidate: 60 * 60 * 24,
+    }
+}
+
+export async function getStaticPaths() {
+    return {
+        paths: [],
+        fallback: 'blocking',
     }
 }
