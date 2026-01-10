@@ -1,4 +1,4 @@
-import { act, useCallback, useEffect, useState, useMemo } from 'react'
+import { act, useCallback, useEffect, useState, useMemo, useRef } from 'react'
 import styles from './crossword.module.css'
 import Cell from './cell/cell';
 import { getPuzzleId } from './utils';
@@ -37,16 +37,25 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
 
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
+    const [inputHistory, setInputHistory] = useState('')
+    const inputRef = useRef(null)
+
+    const focusInput = useCallback(() => {
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
+    }, [])
 
     const createCellCallback = useCallback((x, y) => {
         return () => {
+            focusInput()
             if (x == activeCell.x && y == activeCell.y) {
                 setOrientation(orientation == 'horizontal' ? 'vertical' : 'horizontal');
             }
             const newActiveCell = { x: x, y: y }
             setActiveCell(newActiveCell)
         }
-    }, [guessGrid, orientation, activeCell])
+    }, [guessGrid, orientation, activeCell, focusInput])
 
     const findNextCell = useCallback((x, y, dx, dy, skipLetters = false, wrap = false) => {
         if (!guessGrid) return null;
@@ -168,6 +177,21 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
         });
     }, [activeCell, orientation, findNextCell]);
 
+    const handleInput = useCallback((event) => {
+        const currentValue = event.target.value || ''
+
+        if (currentValue.length < inputHistory.length) {
+            setInputHistory(currentValue)
+            handleBackspace()
+        } else if (currentValue.length > inputHistory.length) {
+            const newChar = currentValue[currentValue.length - 1]
+            setInputHistory(currentValue)
+            if (newChar && newChar.match(/[a-zA-Z]/)) {
+                handleLetterInput(newChar.toLowerCase())
+            }
+        }
+    }, [inputHistory, handleBackspace, handleLetterInput])
+
     const handleArrowKey = useCallback((key) => {
         const { x, y } = activeCell;
         let dx = 0, dy = 0;
@@ -218,17 +242,6 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
         
     }, [disabled, isEditMode, handleBackspace, handleLetterInput, handleArrowKey]);
 
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            keyPressedHandler(event)
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        // Cleanup the event listener on component unmount
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [keyPressedHandler]);
-
     const clueCells = useMemo(() => {
         if (!activeClue) return
         let x = activeClue.x
@@ -265,6 +278,19 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
 
     return (
         <div className={styles.crosswordBox}>
+            <input
+                ref={inputRef}
+                style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+                type="text"
+                inputMode="text"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                data-quicktypes="off"
+                onKeyDown={keyPressedHandler}
+                onInput={handleInput}
+            />
             {guessGrid && guessGrid.map((row, y) => (
                 <div key={`${y}-row`} className={styles.crosswordRow}>
                     {row.map((char, x) => {

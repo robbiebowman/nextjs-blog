@@ -98,6 +98,8 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
         }
       };
 
+    const titleStyle = `${styles.newTitle} ${isSolved ? styles.successTitle : ''}`
+
     useEffect(() => {
         const handleKeyDown = (event) => {
             keyPressedHandler(event)
@@ -113,8 +115,6 @@ export default function TitleGameInput({ solution, onSolutionFound, isSolved }) 
             window.removeEventListener('input', handleInputFunc);
         };
     }, [keyPressedHandler, handleInput]);
-
-    const titleStyle = `${styles.newTitle} ${isSolved ? styles.successTitle : ''}`
 
     return (
         <>
