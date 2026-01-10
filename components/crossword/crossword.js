@@ -252,6 +252,21 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
         
     }, [disabled, isEditMode, handleBackspace, handleLetterInput, handleArrowKey]);
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            keyPressedHandler(event)
+        }
+        const handleInputFunc = (event) => {
+            handleInput(event)
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        window.addEventListener('input', handleInputFunc)
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+            window.removeEventListener('input', handleInputFunc)
+        }
+    }, [keyPressedHandler, handleInput])
+
     const clueCells = useMemo(() => {
         if (!activeClue) return
         let x = activeClue.x
@@ -298,8 +313,6 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
                 autoCapitalize="off"
                 spellCheck="false"
                 data-quicktypes="off"
-                onKeyDown={keyPressedHandler}
-                onInput={handleInput}
             />
             {guessGrid && guessGrid.map((row, y) => (
                 <div key={`${y}-row`} className={styles.crosswordRow}>
