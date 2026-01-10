@@ -38,6 +38,7 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
     const inputRef = useRef(null)
+    const inputHistoryRef = useRef('')
 
     const focusInput = useCallback(() => {
         if (inputRef.current) {
@@ -177,18 +178,27 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
     }, [activeCell, orientation, findNextCell]);
 
     const handleInput = useCallback((event) => {
-        const nativeEvent = event.nativeEvent || {}
-        const inputType = nativeEvent.inputType || ''
-        const data = nativeEvent.data || ''
+        const currentValue = event.target.value || ''
+        const previousValue = inputHistoryRef.current
 
-        if (inputType === 'deleteContentBackward') {
-            handleBackspace()
-        } else if (data && data.match(/[a-zA-Z]/)) {
-            handleLetterInput(data.toLowerCase())
+        if (currentValue.length < previousValue.length) {
+            const deleteCount = previousValue.length - currentValue.length
+            for (let i = 0; i < deleteCount; i++) {
+                handleBackspace()
+            }
+        } else if (currentValue.length > previousValue.length) {
+            const added = currentValue.slice(previousValue.length)
+            for (const char of added) {
+                if (char.match(/[a-zA-Z]/)) {
+                    handleLetterInput(char.toLowerCase())
+                }
+            }
         }
 
-        if (event.target && event.target.value !== '') {
+        inputHistoryRef.current = currentValue
+        if (event.target && currentValue !== '') {
             event.target.value = ''
+            inputHistoryRef.current = ''
         }
     }, [handleBackspace, handleLetterInput])
 
