@@ -37,7 +37,6 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
 
     const [orientation, setOrientation] = useState('horizontal')
     const [activeCell, setActiveCell] = useState({ x: 0, y: 0 })
-    const [inputHistory, setInputHistory] = useState('')
     const inputRef = useRef(null)
 
     const focusInput = useCallback(() => {
@@ -178,19 +177,20 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
     }, [activeCell, orientation, findNextCell]);
 
     const handleInput = useCallback((event) => {
-        const currentValue = event.target.value || ''
+        const nativeEvent = event.nativeEvent || {}
+        const inputType = nativeEvent.inputType || ''
+        const data = nativeEvent.data || ''
 
-        if (currentValue.length < inputHistory.length) {
-            setInputHistory(currentValue)
+        if (inputType === 'deleteContentBackward') {
             handleBackspace()
-        } else if (currentValue.length > inputHistory.length) {
-            const newChar = currentValue[currentValue.length - 1]
-            setInputHistory(currentValue)
-            if (newChar && newChar.match(/[a-zA-Z]/)) {
-                handleLetterInput(newChar.toLowerCase())
-            }
+        } else if (data && data.match(/[a-zA-Z]/)) {
+            handleLetterInput(data.toLowerCase())
         }
-    }, [inputHistory, handleBackspace, handleLetterInput])
+
+        if (event.target && event.target.value !== '') {
+            event.target.value = ''
+        }
+    }, [handleBackspace, handleLetterInput])
 
     const handleArrowKey = useCallback((key) => {
         const { x, y } = activeCell;
