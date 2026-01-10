@@ -128,6 +128,36 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
         }
     }, [guessGrid]);
 
+    const findFirstEmptyInNextLine = useCallback((x, y) => {
+        if (!guessGrid) return { x, y };
+        const gridHeight = guessGrid.length;
+        const gridWidth = guessGrid[0].length;
+
+        if (orientation === 'horizontal') {
+            for (let offset = 1; offset <= gridHeight; offset++) {
+                const rowIndex = (y + offset) % gridHeight;
+                for (let colIndex = 0; colIndex < gridWidth; colIndex++) {
+                    const char = guessGrid[rowIndex][colIndex];
+                    if (char !== '#' && (char < 'a' || char > 'z')) {
+                        return { x: colIndex, y: rowIndex };
+                    }
+                }
+            }
+        } else {
+            for (let offset = 1; offset <= gridWidth; offset++) {
+                const colIndex = (x + offset) % gridWidth;
+                for (let rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+                    const char = guessGrid[rowIndex][colIndex];
+                    if (char !== '#' && (char < 'a' || char > 'z')) {
+                        return { x: colIndex, y: rowIndex };
+                    }
+                }
+            }
+        }
+
+        return { x, y };
+    }, [guessGrid, orientation]);
+
     const activeClue = useMemo(() => {
         if (orientation == 'horizontal') {
             const startingCell = findCellBeforeBlack(activeCell.x, activeCell.y, -1, 0)
@@ -242,6 +272,13 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
         if (key === 'Backspace') {
             event.preventDefault(); // Prevent default backspace behavior
             handleBackspace();
+        } else if (key === 'Tab') {
+            event.preventDefault();
+            setOrientation((prev) => prev === 'horizontal' ? 'vertical' : 'horizontal');
+        } else if (key === 'Enter') {
+            event.preventDefault();
+            const newCell = findFirstEmptyInNextLine(activeCell.x, activeCell.y);
+            setActiveCell(newCell);
         } else if (key.length === 1 && key.match(/[a-zA-Z]/)) {
             event.preventDefault(); // Prevent default letter input behavior
             handleLetterInput(key.toLowerCase());
@@ -250,7 +287,7 @@ export default function Crossword({ puzzle, clues, guessGrid, setGuessGrid, sele
             handleArrowKey(key);
         }
         
-    }, [disabled, isEditMode, handleBackspace, handleLetterInput, handleArrowKey]);
+    }, [disabled, isEditMode, handleBackspace, handleLetterInput, handleArrowKey, findFirstEmptyInNextLine]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
