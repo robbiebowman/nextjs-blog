@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test lib/one-shot-wordle.test.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
