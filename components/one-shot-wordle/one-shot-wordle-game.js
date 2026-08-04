@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { deserializePuzzles } from '../../lib/one-shot-wordle-puzzles'
 import styles from './one-shot-wordle-game.module.css'
 
 const STATE_NAMES = ['absent', 'present elsewhere', 'correct position']
@@ -28,7 +29,7 @@ function getMillisecondsUntilTomorrow() {
 
 export default function OneShotWordleGame({
   answerCount,
-  puzzles,
+  serializedPuzzles,
   validWords,
 }) {
   const [puzzleIndex, setPuzzleIndex] = useState(null)
@@ -38,6 +39,10 @@ export default function OneShotWordleGame({
   const [messageType, setMessageType] = useState('neutral')
   const [isSolved, setIsSolved] = useState(false)
   const inputRef = useRef(null)
+  const puzzles = useMemo(
+    () => deserializePuzzles(serializedPuzzles),
+    [serializedPuzzles]
+  )
   const validWordSet = useMemo(() => new Set(validWords.split(',')), [validWords])
   const puzzle = puzzleIndex === null ? null : puzzles[puzzleIndex]
 
@@ -190,8 +195,8 @@ export default function OneShotWordleGame({
       <footer className={styles.gameFooter}>
         <span>{validWordSet.size.toLocaleString()} clue words</span>
         <span>{answerCount.toLocaleString()} familiar answers</span>
-        <span>At most 2 greens</span>
-        <span>At most 3 highlights</span>
+        <span>{puzzles.length.toLocaleString()} daily puzzles</span>
+        <span>At most 2 highlights</span>
       </footer>
     </div>
   )

@@ -4,7 +4,8 @@ import path from 'path'
 import Layout from '../components/layout'
 import OneShotWordleGame from '../components/one-shot-wordle/one-shot-wordle-game'
 import { WordleGameSelector } from '../components/game-selector/game-selector'
-import { buildPuzzlePool, parseWords } from '../lib/one-shot-wordle'
+import { parseWords } from '../lib/one-shot-wordle'
+import { serializePuzzles } from '../lib/one-shot-wordle-puzzles'
 
 export async function getStaticProps() {
   const dataDirectory = path.join(process.cwd(), 'data', 'one-shot-wordle')
@@ -15,7 +16,9 @@ export async function getStaticProps() {
     fs.readFileSync(path.join(dataDirectory, 'allowed-guesses.txt'), 'utf8')
   )
   const validWords = [...new Set([...answerWords, ...additionalGuesses])]
-  const puzzles = buildPuzzlePool(validWords, answerWords)
+  const { puzzles } = JSON.parse(
+    fs.readFileSync(path.join(dataDirectory, 'puzzles.json'), 'utf8')
+  )
 
   if (puzzles.length === 0) {
     throw new Error('No qualifying One-Shot Wordle puzzles were generated.')
@@ -24,7 +27,7 @@ export async function getStaticProps() {
   return {
     props: {
       answerCount: answerWords.length,
-      puzzles,
+      serializedPuzzles: serializePuzzles(puzzles),
       validWords: validWords.join(','),
     },
   }

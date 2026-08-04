@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test lib/one-shot-wordle.test.js"
+    "test": "node --test lib/one-shot-wordle.test.js",
+    "generate:one-shot-wordle": "node scripts/generate-one-shot-wordle-puzzles.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.3.0",
