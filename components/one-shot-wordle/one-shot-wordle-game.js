@@ -114,18 +114,12 @@ export default function OneShotWordleGame({
     <div className={styles.game}>
       <header className={styles.gameHeader}>
         <div>
-          <p className={styles.kicker}>Daily puzzle. One clue. One answer.</p>
           <h1>One-Shot Wordle</h1>
         </div>
       </header>
 
       {puzzle ? (
-        <section className={styles.playArea} aria-labelledby="clue-heading">
-          <div className={styles.clueHeadingRow}>
-            <h2 id="clue-heading">Given clue</h2>
-            <span className={styles.uniqueBadge}>1 possible answer</span>
-          </div>
-
+        <section className={styles.playArea} aria-label="Given clue">
           <div
             aria-label={`${puzzle.clue.toUpperCase()} Wordle clue`}
             className={styles.tiles}
@@ -140,12 +134,6 @@ export default function OneShotWordleGame({
                 {letter}
               </div>
             ))}
-          </div>
-
-          <div className={styles.legend} aria-label="Clue color key">
-            <span><i className={styles.correctSwatch} />Correct spot</span>
-            <span><i className={styles.presentSwatch} />Wrong spot</span>
-            <span><i className={styles.absentSwatch} />Not in word</span>
           </div>
 
           <form className={styles.answerForm} onSubmit={handleSubmit}>
