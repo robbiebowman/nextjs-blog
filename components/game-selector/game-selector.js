@@ -26,7 +26,10 @@ export function WordleGameSelector({
     selectedTitle
 }) {
     return GameSelector({
-        tabs: [{ title: "Solver", link: "/wordle" }],
+        tabs: [
+            { title: "Solver", link: "/wordle" },
+            { title: "One Shot", link: "/one-shot-wordle" },
+        ],
         selectedTitle
     })
 }

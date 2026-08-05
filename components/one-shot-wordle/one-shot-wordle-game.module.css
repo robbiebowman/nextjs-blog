@@ -1,0 +1,292 @@
+.game {
+  --ink: #202124;
+  --muted: #66706a;
+  --line: #d9dedb;
+  --surface: #f6f8f6;
+  --green: #538d4e;
+  --yellow: #b59f3b;
+  --gray: #656968;
+  --red: #a63d32;
+  color: var(--ink);
+  margin: 0 auto;
+  max-width: 40rem;
+  padding: 0 1.5rem;
+}
+
+.gameHeader {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  padding: 0.25rem 0 1.25rem;
+}
+
+.gameHeader h1 {
+  font-size: 2.35rem;
+  letter-spacing: 0;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.kicker {
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.answerRow input:focus-visible,
+.answerRow button:focus-visible {
+  outline: 3px solid #3077c9;
+  outline-offset: 2px;
+}
+
+.playArea {
+  padding: 1.5rem 0 1.25rem;
+}
+
+.clueHeadingRow {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.clueHeadingRow h2 {
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.uniqueBadge {
+  background: #e6f0e4;
+  border-radius: 999px;
+  color: #356a31;
+  font-size: 0.76rem;
+  font-weight: 750;
+  padding: 0.3rem 0.55rem;
+}
+
+.tiles {
+  display: grid;
+  gap: clamp(0.35rem, 1.7vw, 0.55rem);
+  grid-template-columns: repeat(5, minmax(0, 4.25rem));
+  justify-content: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.tile {
+  align-items: center;
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  color: #fff;
+  display: flex;
+  font-size: 2.25rem;
+  font-weight: 800;
+  justify-content: center;
+  line-height: 1;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.correct {
+  background: var(--green);
+}
+
+.present {
+  background: var(--yellow);
+}
+
+.absent {
+  background: var(--gray);
+}
+
+.legend {
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  gap: 0.45rem 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.legend span {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.legend i {
+  border-radius: 2px;
+  display: block;
+  height: 0.65rem;
+  width: 0.65rem;
+}
+
+.correctSwatch {
+  background: var(--green);
+}
+
+.presentSwatch {
+  background: var(--yellow);
+}
+
+.absentSwatch {
+  background: var(--gray);
+}
+
+.answerForm {
+  margin: 0 auto;
+  max-width: 28rem;
+}
+
+.answerForm label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 750;
+  margin-bottom: 0.5rem;
+}
+
+.answerRow {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.answerRow input {
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  flex: 1;
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  min-width: 0;
+  padding: 0.75rem 0.9rem;
+  text-transform: uppercase;
+}
+
+.answerRow input:disabled {
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.answerRow button {
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+  gap: 0.4rem;
+  justify-content: center;
+  min-height: 2.9rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.answerRow button {
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  color: #fff;
+}
+
+.answerRow button:hover:not(:disabled) {
+  background: #3b3e42;
+}
+
+.answerRow button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.message {
+  font-size: 0.88rem;
+  font-weight: 650;
+  margin: 0.8rem 0;
+  min-height: 1.25rem;
+  text-align: center;
+}
+
+.success {
+  color: var(--green);
+}
+
+.error {
+  color: var(--red);
+}
+
+.neutral {
+  color: var(--muted);
+}
+
+.answerReveal {
+  align-items: baseline;
+  background: var(--surface);
+  border-left: 4px solid var(--green);
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 1rem;
+  max-width: 28rem;
+  padding: 0.75rem 0.9rem;
+}
+
+.answerReveal span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.answerReveal strong {
+  letter-spacing: 0;
+}
+
+.loading {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  justify-content: center;
+  min-height: 28rem;
+}
+
+.gameFooter {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  gap: 0.4rem 1rem;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+@media (max-width: 34rem) {
+  .game {
+    padding: 0 1rem;
+  }
+
+  .gameHeader h1 {
+    font-size: 1.75rem;
+  }
+
+  .tile {
+    font-size: 1.8rem;
+  }
+
+  .playArea {
+    padding-top: 1.25rem;
+  }
+
+  .answerRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .answerRow button {
+    width: 100%;
+  }
+}
