@@ -31,6 +31,7 @@ export default function OneShotWordleGame({
   answerCount,
   serializedPuzzles,
   validWords,
+  answers,
 }) {
   const [puzzleIndex, setPuzzleIndex] = useState(null)
   const [entry, setEntry] = useState('')
@@ -44,6 +45,7 @@ export default function OneShotWordleGame({
     [serializedPuzzles]
   )
   const validWordSet = useMemo(() => new Set(validWords.split(',')), [validWords])
+  const answerSet = useMemo(() => new Set(answers?.split(',') || []), [answers])
   const puzzle = puzzleIndex === null ? null : puzzles[puzzleIndex]
 
   useEffect(() => {
@@ -114,18 +116,12 @@ export default function OneShotWordleGame({
     <div className={styles.game}>
       <header className={styles.gameHeader}>
         <div>
-          <p className={styles.kicker}>Daily puzzle. One clue. One answer.</p>
           <h1>One-Shot Wordle</h1>
         </div>
       </header>
 
       {puzzle ? (
-        <section className={styles.playArea} aria-labelledby="clue-heading">
-          <div className={styles.clueHeadingRow}>
-            <h2 id="clue-heading">Given clue</h2>
-            <span className={styles.uniqueBadge}>1 possible answer</span>
-          </div>
-
+        <section className={styles.playArea} aria-label="Given clue">
           <div
             aria-label={`${puzzle.clue.toUpperCase()} Wordle clue`}
             className={styles.tiles}
@@ -142,11 +138,11 @@ export default function OneShotWordleGame({
             ))}
           </div>
 
-          <div className={styles.legend} aria-label="Clue color key">
-            <span><i className={styles.correctSwatch} />Correct spot</span>
-            <span><i className={styles.presentSwatch} />Wrong spot</span>
-            <span><i className={styles.absentSwatch} />Not in word</span>
-          </div>
+          {!answerSet.has(puzzle.clue) && (
+            <p style={{ fontStyle: 'italic', fontSize: '0.9em', color: '#666', textAlign: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
+              Even though this clue is obscure, the answer won't be
+            </p>
+          )}
 
           <form className={styles.answerForm} onSubmit={handleSubmit}>
             <label htmlFor="one-shot-answer">Find the only possible answer</label>
