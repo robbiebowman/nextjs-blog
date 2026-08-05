@@ -31,6 +31,7 @@ export default function OneShotWordleGame({
   answerCount,
   serializedPuzzles,
   validWords,
+  answers,
 }) {
   const [puzzleIndex, setPuzzleIndex] = useState(null)
   const [entry, setEntry] = useState('')
@@ -44,6 +45,7 @@ export default function OneShotWordleGame({
     [serializedPuzzles]
   )
   const validWordSet = useMemo(() => new Set(validWords.split(',')), [validWords])
+  const answerSet = useMemo(() => new Set(answers?.split(',') || []), [answers])
   const puzzle = puzzleIndex === null ? null : puzzles[puzzleIndex]
 
   useEffect(() => {
@@ -135,6 +137,12 @@ export default function OneShotWordleGame({
               </div>
             ))}
           </div>
+
+          {!answerSet.has(puzzle.clue) && (
+            <p style={{ fontStyle: 'italic', fontSize: '0.9em', color: '#666', textAlign: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
+              Even though this clue is obscure, the answer won't be
+            </p>
+          )}
 
           <form className={styles.answerForm} onSubmit={handleSubmit}>
             <label htmlFor="one-shot-answer">Find the only possible answer</label>
