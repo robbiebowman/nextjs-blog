@@ -61,17 +61,6 @@
       ]
     },
     {
-      "answer": "outgo",
-      "clue": "gates",
-      "states": [
-        1,
-        0,
-        2,
-        0,
-        0
-      ]
-    },
-    {
       "answer": "kayak",
       "clue": "skyte",
       "states": [
@@ -487,17 +476,6 @@
         0,
         0,
         2
-      ]
-    },
-    {
-      "answer": "outgo",
-      "clue": "taggy",
-      "states": [
-        1,
-        0,
-        0,
-        2,
-        0
       ]
     },
     {
@@ -1271,17 +1249,6 @@
       ]
     },
     {
-      "answer": "outgo",
-      "clue": "taigs",
-      "states": [
-        1,
-        0,
-        0,
-        2,
-        0
-      ]
-    },
-    {
       "answer": "vying",
       "clue": "leavy",
       "states": [
@@ -1691,17 +1658,6 @@
     {
       "answer": "rugby",
       "clue": "beget",
-      "states": [
-        1,
-        0,
-        2,
-        0,
-        0
-      ]
-    },
-    {
-      "answer": "outgo",
-      "clue": "gytes",
       "states": [
         1,
         0,
@@ -4593,17 +4549,6 @@
       ]
     },
     {
-      "answer": "outgo",
-      "clue": "tangs",
-      "states": [
-        1,
-        0,
-        0,
-        2,
-        0
-      ]
-    },
-    {
       "answer": "agape",
       "clue": "gimps",
       "states": [
@@ -5887,17 +5832,6 @@
         0,
         0,
         2,
-        0
-      ]
-    },
-    {
-      "answer": "outgo",
-      "clue": "gites",
-      "states": [
-        1,
-        0,
-        2,
-        0,
         0
       ]
     },
@@ -8003,17 +7937,6 @@
       ]
     },
     {
-      "answer": "outgo",
-      "clue": "gater",
-      "states": [
-        1,
-        0,
-        2,
-        0,
-        0
-      ]
-    },
-    {
       "answer": "abate",
       "clue": "bints",
       "states": [
@@ -9081,17 +9004,6 @@
       ]
     },
     {
-      "answer": "outgo",
-      "clue": "getas",
-      "states": [
-        1,
-        0,
-        2,
-        0,
-        0
-      ]
-    },
-    {
       "answer": "usher",
       "clue": "unhat",
       "states": [
@@ -9935,17 +9847,6 @@
         0,
         0,
         2,
-        0
-      ]
-    },
-    {
-      "answer": "outgo",
-      "clue": "gaths",
-      "states": [
-        1,
-        0,
-        2,
-        0,
         0
       ]
     },
@@ -11002,17 +10903,6 @@
         0,
         2,
         1,
-        0
-      ]
-    },
-    {
-      "answer": "outgo",
-      "clue": "tangy",
-      "states": [
-        1,
-        0,
-        0,
-        2,
         0
       ]
     },
@@ -12513,17 +12403,6 @@
       ]
     },
     {
-      "answer": "outgo",
-      "clue": "gatch",
-      "states": [
-        1,
-        0,
-        2,
-        0,
-        0
-      ]
-    },
-    {
       "answer": "shrug",
       "clue": "thang",
       "states": [
@@ -13819,28 +13698,6 @@
         1,
         0,
         2
-      ]
-    },
-    {
-      "answer": "omega",
-      "clue": "outgo",
-      "states": [
-        2,
-        0,
-        0,
-        2,
-        0
-      ]
-    },
-    {
-      "answer": "outgo",
-      "clue": "gated",
-      "states": [
-        1,
-        0,
-        2,
-        0,
-        0
       ]
     },
     {
