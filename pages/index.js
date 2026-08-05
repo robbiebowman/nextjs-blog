@@ -35,7 +35,7 @@ export default function Home({ allPostsData }) {
               <small className={utilStyles.lightText}>
                 <span style={{ fontStyle: 'italic', color: '#666', fontSize: '0.85em' }}>August 2026</span>
                 <br />
-                One Wordle clue leaves exactly one five-letter answer.
+                One Wordle clue leaves exactly one familiar five-letter answer.
                 <br />
                 <Link href="https://github.com/robbiebowman/nextjs-blog/tree/main/components/one-shot-wordle">Source code.</Link>
               </small>

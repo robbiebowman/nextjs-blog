@@ -29,7 +29,6 @@ export async function getStaticProps() {
       answerCount: answerWords.length,
       serializedPuzzles: serializePuzzles(puzzles),
       validWords: validWords.join(','),
-      answers: answerWords.join(','),
     },
   }
 }
