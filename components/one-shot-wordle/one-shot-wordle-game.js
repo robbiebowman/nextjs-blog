@@ -137,6 +137,46 @@ export default function OneShotWordleGame({
             </p>
           )}
 
+          <form className={styles.answerForm} onSubmit={handleSubmit}>
+            <label htmlFor="one-shot-answer">Find the only possible answer</label>
+            <div className={styles.answerRow}>
+              <div
+                className={`${styles.answerTiles} ${isSolved ? styles.answerTilesSolved : ''}`}
+              >
+                {Array.from({ length: 5 }, (_, index) => (
+                  <span
+                    aria-hidden="true"
+                    className={styles.answerTile}
+                    key={index}
+                    style={{ '--tile-index': index }}
+                  >
+                    {entry[index] || ''}
+                  </span>
+                ))}
+                <input
+                  aria-label="Five-letter answer"
+                  autoCapitalize="characters"
+                  autoComplete="off"
+                  disabled={isSolved}
+                  id="one-shot-answer"
+                  inputMode="text"
+                  maxLength={5}
+                  onChange={handleEntryChange}
+                  ref={inputRef}
+                  spellCheck="false"
+                  type="text"
+                  value={entry}
+                />
+              </div>
+              {!isSolved && (
+                <button type="submit">
+                  Check
+                  <ArrowRight aria-hidden="true" size={19} />
+                </button>
+              )}
+            </div>
+          </form>
+
           {isSolved ? (
             <div className={styles.successScreen} aria-live="polite">
               <div className={styles.successHeading}>
@@ -146,23 +186,6 @@ export default function OneShotWordleGame({
                 <p>Brilliant!</p>
               </div>
 
-              <div
-                aria-label={`${puzzle.answer.toUpperCase()}, all letters correct`}
-                className={styles.solvedTiles}
-                role="img"
-              >
-                {puzzle.answer.split('').map((letter, index) => (
-                  <span
-                    aria-hidden="true"
-                    className={styles.solvedTile}
-                    key={`${letter}-${index}`}
-                    style={{ '--tile-index': index }}
-                  >
-                    {letter}
-                  </span>
-                ))}
-              </div>
-
               <p className={styles.successNote}>
                 <Check aria-hidden="true" size={18} strokeWidth={3} />
                 You found the only possible answer
@@ -170,29 +193,6 @@ export default function OneShotWordleGame({
             </div>
           ) : (
             <>
-              <form className={styles.answerForm} onSubmit={handleSubmit}>
-                <label htmlFor="one-shot-answer">Find the only possible answer</label>
-                <div className={styles.answerRow}>
-                  <input
-                    autoCapitalize="characters"
-                    autoComplete="off"
-                    id="one-shot-answer"
-                    inputMode="text"
-                    maxLength={5}
-                    onChange={handleEntryChange}
-                    placeholder="ANSWER"
-                    ref={inputRef}
-                    spellCheck="false"
-                    type="text"
-                    value={entry}
-                  />
-                  <button type="submit">
-                    Check
-                    <ArrowRight aria-hidden="true" size={19} />
-                  </button>
-                </div>
-              </form>
-
               <p
                 aria-live="polite"
                 className={`${styles.message} ${styles[messageType]}`}
