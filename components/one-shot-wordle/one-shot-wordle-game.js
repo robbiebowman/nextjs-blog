@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Check, Sparkles } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { deserializePuzzles } from '../../lib/one-shot-wordle-puzzles'
 import styles from './one-shot-wordle-game.module.css'
@@ -35,7 +35,6 @@ export default function OneShotWordleGame({
 }) {
   const [puzzleIndex, setPuzzleIndex] = useState(null)
   const [entry, setEntry] = useState('')
-  const [attempts, setAttempts] = useState(0)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('neutral')
   const [isSolved, setIsSolved] = useState(false)
@@ -54,7 +53,6 @@ export default function OneShotWordleGame({
     function showTodaysPuzzle() {
       setPuzzleIndex(getDailyPuzzleIndex(puzzles.length))
       setEntry('')
-      setAttempts(0)
       setMessage('')
       setMessageType('neutral')
       setIsSolved(false)
@@ -97,12 +95,7 @@ export default function OneShotWordleGame({
       return
     }
 
-    const nextAttemptCount = attempts + 1
-    setAttempts(nextAttemptCount)
-
     if (submittedWord === puzzle.answer) {
-      setMessage(`Solved in ${nextAttemptCount} ${nextAttemptCount === 1 ? 'try' : 'tries'}.`)
-      setMessageType('success')
       setIsSolved(true)
       return
     }
@@ -140,46 +133,73 @@ export default function OneShotWordleGame({
 
           {!answerSet.has(puzzle.clue) && (
             <p style={{ fontStyle: 'italic', fontSize: '0.9em', color: '#666', textAlign: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
-              Even though this clue is obscure, the answer won't be
+              Even though the clue may be obscure, the answer is not
             </p>
           )}
 
-          <form className={styles.answerForm} onSubmit={handleSubmit}>
-            <label htmlFor="one-shot-answer">Find the only possible answer</label>
-            <div className={styles.answerRow}>
-              <input
-                autoCapitalize="characters"
-                autoComplete="off"
-                disabled={isSolved}
-                id="one-shot-answer"
-                inputMode="text"
-                maxLength={5}
-                onChange={handleEntryChange}
-                placeholder="ANSWER"
-                ref={inputRef}
-                spellCheck="false"
-                type="text"
-                value={entry}
-              />
-              <button disabled={isSolved} type="submit">
-                Check
-                <ArrowRight aria-hidden="true" size={19} />
-              </button>
-            </div>
-          </form>
+          {isSolved ? (
+            <div className={styles.successScreen} aria-live="polite">
+              <div className={styles.successHeading}>
+                <span className={styles.successIcon} aria-hidden="true">
+                  <Sparkles size={24} />
+                </span>
+                <p>Brilliant!</p>
+              </div>
 
-          <p
-            aria-live="polite"
-            className={`${styles.message} ${styles[messageType]}`}
-          >
-            {message || '\u00a0'}
-          </p>
+              <div
+                aria-label={`${puzzle.answer.toUpperCase()}, all letters correct`}
+                className={styles.solvedTiles}
+                role="img"
+              >
+                {puzzle.answer.split('').map((letter, index) => (
+                  <span
+                    aria-hidden="true"
+                    className={styles.solvedTile}
+                    key={`${letter}-${index}`}
+                    style={{ '--tile-index': index }}
+                  >
+                    {letter}
+                  </span>
+                ))}
+              </div>
 
-          {isSolved && (
-            <div className={styles.answerReveal}>
-              <span>Only match</span>
-              <strong>{puzzle.answer.toUpperCase()}</strong>
+              <p className={styles.successNote}>
+                <Check aria-hidden="true" size={18} strokeWidth={3} />
+                You found the only possible answer
+              </p>
             </div>
+          ) : (
+            <>
+              <form className={styles.answerForm} onSubmit={handleSubmit}>
+                <label htmlFor="one-shot-answer">Find the only possible answer</label>
+                <div className={styles.answerRow}>
+                  <input
+                    autoCapitalize="characters"
+                    autoComplete="off"
+                    id="one-shot-answer"
+                    inputMode="text"
+                    maxLength={5}
+                    onChange={handleEntryChange}
+                    placeholder="ANSWER"
+                    ref={inputRef}
+                    spellCheck="false"
+                    type="text"
+                    value={entry}
+                  />
+                  <button type="submit">
+                    Check
+                    <ArrowRight aria-hidden="true" size={19} />
+                  </button>
+                </div>
+              </form>
+
+              <p
+                aria-live="polite"
+                className={`${styles.message} ${styles[messageType]}`}
+              >
+                {message || '\u00a0'}
+              </p>
+            </>
           )}
         </section>
       ) : (
