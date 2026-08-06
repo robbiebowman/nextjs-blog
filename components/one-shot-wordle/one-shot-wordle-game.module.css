@@ -223,26 +223,116 @@
   color: var(--muted);
 }
 
-.answerReveal {
-  align-items: baseline;
-  background: var(--surface);
-  border-left: 4px solid var(--green);
-  display: flex;
-  justify-content: space-between;
-  margin: 0 auto 1rem;
-  max-width: 28rem;
-  padding: 0.75rem 0.9rem;
+.successScreen {
+  background: linear-gradient(145deg, #f5faf4, #e5f1e2);
+  border: 1px solid #c7ddc3;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgb(53 106 49 / 12%);
+  margin: 1.5rem auto 1rem;
+  max-width: 30rem;
+  overflow: hidden;
+  padding: 1.5rem;
 }
 
-.answerReveal span {
+.successHeading {
+  align-items: center;
+  display: flex;
+  gap: 0.85rem;
+  justify-content: center;
+  margin-bottom: 1.35rem;
+}
+
+.successHeading p,
+.successHeading h2 {
+  margin: 0;
+}
+
+.successHeading p {
+  color: #356a31;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.successHeading h2 {
   color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.successIcon {
+  align-items: center;
+  animation: success-pop 500ms 900ms both;
+  background: var(--green);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  height: 2.75rem;
+  justify-content: center;
+  width: 2.75rem;
+}
+
+.solvedTiles {
+  display: grid;
+  gap: clamp(0.3rem, 1.5vw, 0.5rem);
+  grid-template-columns: repeat(5, minmax(0, 3.75rem));
+  justify-content: center;
+}
+
+.solvedTile {
+  align-items: center;
+  animation: reveal-correct 600ms cubic-bezier(0.2, 0.8, 0.3, 1.25) both;
+  animation-delay: calc(var(--tile-index) * 120ms);
+  aspect-ratio: 1;
+  background: var(--green);
+  border: 2px solid #477a43;
+  color: #fff;
+  display: flex;
+  font-size: 1.9rem;
+  font-weight: 800;
+  justify-content: center;
   text-transform: uppercase;
 }
 
-.answerReveal strong {
-  letter-spacing: 0;
+.successNote {
+  align-items: center;
+  color: #356a31;
+  display: flex;
+  font-size: 0.82rem;
+  font-weight: 700;
+  gap: 0.35rem;
+  justify-content: center;
+  margin: 1.15rem 0 0;
+}
+
+@keyframes reveal-correct {
+  0% {
+    opacity: 0;
+    transform: rotateX(90deg) translateY(-12px);
+  }
+
+  65% {
+    opacity: 1;
+    transform: rotateX(0) translateY(3px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes success-pop {
+  0% {
+    transform: scale(0) rotate(-20deg);
+  }
+
+  70% {
+    transform: scale(1.15) rotate(8deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
 }
 
 .loading {
@@ -288,5 +378,12 @@
 
   .answerRow button {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solvedTile,
+  .successIcon {
+    animation: none;
   }
 }
