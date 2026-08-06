@@ -35,7 +35,6 @@ export default function OneShotWordleGame({
 }) {
   const [puzzleIndex, setPuzzleIndex] = useState(null)
   const [entry, setEntry] = useState('')
-  const [attempts, setAttempts] = useState(0)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('neutral')
   const [isSolved, setIsSolved] = useState(false)
@@ -54,7 +53,6 @@ export default function OneShotWordleGame({
     function showTodaysPuzzle() {
       setPuzzleIndex(getDailyPuzzleIndex(puzzles.length))
       setEntry('')
-      setAttempts(0)
       setMessage('')
       setMessageType('neutral')
       setIsSolved(false)
@@ -97,12 +95,7 @@ export default function OneShotWordleGame({
       return
     }
 
-    const nextAttemptCount = attempts + 1
-    setAttempts(nextAttemptCount)
-
     if (submittedWord === puzzle.answer) {
-      setMessage(`Solved in ${nextAttemptCount} ${nextAttemptCount === 1 ? 'try' : 'tries'}.`)
-      setMessageType('success')
       setIsSolved(true)
       return
     }
@@ -140,7 +133,7 @@ export default function OneShotWordleGame({
 
           {!answerSet.has(puzzle.clue) && (
             <p style={{ fontStyle: 'italic', fontSize: '0.9em', color: '#666', textAlign: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
-              Even though this clue is obscure, the answer won't be
+              Even though the clue may be obscure, the answer is not
             </p>
           )}
 
@@ -150,10 +143,7 @@ export default function OneShotWordleGame({
                 <span className={styles.successIcon} aria-hidden="true">
                   <Sparkles size={24} />
                 </span>
-                <div>
-                  <p>Brilliant!</p>
-                  <h2>{message}</h2>
-                </div>
+                <p>Brilliant!</p>
               </div>
 
               <div

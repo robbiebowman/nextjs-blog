@@ -242,21 +242,11 @@
   margin-bottom: 1.35rem;
 }
 
-.successHeading p,
-.successHeading h2 {
-  margin: 0;
-}
-
 .successHeading p {
   color: #356a31;
   font-size: 1.25rem;
   font-weight: 800;
-}
-
-.successHeading h2 {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 650;
+  margin: 0;
 }
 
 .successIcon {
