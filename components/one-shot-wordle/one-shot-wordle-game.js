@@ -1,4 +1,11 @@
-import { ArrowRight, Check, Sparkles } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+} from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { deserializePuzzles } from '../../lib/one-shot-wordle-puzzles'
 import styles from './one-shot-wordle-game.module.css'
@@ -6,15 +13,49 @@ import styles from './one-shot-wordle-game.module.css'
 const STATE_NAMES = ['absent', 'present elsewhere', 'correct position']
 const STATE_CLASSES = ['absent', 'present', 'correct']
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
+const COMPLETED_DAYS_STORAGE_KEY = 'one-shot-wordle-completed-days'
 
-function getDailyPuzzleIndex(puzzleCount) {
-  const today = new Date()
-  const localDay = Date.UTC(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  )
-  return Math.floor(localDay / MILLISECONDS_PER_DAY) % puzzleCount
+function getLocalDayNumber(date = new Date()) {
+  return Math.floor(Date.UTC(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ) / MILLISECONDS_PER_DAY)
+}
+
+function getDailyPuzzleIndex(dayNumber, puzzleCount) {
+  return ((dayNumber % puzzleCount) + puzzleCount) % puzzleCount
+}
+
+function formatPuzzleDate(dayNumber) {
+  return new Intl.DateTimeFormat(undefined, {
+    day: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+    year: 'numeric',
+  }).format(new Date(dayNumber * MILLISECONDS_PER_DAY))
+}
+
+function loadCompletedDays() {
+  try {
+    const savedDays = JSON.parse(
+      window.localStorage.getItem(COMPLETED_DAYS_STORAGE_KEY) || '[]'
+    )
+    return new Set(savedDays.filter(Number.isInteger))
+  } catch {
+    return new Set()
+  }
+}
+
+function saveCompletedDays(completedDays) {
+  try {
+    window.localStorage.setItem(
+      COMPLETED_DAYS_STORAGE_KEY,
+      JSON.stringify([...completedDays].sort((a, b) => a - b))
+    )
+  } catch {
+    // The game remains playable when storage is unavailable.
+  }
 }
 
 function getMillisecondsUntilTomorrow() {
@@ -33,11 +74,12 @@ export default function OneShotWordleGame({
   validWords,
   answers,
 }) {
-  const [puzzleIndex, setPuzzleIndex] = useState(null)
+  const [selectedDay, setSelectedDay] = useState(null)
+  const [todayDay, setTodayDay] = useState(null)
+  const [completedDays, setCompletedDays] = useState(new Set())
   const [entry, setEntry] = useState('')
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('neutral')
-  const [isSolved, setIsSolved] = useState(false)
   const inputRef = useRef(null)
   const puzzles = useMemo(
     () => deserializePuzzles(serializedPuzzles),
@@ -45,26 +87,40 @@ export default function OneShotWordleGame({
   )
   const validWordSet = useMemo(() => new Set(validWords.split(',')), [validWords])
   const answerSet = useMemo(() => new Set(answers?.split(',') || []), [answers])
-  const puzzle = puzzleIndex === null ? null : puzzles[puzzleIndex]
+  const puzzle = selectedDay === null
+    ? null
+    : puzzles[getDailyPuzzleIndex(selectedDay, puzzles.length)]
+  const isSolved = selectedDay !== null && completedDays.has(selectedDay)
+  const earliestDay = todayDay === null ? null : todayDay - puzzles.length + 1
+  const isToday = selectedDay === todayDay
 
   useEffect(() => {
     let timeoutId
 
     function showTodaysPuzzle() {
-      setPuzzleIndex(getDailyPuzzleIndex(puzzles.length))
+      const nextTodayDay = getLocalDayNumber()
+      setTodayDay(nextTodayDay)
+      setSelectedDay(nextTodayDay)
       setEntry('')
       setMessage('')
       setMessageType('neutral')
-      setIsSolved(false)
       timeoutId = window.setTimeout(
         showTodaysPuzzle,
         getMillisecondsUntilTomorrow() + 100
       )
     }
 
+    setCompletedDays(loadCompletedDays())
     showTodaysPuzzle()
     return () => window.clearTimeout(timeoutId)
   }, [puzzles.length])
+
+  function selectDay(dayNumber) {
+    setSelectedDay(dayNumber)
+    setEntry('')
+    setMessage('')
+    setMessageType('neutral')
+  }
 
   function handleEntryChange(event) {
     setEntry(
@@ -96,7 +152,9 @@ export default function OneShotWordleGame({
     }
 
     if (submittedWord === puzzle.answer) {
-      setIsSolved(true)
+      const nextCompletedDays = new Set(completedDays).add(selectedDay)
+      setCompletedDays(nextCompletedDays)
+      saveCompletedDays(nextCompletedDays)
       return
     }
 
@@ -112,6 +170,34 @@ export default function OneShotWordleGame({
           <h1>One-Shot Wordle</h1>
         </div>
       </header>
+
+      {selectedDay !== null && (
+        <nav className={styles.dayNavigator} aria-label="Choose puzzle day">
+          <button
+            aria-label="Play previous day's puzzle"
+            disabled={selectedDay <= earliestDay}
+            onClick={() => selectDay(selectedDay - 1)}
+            type="button"
+          >
+            <ChevronLeft aria-hidden="true" size={20} />
+          </button>
+          <div className={styles.dayLabel}>
+            <strong>{isToday ? 'Today' : formatPuzzleDate(selectedDay)}</strong>
+            <span>
+              {isSolved && <Check aria-hidden="true" size={15} strokeWidth={3} />}
+              {isSolved ? 'Completed' : 'Not completed'}
+            </span>
+          </div>
+          <button
+            aria-label="Play next day's puzzle"
+            disabled={isToday}
+            onClick={() => selectDay(selectedDay + 1)}
+            type="button"
+          >
+            <ChevronRight aria-hidden="true" size={20} />
+          </button>
+        </nav>
+      )}
 
       {puzzle ? (
         <section className={styles.playArea} aria-label="Given clue">
@@ -167,6 +253,16 @@ export default function OneShotWordleGame({
                 <Check aria-hidden="true" size={18} strokeWidth={3} />
                 You found the only possible answer
               </p>
+              {!isToday && (
+                <button
+                  className={styles.returnButton}
+                  onClick={() => selectDay(todayDay)}
+                  type="button"
+                >
+                  <ArrowLeft aria-hidden="true" size={17} />
+                  Return to today
+                </button>
+              )}
             </div>
           ) : (
             <>
