@@ -1,5 +1,4 @@
 import {
-  ArrowLeft,
   ArrowRight,
   Check,
   ChevronLeft,
@@ -14,6 +13,9 @@ const STATE_NAMES = ['absent', 'present elsewhere', 'correct position']
 const STATE_CLASSES = ['absent', 'present', 'correct']
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000
 const COMPLETED_DAYS_STORAGE_KEY = 'one-shot-wordle-completed-days'
+const FIRST_PUZZLE_DAY = Date.UTC(2026, 7, 8) / MILLISECONDS_PER_DAY
+const FIRST_PUZZLE_MONTH = Date.UTC(2026, 7, 1) / MILLISECONDS_PER_DAY
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 function getLocalDayNumber(date = new Date()) {
   return Math.floor(Date.UTC(
@@ -34,6 +36,40 @@ function formatPuzzleDate(dayNumber) {
     timeZone: 'UTC',
     year: 'numeric',
   }).format(new Date(dayNumber * MILLISECONDS_PER_DAY))
+}
+
+function formatPuzzleMonth(dayNumber) {
+  return new Intl.DateTimeFormat(undefined, {
+    month: 'long',
+    timeZone: 'UTC',
+    year: 'numeric',
+  }).format(new Date(dayNumber * MILLISECONDS_PER_DAY))
+}
+
+function getMonthStart(dayNumber) {
+  const date = new Date(dayNumber * MILLISECONDS_PER_DAY)
+  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1) /
+    MILLISECONDS_PER_DAY
+}
+
+function shiftMonth(dayNumber, offset) {
+  const date = new Date(dayNumber * MILLISECONDS_PER_DAY)
+  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + offset, 1) /
+    MILLISECONDS_PER_DAY
+}
+
+function getCalendarDays(monthStart) {
+  const date = new Date(monthStart * MILLISECONDS_PER_DAY)
+  const daysInMonth = new Date(Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth() + 1,
+    0
+  )).getUTCDate()
+
+  return [
+    ...Array(date.getUTCDay()).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, index) => monthStart + index),
+  ]
 }
 
 function loadCompletedDays() {
@@ -76,6 +112,7 @@ export default function OneShotWordleGame({
 }) {
   const [selectedDay, setSelectedDay] = useState(null)
   const [todayDay, setTodayDay] = useState(null)
+  const [calendarMonth, setCalendarMonth] = useState(null)
   const [completedDays, setCompletedDays] = useState(new Set())
   const [entry, setEntry] = useState('')
   const [message, setMessage] = useState('')
@@ -91,8 +128,11 @@ export default function OneShotWordleGame({
     ? null
     : puzzles[getDailyPuzzleIndex(selectedDay, puzzles.length)]
   const isSolved = selectedDay !== null && completedDays.has(selectedDay)
-  const earliestDay = todayDay === null ? null : todayDay - puzzles.length + 1
   const isToday = selectedDay === todayDay
+  const latestMonth = todayDay === null ? null : getMonthStart(todayDay)
+  const calendarDays = calendarMonth === null
+    ? []
+    : getCalendarDays(calendarMonth)
 
   useEffect(() => {
     let timeoutId
@@ -101,6 +141,7 @@ export default function OneShotWordleGame({
       const nextTodayDay = getLocalDayNumber()
       setTodayDay(nextTodayDay)
       setSelectedDay(nextTodayDay)
+      setCalendarMonth(getMonthStart(nextTodayDay))
       setEntry('')
       setMessage('')
       setMessageType('neutral')
@@ -120,6 +161,10 @@ export default function OneShotWordleGame({
     setEntry('')
     setMessage('')
     setMessageType('neutral')
+  }
+
+  function changeMonth(offset) {
+    setCalendarMonth(shiftMonth(calendarMonth, offset))
   }
 
   function handleEntryChange(event) {
@@ -172,31 +217,12 @@ export default function OneShotWordleGame({
       </header>
 
       {selectedDay !== null && (
-        <nav className={styles.dayNavigator} aria-label="Choose puzzle day">
-          <button
-            aria-label="Play previous day's puzzle"
-            disabled={selectedDay <= earliestDay}
-            onClick={() => selectDay(selectedDay - 1)}
-            type="button"
-          >
-            <ChevronLeft aria-hidden="true" size={20} />
-          </button>
-          <div className={styles.dayLabel}>
-            <strong>{isToday ? 'Today' : formatPuzzleDate(selectedDay)}</strong>
-            <span>
-              {isSolved && <Check aria-hidden="true" size={15} strokeWidth={3} />}
-              {isSolved ? 'Completed' : 'Not completed'}
-            </span>
-          </div>
-          <button
-            aria-label="Play next day's puzzle"
-            disabled={isToday}
-            onClick={() => selectDay(selectedDay + 1)}
-            type="button"
-          >
-            <ChevronRight aria-hidden="true" size={20} />
-          </button>
-        </nav>
+        <p className={styles.currentPuzzleDate}>
+          {isToday ? 'Today' : formatPuzzleDate(selectedDay)}
+          {isSolved && (
+            <span><Check aria-hidden="true" size={15} strokeWidth={3} /> Completed</span>
+          )}
+        </p>
       )}
 
       {puzzle ? (
@@ -253,16 +279,6 @@ export default function OneShotWordleGame({
                 <Check aria-hidden="true" size={18} strokeWidth={3} />
                 You found the only possible answer
               </p>
-              {!isToday && (
-                <button
-                  className={styles.returnButton}
-                  onClick={() => selectDay(todayDay)}
-                  type="button"
-                >
-                  <ArrowLeft aria-hidden="true" size={17} />
-                  Return to today
-                </button>
-              )}
             </div>
           ) : (
             <>
@@ -302,6 +318,85 @@ export default function OneShotWordleGame({
         <div className={styles.loading} aria-live="polite">
           Loading today&apos;s puzzle...
         </div>
+      )}
+
+      {calendarMonth !== null && (
+        <section className={styles.archive} aria-labelledby="archive-heading">
+          <div className={styles.archiveHeading}>
+            <div>
+              <h2 id="archive-heading">Puzzle archive</h2>
+              <p>Choose a day to play</p>
+            </div>
+            {!isToday && (
+              <button
+                className={styles.todayButton}
+                onClick={() => {
+                  selectDay(todayDay)
+                  setCalendarMonth(latestMonth)
+                }}
+                type="button"
+              >
+                Today
+              </button>
+            )}
+          </div>
+
+          <div className={styles.monthNavigator}>
+            <button
+              aria-label="Previous month"
+              disabled={calendarMonth <= FIRST_PUZZLE_MONTH}
+              onClick={() => changeMonth(-1)}
+              type="button"
+            >
+              <ChevronLeft aria-hidden="true" size={20} />
+            </button>
+            <strong aria-live="polite">{formatPuzzleMonth(calendarMonth)}</strong>
+            <button
+              aria-label="Next month"
+              disabled={calendarMonth >= latestMonth}
+              onClick={() => changeMonth(1)}
+              type="button"
+            >
+              <ChevronRight aria-hidden="true" size={20} />
+            </button>
+          </div>
+
+          <div className={styles.calendar} role="grid">
+            {WEEKDAYS.map((weekday) => (
+              <span className={styles.weekday} key={weekday} role="columnheader">
+                {weekday}
+              </span>
+            ))}
+            {calendarDays.map((dayNumber, index) => {
+              if (dayNumber === null) {
+                return <span aria-hidden="true" key={`empty-${index}`} />
+              }
+
+              const isAvailable = dayNumber >= FIRST_PUZZLE_DAY &&
+                dayNumber <= todayDay
+              const isCompleted = completedDays.has(dayNumber)
+              const dayOfMonth = new Date(
+                dayNumber * MILLISECONDS_PER_DAY
+              ).getUTCDate()
+
+              return (
+                <button
+                  aria-current={dayNumber === selectedDay ? 'date' : undefined}
+                  aria-label={`${formatPuzzleDate(dayNumber)}${isCompleted ? ', completed' : ''}`}
+                  className={`${styles.calendarDay} ${isCompleted ? styles.completedDay : ''}`}
+                  disabled={!isAvailable}
+                  key={dayNumber}
+                  onClick={() => selectDay(dayNumber)}
+                  role="gridcell"
+                  type="button"
+                >
+                  {dayOfMonth}
+                  {isCompleted && <Check aria-hidden="true" size={12} strokeWidth={3} />}
+                </button>
+              )
+            })}
+          </div>
+        </section>
       )}
 
     </div>

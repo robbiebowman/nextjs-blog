@@ -27,19 +27,78 @@
   margin: 0;
 }
 
-.dayNavigator {
+.currentPuzzleDate {
+  align-items: center;
+  display: flex;
+  font-size: 0.88rem;
+  font-weight: 750;
+  gap: 0.65rem;
+  justify-content: center;
+  margin: 1rem 0 0;
+}
+
+.currentPuzzleDate span {
+  align-items: center;
+  color: var(--green);
+  display: flex;
+  gap: 0.25rem;
+}
+
+.archive {
+  border-top: 1px solid var(--line);
+  margin-top: 1.25rem;
+  padding: 1.5rem 0 2rem;
+}
+
+.archiveHeading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 1rem;
+  max-width: 30rem;
+}
+
+.archiveHeading h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.archiveHeading p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin: 0.2rem 0 0;
+}
+
+.todayButton {
+  background: transparent;
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 750;
+  padding: 0.4rem 0.7rem;
+}
+
+.monthNavigator {
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   display: grid;
-  gap: 0.75rem;
   grid-template-columns: 2.75rem 1fr 2.75rem;
-  margin-top: 1rem;
+  margin: 0 auto;
+  max-width: 30rem;
   padding: 0.55rem;
 }
 
-.dayNavigator button {
+.monthNavigator strong {
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.monthNavigator button {
   align-items: center;
   background: #fff;
   border: 1px solid var(--line);
@@ -47,49 +106,89 @@
   color: var(--ink);
   cursor: pointer;
   display: flex;
-  height: 2.75rem;
+  height: 2.5rem;
   justify-content: center;
   padding: 0;
 }
 
-.dayNavigator button:hover:not(:disabled) {
+.monthNavigator button:hover:not(:disabled) {
   border-color: var(--green);
   color: var(--green);
 }
 
-.dayNavigator button:focus-visible,
-.returnButton:focus-visible {
-  outline: 3px solid #3077c9;
-  outline-offset: 2px;
-}
-
-.dayNavigator button:disabled {
+.monthNavigator button:disabled {
   cursor: not-allowed;
   opacity: 0.35;
 }
 
-.dayLabel {
-  min-width: 0;
-  text-align: center;
+.calendar {
+  border: 1px solid var(--line);
+  border-radius: 0 0 10px 10px;
+  border-top: 0;
+  display: grid;
+  gap: 0.3rem;
+  grid-template-columns: repeat(7, 1fr);
+  margin: 0 auto;
+  max-width: 30rem;
+  padding: 0.75rem;
 }
 
-.dayLabel strong {
-  display: block;
-  font-size: 0.92rem;
-}
-
-.dayLabel span {
-  align-items: center;
+.weekday {
   color: var(--muted);
-  display: flex;
-  font-size: 0.75rem;
-  gap: 0.25rem;
-  justify-content: center;
-  margin-top: 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 750;
+  padding: 0.25rem 0;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-.dayLabel span svg {
+.calendarDay {
+  align-items: center;
+  aspect-ratio: 1;
+  background: #fff;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  justify-content: center;
+  min-width: 0;
+  padding: 0;
+}
+
+.calendarDay:hover:not(:disabled) {
+  background: #edf5eb;
+  border-color: #b9d1b5;
+}
+
+.calendarDay[aria-current='date'] {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.calendarDay:disabled {
+  color: #b5bab7;
+  cursor: not-allowed;
+}
+
+.completedDay svg {
   color: var(--green);
+}
+
+.completedDay[aria-current='date'] svg {
+  color: #fff;
+}
+
+.monthNavigator button:focus-visible,
+.calendarDay:focus-visible,
+.todayButton:focus-visible {
+  outline: 3px solid #3077c9;
+  outline-offset: 2px;
 }
 
 .kicker {
@@ -357,26 +456,6 @@
   gap: 0.35rem;
   justify-content: center;
   margin: 1.15rem 0 0;
-}
-
-.returnButton {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  color: #356a31;
-  cursor: pointer;
-  display: flex;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 750;
-  gap: 0.35rem;
-  justify-content: center;
-  margin: 1rem auto 0;
-  padding: 0.35rem 0.5rem;
-}
-
-.returnButton:hover {
-  text-decoration: underline;
 }
 
 @keyframes reveal-correct {
