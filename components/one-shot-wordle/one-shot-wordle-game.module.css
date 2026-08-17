@@ -207,6 +207,8 @@
 }
 
 .playArea {
+  box-sizing: border-box;
+  min-height: 29rem;
   padding: 1.5rem 0 1.25rem;
 }
 
